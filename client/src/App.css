@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+
+.comp {
+  outline: blue solid 2px;
+  width: 70%;
+  padding: 20px;
+}
