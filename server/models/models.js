@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-//Models with subdocs
 
 const MemberSchema = new Schema({
   login: LoginSchema,
@@ -19,17 +18,28 @@ const LoginSchema = new Schema({
 
 const WorkspaceSchema = new Schema({
   title: String,
-  boards: [BoardSchema],
-  members: [MemberSchema]
+  boards: [{
+    name: String,
+    boardsDetail: [{type: Schema.Types.ObjectId, ref: "board"}]
+  }],
+  members: [{type: Schema.Types.ObjectId, ref: "member"}] // by ref because you only need to see members when you click on them
 })
 
+
+
 const BoardSchema = new Schema({
-  lists: [ListSchema]
+  lists: [ListSchema],
+  members: [MemberSchema] // boards also needs a member property, not by refs because members will always be shown
 })
+
 
 const ListSchema = new Schema({
   title: String,
-  cards: [CardSchema]
+  cards: [{
+    cardsDetail: [{type: Schema.Types.ObjectId, ref: "card"}],
+    cardTitle: String,
+    commentCount: Number
+  }]
 })
 
 const CardSchema = new Schema({
@@ -41,7 +51,10 @@ const CardSchema = new Schema({
   },
   currentList: String,
   activity: [ActivitySchema]
+
+// why does card schema need workspace property?
 })
+
 
 const ActivitySchema = new Schema({
   member: String,
@@ -54,3 +67,7 @@ const ActivitySchema = new Schema({
   },
   date: {type: Date}
 })
+
+const Member = mongoose.model("member", MemberSchema);
+const Board = mongoose.model("board", BoardSchema)
+const Card = mongoose.model("card", CardSchema)
