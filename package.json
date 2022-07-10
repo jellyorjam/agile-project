@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/jellyorjam/agile-project/issues"
   },
-  "homepage": "https://github.com/jellyorjam/agile-project#readme"
+  "homepage": "https://github.com/jellyorjam/agile-project#readme",
+  "dependencies": {
+    "mongoose": "^6.4.4"
+  }
 }
