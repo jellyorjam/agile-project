@@ -40,3 +40,12 @@
 .nav-item {
   padding-left: 50px;
 }
+
+.login-form {
+  margin-top: 80px;
+}
+
+.form-item {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
