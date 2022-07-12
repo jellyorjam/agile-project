@@ -1,4 +1,4 @@
-# Swagger file last updated on 7/10/22
+# Version of Swagger file last updated 7/11 at 11:30PM
 swagger: "2.0"
 info:
   title: Trello Clone API
@@ -186,6 +186,9 @@ definitions:
   Member:
     type: object
     properties:
+      id:
+        type: string
+        description: Unique identifier for a member
       login:
         type: object
         properties:
@@ -214,99 +217,89 @@ definitions:
       workspaces:
         type: array
         items:
-          $ref: "#/definitions/Workspace"
+          type: string
+          description: Unique identifier of a workspace a member belongs to
   Workspace:
     type: object
     properties:
       id:
         type: string
-        description: Unique identifier for a workspace.
+        description: Unique identifier for a workspace
       title:
         type: string
-        description: Title assigned to the workspace.
+        description: Title assigned to the workspace
       boards:
         type: array
         items:
-          type: object
-          properties:
-            name:
-              type: string
-              description: The name of a board
-            boardID:
-              type: string
-              description: The ID of a board
+          type: string
+          description: Unique identifier of a board in a workspace
       members:
         type: array
         items:
-          type: object
-          properties:
-            name:
-              type: object
-              properties:
-                username:
-                  type: string
-                  description: Member's username
-                first:
-                  type: string
-                  description: Member's first name
-                last:
-                  type: string
-                  description: Member's last name
-            email:
-              type: string
-              format: email
-              description: Member's email address
+          type: string
+          description: Unique identifier of a member of a workspace
   Board:
     type: object
     properties:
       id:
         type: string
-        description: Unique identifier for a board.
+        description: Unique identifier for a board
+      name:
+        type: string
+        description: Name of a board
       lists:
         type: array
-        description: All lists, in order to be completed, in a board.
         items:
-          $ref: "#/definitions/List"
+          type: string
+          description: Unique identifier of a list in a board
+      members:
+        type: array
+        items:
+          type: string
+          description: Unique identifier of a member of a board
   List:
     type: object
     properties:
       id:
         type: string
-        description: Unique identifier for a list.
+        description: Unique identifier for a list
       title:
         type: string
-        description: Title assigned to the list.
+        description: Title assigned to the list
       cards:
         type: array
         items:
-          type: object
-          properties:
-            cardID:
-              type: string
-              description: Unique identifier for a card
-            cardTitle:
-              type: string
-              description: Title of a card
-            commentCount:
-              type: number
-              description: The number of comments on a card
+          type: string
+          description:
+            Unique identifier for a card
+            # cardTitle:
+            #   type: string
+            #   description: Title of a card
+            # commentCount:
+            #   type: number
+            #   description: The number of comments on a card
+            # labels:
+            #   type: array
+            #   items:
+            #     type: string
+            #     description: Unique identifier of a label
   Card:
     type: object
     properties:
       id:
         type: string
-        description: Unique identifier for a card.
+        description: Unique identifier for a card
       title:
         type: string
-        description: Title assigned to the card.
+        description: Title assigned to the card
       description:
         type: string
-        description: Description of the card.
+        description: Description of the card
       members:
         type: array
         items:
           type: string
-          description: The username of a member assigned to the card.
+          description: The username of a member assigned to the card
       label:
         type: object
         properties:
@@ -315,11 +308,12 @@ definitions:
             description: color code assigned to a label
       currentList:
         type: string
-        description: ID of the list the card is currently in.
+        description: ID of the list the card is currently in
       activity:
         type: array
         items:
-          $ref: "#/definitions/Activity"
+          type: string
+          description: Unique identifier for an activity
       workspaceID:
         type: string
         description: ID of the workspace the card belongs to
