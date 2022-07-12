@@ -1,0 +1,366 @@
+# Swagger file last updated on 7/10/22
+swagger: "2.0"
+info:
+  title: Trello Clone API
+  description: An API to support Parsity's Part Time Cohort 3's Trello clone server
+  version: 1.0.0
+# host: api.trello-clone.com
+schemes:
+  - https
+# basePath: /v1
+produces:
+  - application/json
+paths:
+  /login:
+    post:
+      summary: Logs member into the site
+      consumes:
+        - application/json
+      parameters:
+        - name: member credentials
+          in: body
+          description: A member's login credentials
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+          required: true
+      tags:
+        - Member
+      responses:
+        200:
+          description: Login succeeded
+        400:
+          description: Missing required credential information
+        401:
+          description: Username or password is invalid
+        default:
+          description: Unexpected error
+          schema:
+            $ref: "#/definitions/Error"
+  /members/{username}:
+    get:
+      summary: Get all of a member's workspaces
+      description: >
+        All of the data for a member
+      produces:
+        - application/json
+      parameters:
+        - name: username
+          in: path
+          description: The username for the user whose data is being retrieved.
+          required: true
+          type: string
+      tags:
+        - Member
+      responses:
+        "200":
+          description: An object containing all of the data for a specific member
+          schema:
+            $ref: "#/definitions/Member"
+        "401":
+          description: You must be logged in to access this workspace
+        "403":
+          description: You do not have permission to access this workspace
+        "404":
+          description: Workspace not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: "#/definitions/Error"
+  /boards/{boardId}:
+    get:
+      summary: A board in a workspace
+      description: >
+        All of the board data in a workspace
+      produces:
+        - application/json
+      parameters:
+        - name: boardId
+          in: path
+          description: The ID of the board being retrieved
+          required: true
+          type: string
+      tags:
+        - Board
+      responses:
+        "200":
+          description: An object containing all of the data for a specific board
+          schema:
+            $ref: "#/definitions/Board"
+        "401":
+          description: You must be logged in to access this board
+        "403":
+          description: You do not have permission to access this board
+        "404":
+          description: Board not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: "#/definitions/Error"
+  /cards/{cardID}:
+    get:
+      summary: Returns all of the data for a specific card
+      description: >
+        All of the data for a card, such as activity, description, etc
+      produces:
+        - application/json
+      parameters:
+        - name: cardID
+          in: path
+          description: The ID of the card
+          required: true
+          type: string
+      tags:
+        - Card
+      responses:
+        "200":
+          description: An object containing all of the data for a specific card
+          schema:
+            $ref: "#/definitions/Card"
+        "400":
+          description: Invalid card ID supplied
+        "404":
+          description: Card not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      summary: Adds an activity to a card
+      consumes:
+        - application/json
+      parameters:
+        - name: cardID
+          in: path
+          description: The ID of the card
+          required: true
+          type: string
+        - name: activity
+          in: body
+          description: The details of an activity
+          schema:
+            $ref: "#/definitions/Activity"
+      tags:
+        - Activity
+      responses:
+        200:
+          description: Login succeeded
+        400:
+          description: Missing required credential information
+        401:
+          description: Username or password is invalid
+        default:
+          description: Unexpected error
+          schema:
+            $ref: "#/definitions/Error"
+  /cards/{cardID}/activity/{activityID}:
+    delete:
+      summary: Delete card activity by ID
+      description: Deletes an activity from a card
+      tags:
+        - Activity
+      produces:
+        - application/json
+      parameters:
+        - name: cardID
+          in: path
+          description: ID of the card that holds the activity to be deleted
+          required: true
+          type: string
+        - name: activityID
+          in: path
+          description: ID of the activity to be deleted
+          required: true
+          type: string
+      responses:
+        400:
+          description: Invalid activity ID supplied
+        404:
+          description: Activity not found
+
+definitions:
+  Member:
+    type: object
+    properties:
+      login:
+        type: object
+        properties:
+          username:
+            type: string
+            description: A member's unique username.
+          password:
+            type: string
+            description: A member's password.
+      name:
+        type: object
+        properties:
+          first:
+            type: string
+            description: A member's first name.
+          last:
+            type: string
+            description: A member's last name.
+      email:
+        type: string
+        description: A member's email address.
+        format: email
+      picture:
+        type: string
+        description: URL to a user's photo
+      workspaces:
+        type: array
+        items:
+          $ref: "#/definitions/Workspace"
+  Workspace:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier for a workspace.
+      title:
+        type: string
+        description: Title assigned to the workspace.
+      boards:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of a board
+            boardID:
+              type: string
+              description: The ID of a board
+      members:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Member's username
+                first:
+                  type: string
+                  description: Member's first name
+                last:
+                  type: string
+                  description: Member's last name
+            email:
+              type: string
+              format: email
+              description: Member's email address
+  Board:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier for a board.
+      lists:
+        type: array
+        description: All lists, in order to be completed, in a board.
+        items:
+          $ref: "#/definitions/List"
+  List:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier for a list.
+      title:
+        type: string
+        description: Title assigned to the list.
+      cards:
+        type: array
+        items:
+          type: object
+          properties:
+            cardID:
+              type: string
+              description: Unique identifier for a card
+            cardTitle:
+              type: string
+              description: Title of a card
+            commentCount:
+              type: number
+              description: The number of comments on a card
+  Card:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier for a card.
+      title:
+        type: string
+        description: Title assigned to the card.
+      description:
+        type: string
+        description: Description of the card.
+      members:
+        type: array
+        items:
+          type: string
+          description: The username of a member assigned to the card.
+      label:
+        type: object
+        properties:
+          color:
+            type: string
+            description: color code assigned to a label
+      currentList:
+        type: string
+        description: ID of the list the card is currently in.
+      activity:
+        type: array
+        items:
+          $ref: "#/definitions/Activity"
+      workspaceID:
+        type: string
+        description: ID of the workspace the card belongs to
+  Activity:
+    type: object
+    properties:
+      member:
+        type: string
+        description: The username of the member who did the activity.
+      activityType:
+        type: string
+        description: The type of activity. Valid options are Add, Move, Comment, Archive, and unarchive
+      previousListID:
+        type: string
+        description: ID of list a card is moved from. Used for the Move activity only
+      targetListID:
+        type: string
+        description: ID of list a card is moved to or a comment is added to. Used for the Add & Move activities only
+      comment:
+        type: object
+        properties:
+          text:
+            type: string
+            description: The text of the comment.
+          edited:
+            type: boolean
+            description: Indicates whether the comment has been edited since its original posting.
+      date:
+        type: string
+        format: date-time
+        description: The date and time the activity occurred.
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /SkyeWulff/Trello_Clone/1.0.0
