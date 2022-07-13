@@ -8,7 +8,7 @@ const MemberSchema = new Schema({
   lastName: String,
   email: String,
   picture: String,
-  workspaces: [WorkspaceSchema]
+  workspaces: [{type: Schema.Types.ObjectId, ref: "workspace"}]
 });
 
 const LoginSchema = new Schema({
@@ -22,37 +22,32 @@ const WorkspaceSchema = new Schema({
     name: String,
     boardsDetail: [{type: Schema.Types.ObjectId, ref: "board"}]
   }],
-  members: [{type: Schema.Types.ObjectId, ref: "member"}] // by ref because you only need to see members when you click on them
+  members: [{type: Schema.Types.ObjectId, ref: "member"}] 
 })
 
 
-
 const BoardSchema = new Schema({
-  lists: [ListSchema],
-  members: [MemberSchema] // boards also needs a member property, not by refs because members will always be shown
+  title: String, //title not name
+  lists: [{type: Schema.Types.ObjectId, ref: "list"}],
+  members: [{type: Schema.Types.ObjectId, ref: "member"}],
+  labels: [{type: Schema.Types.ObjectId, ref: "label"}]
 })
 
 
 const ListSchema = new Schema({
   title: String,
-  cards: [{
-    cardsDetail: [{type: Schema.Types.ObjectId, ref: "card"}],
-    cardTitle: String,
-    commentCount: Number
-  }]
+  cards:[{type: Schema.Types.ObjectId, ref: "card"}]
 })
 
 const CardSchema = new Schema({
   title: String,
   description: String,
-  members: [MemberSchema],
-  label: {
-    color: String
-  },
+  commentCount: Number,
+  members: [{type: Schema.Types.ObjectId, ref: "member"}],
+  label: LabelSchema,
   currentList: String,
-  activity: [ActivitySchema]
-
-// why does card schema need workspace property?
+  activity: [{type: Schema.Types.ObjectId, ref: "activity"}], 
+  workspace: {type: Schema.Types.ObjectId, ref: "workspace"}
 })
 
 
@@ -68,6 +63,17 @@ const ActivitySchema = new Schema({
   date: {type: Date}
 })
 
+const LabelSchema = new Schema({
+  title: String,
+  color: String
+})
+
 const Member = mongoose.model("member", MemberSchema);
+const Workspace = mongoose.model("workspace", WorkspaceSchema)
 const Board = mongoose.model("board", BoardSchema)
 const Card = mongoose.model("card", CardSchema)
+const Label = mongoosem.model("label", LabelSchema)
+const List = mongoose.model("list", ListSchema)
+const Activity = mongoose.model("activity", ActivitySchema)
+
+//Why have a listsId endpoint?
