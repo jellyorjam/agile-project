@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/jellyorjam/agile-project#readme",
   "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "faker": "^5.5.3",
     "mongoose": "^6.4.4"
   }
 }
