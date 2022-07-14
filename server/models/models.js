@@ -61,7 +61,9 @@ const CardSchema = new Schema({
   //I put currentList in the model in swagger, may end up realizing we don't need it. Trying to think through drag and drop targets, may be trackable just in list's card array
   currentList: String,
   activity: [{type: Schema.Types.ObjectId, ref: "activity"}], 
-  workspace: {type: Schema.Types.ObjectId, ref: "workspace"}
+  //change from workspace to board b/c the board behind the card is what we have to make sure renders if a user types a url straight to a card. Updated swagger as well.
+  // workspace: {type: Schema.Types.ObjectId, ref: "workspace"}
+  board: {type: Schema.Types.ObjectId, ref: "workspace"}
 })
 
 
