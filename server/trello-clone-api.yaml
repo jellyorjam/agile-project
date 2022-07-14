@@ -1,4 +1,3 @@
-# Version of Swagger file last updated 7/11 at 11:30PM
 swagger: "2.0"
 info:
   title: Trello Clone API
@@ -41,7 +40,7 @@ paths:
           description: Unexpected error
           schema:
             $ref: "#/definitions/Error"
-  /members/{username}:
+  /members/{memberID}/workspaces:
     get:
       summary: Get all of a member's workspaces
       description: >
@@ -49,18 +48,68 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: username
+        - name: memberID
           in: path
-          description: The username for the user whose data is being retrieved.
+          description: The ID of the member
           required: true
           type: string
       tags:
-        - Member
+        - Workspace
       responses:
         "200":
           description: An object containing all of the data for a specific member
           schema:
-            $ref: "#/definitions/Member"
+            type: array
+            items:
+              type: string
+              description: Array of a workspaceIDs
+            example: [workspaceID1, workspaceID2, workspaceID3]
+        "401":
+          description: You must be logged in to access this workspace
+        "403":
+          description: You do not have permission to access this workspace
+        "404":
+          description: Workspace not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: "#/definitions/Error"
+  /workspaces/{workspaceID}:
+    get:
+      summary: Get workspace data
+      description: >
+        Get a workspace's name, the IDs of its members, and the IDs of it's boards
+      produces:
+        - application/json
+      parameters:
+        - name: workspaceID
+          in: path
+          description: The ID of the workspace
+          required: true
+          type: string
+      tags:
+        - Workspace
+      responses:
+        "200":
+          description: An object containing all of the data for a specific member
+          schema:
+            $ref: "#/definitions/Workspace"
+            # type: object
+            # properties:
+            #   workspaceTitle:
+            #     type: string
+            #     description: The title of workspace
+            #   boardIDs:
+            #     type: array
+            #     items:
+            #       type: string
+            #       description: Array of a boardIDs
+            #     example: [boardID1, boardID2, boardID3]
+            #   memberIDs:
+            #     type: array
+            #     items:
+            #       type: string
+            #       description: Array of a memberIDs
         "401":
           description: You must be logged in to access this workspace
         "403":
@@ -101,6 +150,36 @@ paths:
           description: Unexpected error
           schema:
             $ref: "#/definitions/Error"
+  /lists/{listID}:
+    get:
+      summary: Returns list data
+      description: >
+        All of the list data in a board
+      produces:
+        - application/json
+      parameters:
+        - name: listID
+          in: path
+          description: The ID of the list being retrieved
+          required: true
+          type: string
+      tags:
+        - List
+      responses:
+        "200":
+          description: An object containing all of the data for a specific list
+          schema:
+            $ref: "#/definitions/List"
+        "401":
+          description: You must be logged in to access this list
+        "403":
+          description: You do not have permission to access this list
+        "404":
+          description: List not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: "#/definitions/Error"
   /cards/{cardID}:
     get:
       summary: Returns all of the data for a specific card
@@ -129,6 +208,37 @@ paths:
           description: Unexpected error
           schema:
             $ref: "#/definitions/Error"
+  /cards/{cardID}/activities:
+    get:
+      summary: Returns all of the activities for a specific card
+      description: >
+        All card activities
+      produces:
+        - application/json
+      parameters:
+        - name: cardID
+          in: path
+          description: The ID of the card
+          required: true
+          type: string
+      tags:
+        - Activity
+      responses:
+        "200":
+          description: An array containing all of the activityIDs for a specific card
+          schema:
+            type: array
+            items:
+              type: string
+              description: ID of of an activity
+        "400":
+          description: Invalid card ID supplied
+        "404":
+          description: Card not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: "#/definitions/Error"
     post:
       summary: Adds an activity to a card
       consumes:
@@ -141,7 +251,7 @@ paths:
           type: string
         - name: activity
           in: body
-          description: The details of an activity
+          description: The details of a
           schema:
             $ref: "#/definitions/Activity"
       tags:
@@ -178,9 +288,43 @@ paths:
           type: string
       responses:
         400:
-          description: Invalid activity ID supplied
+          description: Invalid activity ID or cardID supplied
         404:
-          description: Activity not found
+          description: Activity or card not found
+  ##labels need to be part of board
+  /boards/{boardID}/labels/{labelID}:
+    get:
+      summary: Get a board's label by its ID
+      tags:
+        - Label
+      produces:
+        - application/json
+      parameters:
+        - name: boardID
+          in: path
+          description: ID of the board
+          required: true
+          type: string
+        - name: labelID
+          in: path
+          description: ID of the label
+          required: true
+          type: string
+      responses:
+        "200":
+          description: An object containing all of the data for a specific label
+          schema:
+            $ref: "#/definitions/Label"
+        "401":
+          description: You must be logged in to access this label
+        "403":
+          description: You do not have permission to access this label
+        "404":
+          description: Label not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: "#/definitions/Error"
 
 definitions:
   Member:
@@ -244,7 +388,7 @@ definitions:
       id:
         type: string
         description: Unique identifier for a board
-      name:
+      title:
         type: string
         description: Name of a board
       lists:
@@ -257,6 +401,11 @@ definitions:
         items:
           type: string
           description: Unique identifier of a member of a board
+      labels:
+        type: array
+        items:
+          type: string
+          description: Unique identifier of a label on a board
   List:
     type: object
     properties:
@@ -270,19 +419,7 @@ definitions:
         type: array
         items:
           type: string
-          description:
-            Unique identifier for a card
-            # cardTitle:
-            #   type: string
-            #   description: Title of a card
-            # commentCount:
-            #   type: number
-            #   description: The number of comments on a card
-            # labels:
-            #   type: array
-            #   items:
-            #     type: string
-            #     description: Unique identifier of a label
+          description: Unique identifier for a card
   Card:
     type: object
     properties:
@@ -299,13 +436,12 @@ definitions:
         type: array
         items:
           type: string
-          description: The username of a member assigned to the card
-      label:
-        type: object
-        properties:
-          color:
-            type: string
-            description: color code assigned to a label
+          description: The ID of a member assigned to the card
+      labels:
+        type: array
+        items:
+          type: string
+          description: The ID of a label on to the card
       currentList:
         type: string
         description: ID of the list the card is currently in
@@ -345,6 +481,18 @@ definitions:
         type: string
         format: date-time
         description: The date and time the activity occurred.
+  Label:
+    type: object
+    properties:
+      labelID:
+        type: string
+        description: Unique identifier of a label
+      title:
+        type: string
+        description: Title of a label
+      color:
+        type: string
+        description: Color assigned to a label
   Error:
     type: object
     properties:
