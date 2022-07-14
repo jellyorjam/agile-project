@@ -38,7 +38,7 @@ const WorkspaceSchema = new Schema({
 
 
 const BoardSchema = new Schema({
-  title: String, //title not name
+  title: String,
   lists: [{type: Schema.Types.ObjectId, ref: "list"}],
   members: [{type: Schema.Types.ObjectId, ref: "member"}],
   labels: [{type: Schema.Types.ObjectId, ref: "label"}]
@@ -87,13 +87,15 @@ const LabelSchema = new Schema({
   color: String
 })
 
-const Member = mongoose.model("member", MemberSchema);
-const Workspace = mongoose.model("workspace", WorkspaceSchema)
-const Board = mongoose.model("board", BoardSchema)
-const Card = mongoose.model("card", CardSchema)
-const Label = mongoosem.model("label", LabelSchema)
-const List = mongoose.model("list", ListSchema)
-const Activity = mongoose.model("activity", ActivitySchema)
+exports.Member = mongoose.model("member", MemberSchema);
+exports.Workspace = mongoose.model("workspace", WorkspaceSchema);
+exports.List = mongoose.model("list", ListSchema);
+exports.Board = mongoose.model("board", BoardSchema);
+exports.Card = mongoose.model("card", CardSchema);
+exports.Activity = mongoose.model("activity", ActivitySchema);
+exports.Label = mongoose.model("label", LabelSchema);
+
+
 
 //Why have a listsId endpoint?
 ////The board will render a bunch of list components that will be mapped from the lists array retrieved by the board request, then each list will make a request by the ID it's passed down in that mapping to get all the cards in it
