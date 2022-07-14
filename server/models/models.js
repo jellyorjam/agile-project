@@ -57,7 +57,7 @@ const CardSchema = new Schema({
   members: [{type: Schema.Types.ObjectId, ref: "member"}],
   //changed to a ref because if the same label is applied to 2 cards and then renamed/recolored it will change for both cards, so want to do one database update to change the label to update everywhere
   // label: LabelSchema,
-  labels: [{type: Schema.Types.ObjectId, ref: "lable"}],
+  labels: [{type: Schema.Types.ObjectId, ref: "label"}],
   //I put currentList in the model in swagger, may end up realizing we don't need it. Trying to think through drag and drop targets, may be trackable just in list's card array
   currentList: String,
   activity: [{type: Schema.Types.ObjectId, ref: "activity"}], 
