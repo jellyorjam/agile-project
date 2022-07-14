@@ -388,7 +388,7 @@ definitions:
       id:
         type: string
         description: Unique identifier for a board
-      name:
+      title:
         type: string
         description: Name of a board
       lists:
