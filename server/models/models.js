@@ -3,25 +3,36 @@ const Schema = mongoose.Schema;
 
 
 const MemberSchema = new Schema({
-  login: LoginSchema,
-  firstName: String,
-  lastName: String,
+  login: {
+    username: String,
+    password: String
+  },
+  //made this an object to contain all name related info in case after we finish MVP want to add things like title, suffixes, pronouns, etc
+  // firstName: String,
+  // lastName: String,
+  name: {
+    first: String,
+    last: String
+  },
   email: String,
   picture: String,
   workspaces: [{type: Schema.Types.ObjectId, ref: "workspace"}]
 });
 
-const LoginSchema = new Schema({
-  username: { type: String, required: true},
-  password: { type: String, required: true}
-})
+//since we don't have a collection in the database specifically for login data I moved this inside the member schema
+// const LoginSchema = new Schema({
+//   username: { type: String, required: true},
+//   password: { type: String, required: true}
+// })
 
 const WorkspaceSchema = new Schema({
   title: String,
-  boards: [{
-    name: String,
-    boardsDetail: [{type: Schema.Types.ObjectId, ref: "board"}]
-  }],
+  //can pull names from boardID, otherwise if a board name gets changed have to do two separate database updates
+  // boards: [{
+  //   name: String,
+  //   boardsDetail: [{type: Schema.Types.ObjectId, ref: "board"}]
+  // }],
+  boards: [{type: Schema.Types.ObjectId, ref: "board"}],
   members: [{type: Schema.Types.ObjectId, ref: "member"}] 
 })
 
@@ -44,7 +55,10 @@ const CardSchema = new Schema({
   description: String,
   commentCount: Number,
   members: [{type: Schema.Types.ObjectId, ref: "member"}],
-  label: LabelSchema,
+  //changed to a ref because if the same label is applied to 2 cards and then renamed/recolored it will change for both cards, so want to do one database update to change the label to update everywhere
+  // label: LabelSchema,
+  labels: [{type: Schema.Types.ObjectId, ref: "lable"}],
+  //I put currentList in the model in swagger, may end up realizing we don't need it. Trying to think through drag and drop targets, may be trackable just in list's card array
   currentList: String,
   activity: [{type: Schema.Types.ObjectId, ref: "activity"}], 
   workspace: {type: Schema.Types.ObjectId, ref: "workspace"}
@@ -52,7 +66,12 @@ const CardSchema = new Schema({
 
 
 const ActivitySchema = new Schema({
-  member: String,
+  //Changed this to object with first and last name because I realized that's what gets displayed in the activity. I just updated swagger to match 
+  // member: String,
+  member: {
+    first: String,
+    last: String
+  },
   activityType: String,
   previousListId: String,
   targetListId: String,
@@ -77,3 +96,4 @@ const List = mongoose.model("list", ListSchema)
 const Activity = mongoose.model("activity", ActivitySchema)
 
 //Why have a listsId endpoint?
+////The board will render a bunch of list components that will be mapped from the lists array retrieved by the board request, then each list will make a request by the ID it's passed down in that mapping to get all the cards in it
