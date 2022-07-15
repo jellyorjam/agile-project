@@ -70,10 +70,15 @@ const CardSchema = new Schema({
 const ActivitySchema = new Schema({
   //Changed this to object with first and last name because I realized that's what gets displayed in the activity. I just updated swagger to match 
   // member: String,
-  member: {
-    first: String,
-    last: String
-  },
+  
+  //Changed this again to be a Ref to a member so that if they change their name at their own account level all activites associated with them are updated as well. Can just pull the name info using ID
+  // member: {
+  //   first: String,
+  //   last: String
+  // },
+
+  member: {type: Schema.Types.ObjectId, ref: "member"},
+
   activityType: String,
   previousListId: String,
   targetListId: String,
