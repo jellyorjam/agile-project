@@ -44,7 +44,7 @@ router.get("/generate-fake-data", (req, res, next) => {
             first: names[0],
             last: names[1]
         };
-        member.email = faker.internet.email;
+        member.email = faker.internet.email();
         member.picture = faker.image.people();
         member.workspaces = [];
         member.save((err) => {
@@ -54,18 +54,20 @@ router.get("/generate-fake-data", (req, res, next) => {
     }
     for(let b = 0; b < 3; b++) {
         let workspace = new Workspace();
+        // console.log(workspace);
         workspace.title = faker.company.companyName();
         let shuffledMembers = shuffleArray(members);
         let memberCount = Math.ceil(Math.random() * shuffledMembers.length);
         workspace.members = shuffledMembers.slice(memberCount);
         workspace.boards = [];
-        let numBoards = Math.ceil(Math.random() * 15);
+        let numBoards = Math.ceil(Math.random() * 8);
+        console.log(`numBoards: ${numBoards}`);
         for(let c = 0; c < numBoards; c++) {
             let board = new Board();
             board.title = faker.hacker.noun();
             board.members = workspace.members.slice(Math.floor(Math.random() * shuffledMembers.length));
             board.lists = [];
-            let numLists = Math.ceil(Math.random() * 15);
+            let numLists = Math.ceil(Math.random() * 9);
             for(let d = 0; d < 10; d++) {
                 let label = new Label();
                 label.title = faker.hacker.abbreviation();
@@ -77,7 +79,7 @@ router.get("/generate-fake-data", (req, res, next) => {
                 let list = new List();
                 list.title = faker.hacker.verb();
                 list.cards = [];
-                let numCards = Math.ceil(Math.random() * 15);
+                let numCards = Math.ceil(Math.random() * 10);
                 for(let f = 0; f < numCards; f++) {
                     let card = new Card();
                     card.title = faker.hacker.adjective();
@@ -86,7 +88,23 @@ router.get("/generate-fake-data", (req, res, next) => {
                     let shuffledLabels = shuffleArray(board.labels);
                     card.labels = Math.random() > .7 ? shuffledLabels.slice(Math.floor(Math.random() * shuffledLabels.length)) : [];
                     card.activity = [];
-                    // card.board = board._id;
+                    let commented = Math.random() > .8;
+                    if(commented) {
+                        let commentCount = Math.ceil(Math.random() * 5);
+                        for(let g = 0; g < commentCount; g++) {
+                            let activity = new Activity();
+                            activity.member = card.members[Math.floor(Math.random * card.members.length)];
+                            activity.activityType = "comment",
+                            activity.comment = {
+                                text: faker.hacker.phrase(),
+                                edited: Math.random() > .85 ? true : false
+                            },
+                            activity.date = Date.now();
+                            activity.save();
+                            card.activity.push(activity);
+                        }
+                    }
+                    card.board = board._id;
                     card.save((err) => {
                         if (err) throw err;
                     });
@@ -99,16 +117,22 @@ router.get("/generate-fake-data", (req, res, next) => {
                 if (err) throw err;
             });
         }
-        workspace.save((err) => {
+        workspace.save((err, workspace) => {
             if (err) throw err;
+            for(let g = 0; g < workspace.members.length; g++) {
+                let member = workspace.members[g];
+                // console.log(member._id);
+                // console.log(workspace)
+                member.workspaces.push(workspace);
+                setTimeout(() => {
+                    member.save((err) => {
+                        if (err) throw err;
+                    });
+                }, 1000)
+            };
+            
         });
-        for(let g = 0; g < workspace.members.length; g++) {
-            let member = workspace.members[g];
-            member.workspaces.push(workspace);
-            member.save((err) => {
-                if (err) throw err;
-            });
-        };
+        
     }
     console.log('Data loading complete');
     res.end();
