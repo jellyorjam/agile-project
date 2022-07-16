@@ -1,19 +1,23 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const initialValues = {
     username: "",
-    password: "",
+    password: ""
   };
 
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required("This field is required!"),
-    password: Yup.string().required("This field is required!"),
+    username: Yup.string().required("* This field is required!"),
+    password: Yup.string().required("* This field is required!")
   });
 
   const handleLogin = (formValue) => {
     const { username, password } = formValue;
+    navigate("../home", { replace: true });
   };
 
   return (
@@ -22,25 +26,25 @@ const Login = () => {
       validationSchema={validationSchema}
       onSubmit={handleLogin}
     >
-      <Form>
-        <div>
-          <label htmlFor="username">Username</label>
-          <Field name="username" type="text" />
-          <ErrorMessage name="username" component="div" />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <Field name="password" type="password" />
-          <ErrorMessage name="password" component="div" />
-        </div>
-        <div>
-          <button type="submit">
-            Login
-          </button>
-        </div>
-      </Form>
+      <div className="d-flex justify-content-center align-items-center login-form">
+        <Form className="form-control">
+          <div>
+            <Field className="form-control form-item" name="username" type="text" placeholder="Username" />
+            <ErrorMessage name="username" component="div" />
+          </div>
+          <div>
+            <Field className="form-control form-item" name="password" type="password" placeholder="Password" />
+            <ErrorMessage name="password" component="div" />
+          </div>
+          <div>
+            <button className="btn btn-primary form-item" type="submit">
+              Login
+            </button>
+          </div>
+        </Form>
+      </div>
     </Formik>
-  );
+  )
 };
 
 export default Login;

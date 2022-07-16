@@ -79,7 +79,9 @@ function App() {
   }
 
   return (
-    <Login />
+    <Router>
+      <Login />
+    </Router>
   )
 }
 
