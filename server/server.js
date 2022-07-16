@@ -5,6 +5,7 @@ const router = express.Router();
 const faker = require("faker");
 const {Member, Workspace, Board, List, Card, Activity, Label} = require("./models/models");
 const shuffleArray = require("./utils");
+const e = require("express");
 
 mongoose.connect("mongodb://localhost/trello-clone", {
     useNewUrlParser: true,
@@ -136,6 +137,110 @@ router.get("/generate-fake-data", (req, res, next) => {
     }
     console.log('Data loading complete');
     res.end();
+});
+
+router.param("memberID", function(req, res, next, memberID) {
+    Member.findById(memberID, (err, member) => {
+        if(err) {
+            res.status(500).send("There was an error with the format of your request");
+            throw err;
+        };
+        if(!memberID) {
+            res.status(404).send("Member not found");
+        } else {
+            req.member = member;
+            next();
+        }
+    });
+});
+
+router.param("workspaceID", function(req, res, next, workspaceID) {
+    Workspace.findById(workspaceID, (err, workspace) => {
+        if(err) {
+            res.status(500).send("There was an error with the format of your request");
+            throw err;
+        };
+        if(!workspaceID) {
+            res.status(404).send("Workspace not found");
+        } else {
+            req.workspace = workspace;
+            next();
+        }
+    });
+});
+
+router.param("boardID", function(req, res, next, boardID) {
+    Board.findById(boardID, (err, board) => {
+        if(err) {
+            res.status(500).send("There was an error with the format of your request");
+            throw err;
+        };
+        if(!boardID) {
+            res.status(404).send("Board not found");
+        } else {
+            req.board = board;
+            next();
+        }
+    });
+});
+
+router.param("listID", function(req, res, next, listID) {
+    List.findById(listID, (err, list) => {
+        if(err) {
+            res.status(500).send("There was an error with the format of your request");
+            throw err;
+        };
+        if(!listID) {
+            res.status(404).send("List not found");
+        } else {
+            req.list = list;
+            next();
+        }
+    });
+});
+
+router.param("cardID", function(req, res, next, cardID) {
+    Card.findById(cardID, (err, card) => {
+        if(err) {
+            res.status(500).send("There was an error with the format of your request");
+            throw err;
+        };
+        if(!cardID) {
+            res.status(404).send("Card not found");
+        } else {
+            req.card = card;
+            next();
+        }
+    });
+});
+
+router.param("activityID", function(req, res, next, activityID) {
+    Activity.findById(activityID, (err, activity) => {
+        if(err) {
+            res.status(500).send("There was an error with the format of your request");
+            throw err;
+        };
+        if(!activityID) {
+            res.status(404).send("Activity not found");
+        } else {
+            req.activity = activity;
+            next();
+        }
+    });
+});
+router.param("labelID", function(req, res, next, labelID) {
+    Label.findById(labelID, (err, label) => {
+        if(err) {
+            res.status(500).send("There was an error with the format of your request");
+            throw err;
+        };
+        if(!labelID) {
+            res.status(404).send("Label not found");
+        } else {
+            req.label = label;
+            next();
+        }
+    });
 });
 
 app.use(router);
