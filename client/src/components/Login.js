@@ -1,8 +1,10 @@
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
 
-const Login = () => {
+const Login = ({updateUser}) => {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const initialValues = {
@@ -17,7 +19,19 @@ const Login = () => {
 
   const handleLogin = (formValue) => {
     const { username, password } = formValue;
-    navigate("../home", { replace: true });
+    setLoading(true);
+    updateUser({username: username, password: password})
+    navigate("/home", { replace: true });
+    setLoading(false)
+    // dispatch(login({ username, password }))
+    //   .unwrap()
+    //   .then(() => {
+    //     props.history.push("/profile");
+    //     window.location.reload();
+    //   })
+    //   .catch(() => {
+    //     setLoading(false);
+    //   });
   };
 
   return (
@@ -37,8 +51,11 @@ const Login = () => {
             <ErrorMessage name="password" component="div" />
           </div>
           <div>
-            <button className="btn btn-primary form-item" type="submit">
-              Login
+            <button className="btn btn-primary form-item" type="submit" disabled={loading}>
+              {loading && (
+                  <span className="spinner-border spinner-border-sm"></span>
+                )}
+                <span>Login</span>
             </button>
           </div>
         </Form>
