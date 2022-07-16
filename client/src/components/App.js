@@ -12,12 +12,11 @@ import Home from "./Home"
 import Logout from "./Logout"
 import WorkspaceList from './WorkspaceList';
 import BoardList from './BoardList';
-import Dropdown from 'react-bootstrap/Dropdown'
+import Dropdown from 'react-bootstrap/Dropdown';
 
 function App() {
   let user = undefined;
-
-  if(user !== undefined) {
+  if(user) {
     return (
       <Router>
         <div className="App">
