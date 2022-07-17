@@ -4,11 +4,11 @@ const Logout = () => {
   const navigate = useNavigate();
 
   const handleYesClick = () => {
-    navigate("../");
+    navigate("../login", {replace: true});
   }
 
   const handleNoClick = () => {
-    navigate("../home")
+    navigate("../home", {relpace: true})
   }
 
   return (
