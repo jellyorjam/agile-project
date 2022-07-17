@@ -2,10 +2,14 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setMember } from "../reducers/loginSlice";
+
 
 const Login = ({updateUser}) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const initialValues = {
     username: "",
@@ -22,7 +26,11 @@ const Login = ({updateUser}) => {
     setLoading(true);
     updateUser({username: username, password: password})
     navigate("/home", { replace: true });
-    setLoading(false)
+    setLoading(false);
+
+    const hardCodedUserId = '62d17b0f95e97c0aa7d5825b'
+
+    dispatch(setMember(hardCodedUserId));
     // dispatch(login({ username, password }))
     //   .unwrap()
     //   .then(() => {
