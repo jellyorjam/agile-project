@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setMember } from "../reducers/loginSlice";
+import { setWorkspaces } from "../reducers/homeSlice";
 
 
 const Login = ({updateUser}) => {
@@ -28,9 +29,19 @@ const Login = ({updateUser}) => {
     navigate("/home", { replace: true });
     setLoading(false);
 
-    const hardCodedUserId = '62d17b0f95e97c0aa7d5825b'
+    const hardCodedUserId = '62d17b0f95e97c0aa7d5825b' //emily's hardcoded user
 
-    dispatch(setMember(hardCodedUserId));
+    dispatch(setMember(hardCodedUserId))
+      .unwrap()
+      .then((payload) => {
+        const workspaces = payload.workspaces;
+        for (let i = 0; i < workspaces.length; i++) {
+          let workspace = workspaces[i]
+          dispatch(setWorkspaces(workspace))
+        }
+      }).catch((err) => {
+        return err
+      });
     // dispatch(login({ username, password }))
     //   .unwrap()
     //   .then(() => {
