@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setMember } from "../reducers/loginSlice";
-import { setWorkspaces } from "../reducers/homeSlice";
+import { setWorkspaces, workspacesLoaded } from "../reducers/homeSlice";
 
 
 const Login = ({updateUser}) => {
@@ -28,16 +28,20 @@ const Login = ({updateUser}) => {
     updateUser({username: username, password: password})
     navigate("/home", { replace: true });
 
-    // const hardCodedUserId = '62d17b0f95e97c0aa7d5825b' emily's hardcoded user
-    const hardCodedUserId = '62d4c5f2eb86a718a87a3d22' //natalie's hardcoded user
+    const hardCodedUserId = '62d592bb2d475d2ed21bbea9' //emily's hardcoded user
+    // const hardCodedUserId = '62d4c5f2eb86a718a87a3d22' //natalie's hardcoded user
 
     dispatch(setMember(hardCodedUserId))
       .unwrap()
       .then((payload) => {
         const workspaces = payload.workspaces;
         for (let i = 0; i < workspaces.length; i++) {
-          let workspace = workspaces[i]
-          dispatch(setWorkspaces(workspace))
+          let workspace = workspaces[i];
+          dispatch(setWorkspaces(workspace)).then((payload) => {
+            if (i === workspaces.length - 1) {
+              dispatch(workspacesLoaded())
+            }
+          });
         }
       }).catch((err) => {
         setLoading(false);

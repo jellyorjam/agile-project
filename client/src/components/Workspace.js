@@ -1,4 +1,4 @@
-import BoardList from "./BoardList"
+import BoardList from "./BoardList";
 
 const Workspace = () => {
   return (
