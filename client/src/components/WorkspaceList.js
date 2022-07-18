@@ -1,10 +1,15 @@
 import Workspace from "./Workspace";
 import { useSelector, useDispatch } from "react-redux";
-import { loadBoardsInWorkspace, boardsLoaded } from "../reducers/workspaceSlice";
+import { loadBoardsInWorkspace, boardsLoaded, clearBoards } from "../reducers/workspaceSlice";
 import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 const WorkspaceList = () => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(clearBoards())
+  }, [dispatch]);
 
   const workspacesLoaded = useSelector(state => state.home.workspacesLoaded);
   const workspaces = useSelector(state => state.home.workspaces);
