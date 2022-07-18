@@ -27,9 +27,9 @@ const Login = ({updateUser}) => {
     setLoading(true);
     updateUser({username: username, password: password})
     navigate("/home", { replace: true });
-    setLoading(false);
 
-    const hardCodedUserId = '62d17b0f95e97c0aa7d5825b' //emily's hardcoded user
+    // const hardCodedUserId = '62d17b0f95e97c0aa7d5825b' emily's hardcoded user
+    const hardCodedUserId = '62d4c5f2eb86a718a87a3d22' //natalie's hardcoded user
 
     dispatch(setMember(hardCodedUserId))
       .unwrap()
@@ -40,6 +40,7 @@ const Login = ({updateUser}) => {
           dispatch(setWorkspaces(workspace))
         }
       }).catch((err) => {
+        setLoading(false);
         return err
       });
     // dispatch(login({ username, password }))

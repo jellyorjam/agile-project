@@ -13,6 +13,7 @@ import Logout from "./Logout"
 import WorkspaceList from './WorkspaceList';
 import BoardList from './BoardList';
 import { useState } from 'react';
+import Profile from './Profile';
 
 function App() {
   const [user, updateUser] = useState();
@@ -27,6 +28,7 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/workspaces" element={<WorkspaceList />} />
             <Route path="/boards" element={<BoardList />} />
+            <Route path="/:userId" element={<Profile />} />
             <Route path="/logout" element={<Logout />} />
           </Routes>
         </div>
