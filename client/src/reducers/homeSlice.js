@@ -32,7 +32,9 @@ export const homeSlice = createSlice({
   name: 'home',
   initialState,
   reducers: {
-
+    workspacesLoaded: (state) => {
+      state.workspacesLoaded = true;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(setWorkspaces.fulfilled, (state, action) => {
@@ -44,4 +46,5 @@ export const homeSlice = createSlice({
   }
 })
 
+export const {workspacesLoaded} = homeSlice.actions;
 export default homeSlice.reducer
