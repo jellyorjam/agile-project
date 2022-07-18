@@ -32,9 +32,6 @@ const WorkspaceList = () => {
       return workspace.title === titleClicked
     })
 
-    const workspaceId = workspaceClicked._id;
-    console.log(workspaceId)
-
     const boards = workspaceClicked.boards
     for (let i = 0; i < boards.length; i++) {
       let board = boards[i];
