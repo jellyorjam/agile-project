@@ -9,7 +9,9 @@ const baseUrl = 'http://localhost:8000';
 export const loadBoardsInWorkspace = createAsyncThunk('workspace/loadBoardsInWorkspace', async (board) => {
   try {
     const response = await axios.get(baseUrl + '/boards/' + board);
-    return response.data.title
+    return {
+      title: response.data.title,
+      _id: response.data._id}
   }
   catch (err) {
     return err
