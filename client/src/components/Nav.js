@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 const Nav = () => {
   const login = useSelector(state => state.login);
 
-  console.log(login)
   if(login.login){
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -18,7 +17,7 @@ const Nav = () => {
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item>
-                      <Link className="container row profile-nav" to="/home">
+                      <Link className="container row profile-nav" to={login._id}>
                         <img className="pfp col-7" src={login.picture} alt={login.name.first} />
                         <p className="username">{login.login.username}</p>
                       </Link>

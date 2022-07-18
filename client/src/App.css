@@ -81,3 +81,23 @@ a:link {
 .profile-nav {
   padding-top: 15px;
 }
+
+.full-pfp {
+  border-radius: 50%;
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+}
+
+.profile-page h3 {
+  margin-top: 20px;
+  color: #2328ff;
+}
+
+.profile-page h1 {
+  margin-top: 20px;
+}
+
+.profile-page img {
+  margin-top: 40px;
+}
