@@ -7,9 +7,6 @@ const MemberSchema = new Schema({
     username: String,
     password: String
   },
-  //made this an object to contain all name related info in case after we finish MVP want to add things like title, suffixes, pronouns, etc
-  // firstName: String,
-  // lastName: String,
   name: {
     first: String,
     last: String
@@ -19,19 +16,9 @@ const MemberSchema = new Schema({
   workspaces: [{type: Schema.Types.ObjectId, ref: "workspace"}]
 });
 
-//since we don't have a collection in the database specifically for login data I moved this inside the member schema
-// const LoginSchema = new Schema({
-//   username: { type: String, required: true},
-//   password: { type: String, required: true}
-// })
-
 const WorkspaceSchema = new Schema({
   title: String,
-  //can pull names from boardID, otherwise if a board name gets changed have to do two separate database updates
-  // boards: [{
-  //   name: String,
-  //   boardsDetail: [{type: Schema.Types.ObjectId, ref: "board"}]
-  // }],
+  description: String,
   boards: [{type: Schema.Types.ObjectId, ref: "board"}],
   members: [{type: Schema.Types.ObjectId, ref: "member"}] 
 })
@@ -55,28 +42,14 @@ const CardSchema = new Schema({
   description: String,
   commentCount: Number,
   members: [{type: Schema.Types.ObjectId, ref: "member"}],
-  //changed to a ref because if the same label is applied to 2 cards and then renamed/recolored it will change for both cards, so want to do one database update to change the label to update everywhere
-  // label: LabelSchema,
   labels: [{type: Schema.Types.ObjectId, ref: "label"}],
-  //I put currentList in the model in swagger, may end up realizing we don't need it. Trying to think through drag and drop targets, may be trackable just in list's card array
   currentList: String,
   activity: [{type: Schema.Types.ObjectId, ref: "activity"}], 
-  //change from workspace to board b/c the board behind the card is what we have to make sure renders if a user types a url straight to a card. Updated swagger as well.
-  // workspace: {type: Schema.Types.ObjectId, ref: "workspace"}
   board: {type: Schema.Types.ObjectId, ref: "workspace"}
 })
 
 
 const ActivitySchema = new Schema({
-  //Changed this to object with first and last name because I realized that's what gets displayed in the activity. I just updated swagger to match 
-  // member: String,
-  
-  //Changed this again to be a Ref to a member so that if they change their name at their own account level all activites associated with them are updated as well. Can just pull the name info using ID
-  // member: {
-  //   first: String,
-  //   last: String
-  // },
-
   member: {type: Schema.Types.ObjectId, ref: "member"},
 
   activityType: String,
