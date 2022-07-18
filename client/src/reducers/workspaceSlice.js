@@ -22,7 +22,8 @@ export const workspaceSlice = createSlice({
   reducers: {
     boardsLoaded: (state) => {
       state.boardsLoaded = true;
-    }
+    },
+    clearBoards: () => initialState 
   },
   extraReducers: (builder) => {
     builder.addCase(loadBoardsInWorkspace.fulfilled, (state, action) => {
@@ -31,5 +32,5 @@ export const workspaceSlice = createSlice({
   }
 })
 
-export const {boardsLoaded} = workspaceSlice.actions;
+export const {boardsLoaded, clearBoards} = workspaceSlice.actions;
 export default workspaceSlice.reducer
