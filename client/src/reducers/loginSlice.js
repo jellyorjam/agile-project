@@ -8,6 +8,7 @@ const initialState = [];
 export const setMember = createAsyncThunk('login/setMember', async (hardCodedUserId) => {
   try {
     const response = await axios.get(baseUrl + '/members/' + hardCodedUserId);
+    console.log(response.data)
     return response.data
   }
   catch (err) {
