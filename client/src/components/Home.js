@@ -3,7 +3,7 @@ import WorkspaceList from "./WorkspaceList";
 const Home = () => {
   return (
     <div className="comp">
-      <h1>Home</h1>
+      <h1 className="home-title">Your Workspaces</h1>
       <WorkspaceList />
     </div>
   )

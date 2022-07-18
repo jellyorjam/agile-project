@@ -11,6 +11,7 @@ const Profile = () => {
     dispatch(findMember(userId)).catch((err) => {
       return err;
     })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const viewedMember = useSelector(state => state.home.viewedMember)

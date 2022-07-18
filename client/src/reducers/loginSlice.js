@@ -19,7 +19,7 @@ export const loginSlice = createSlice({
   name: 'login',
   initialState,
   reducers: {
-    
+    reset: () => initialState
   },
   extraReducers: (builder) => {
     builder.addCase(setMember.fulfilled, (state, action) => {
@@ -28,4 +28,5 @@ export const loginSlice = createSlice({
   }
 })
 
+export const {reset} = loginSlice.actions
 export default loginSlice.reducer

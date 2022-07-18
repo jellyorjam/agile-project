@@ -78,8 +78,8 @@ a:link {
   text-decoration: none;
 }
 
-.profile-nav {
-  padding-top: 15px;
+.dropdown-menu {
+  min-width: 100px;
 }
 
 .full-pfp {
@@ -100,4 +100,16 @@ a:link {
 
 .profile-page img {
   margin-top: 40px;
+}
+
+.home-title {
+  margin-top: 60px;
+  margin-bottom: 30px;
+  color: #757575;
+}
+
+.login-div {
+  margin-top: 150px;
+  min-width: 100px;
+  max-width: 600px;
 }
