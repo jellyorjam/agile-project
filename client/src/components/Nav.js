@@ -26,10 +26,8 @@ const Nav = () => {
                           <div className="row profile-drop">
                             <div className="col-3" style={pfpStyle}>{firstInitial}{lastInitial}</div>
                             <p className="col profile-name">{login.name.first} {login.name.last}</p>
-                            <p className="email">@{login.email}</p>
+                            <p className="email-nav">@{login.email}</p>
                           </div>
-                        
-                        
                       </Link>
                     </Dropdown.Item>
                     <Dropdown.Item>
