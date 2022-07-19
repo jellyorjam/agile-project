@@ -1,4 +1,3 @@
-import Workspace from "./Workspace";
 import { useSelector, useDispatch } from "react-redux";
 import { loadBoardsInWorkspace, boardsLoaded } from "../reducers/workspaceSlice";
 import { useNavigate } from "react-router";
@@ -44,8 +43,8 @@ const WorkspaceList = () => {
   }
 
   return (
-    <div className="comp">
-      <div className="row ws-div d-flex align-center">{renderWorkspaces()}</div>
+    <div className="d-flex justify-content-center">
+      <div className="row ws-div container">{renderWorkspaces()}</div>
     </div>
   )
 }

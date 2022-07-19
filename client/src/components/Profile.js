@@ -22,7 +22,8 @@ const Profile = () => {
       <div className="container profile-page">
         <img className="full-pfp" src={viewedMember.picture} alt={viewedMember.name.first} />
         <h1>{viewedMember.name.first} {viewedMember.name.last}</h1>
-        <h3>{viewedMember.email}</h3>
+        <h3 className="email-profile">{`(@${viewedMember.login.username})`}</h3>
+        <h3 className="email-profile col">{viewedMember.email}</h3>
       </div>
   
     )

@@ -70,7 +70,7 @@
   padding-top: 10px;
 }
 
-.email {
+.email-nav {
   color: grey;
   font-size: 15px;
 }
@@ -93,8 +93,8 @@ a:link {
 
 .full-pfp {
   border-radius: 50%;
-  width: 300px;
-  height: 300px;
+  width: 20vw;
+  height: 20vw;
   object-fit: cover;
 }
 
@@ -130,6 +130,7 @@ a:link {
   color: white;
   font-weight: bold;
   border-radius: 8px;
+  line-height: 105px;
 }
 
 .workspace-box:hover {
@@ -139,5 +140,9 @@ a:link {
 
 .ws-div {
   max-width: 600px;
-  text-align: center;
+  padding-top: 30px;
+}
+
+.email-profile {
+  color: grey !important;
 }
