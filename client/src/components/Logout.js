@@ -1,10 +1,15 @@
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { reset } from "../reducers/loginSlice";
 
 const Logout = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleYesClick = () => {
-    navigate("../login", {replace: true});
+    
+    dispatch(reset());
+    navigate("../", {replace: true});
   }
 
   const handleNoClick = () => {

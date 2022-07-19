@@ -23,13 +23,12 @@ const Login = ({updateUser}) => {
   });
 
   const handleLogin = (formValue) => {
-    const { username, password } = formValue;
+    // const { username, password } = formValue;
     setLoading(true);
-    updateUser({username: username, password: password})
     navigate("/home", { replace: true });
 
-    const hardCodedUserId = '62d592bb2d475d2ed21bbea9' //emily's hardcoded user
-    // const hardCodedUserId = '62d4c5f2eb86a718a87a3d22' //natalie's hardcoded user
+    // const hardCodedUserId = '62d592bb2d475d2ed21bbea9' //emily's hardcoded user
+    const hardCodedUserId = '62d4c5f2eb86a718a87a3d22' //natalie's hardcoded user
 
     dispatch(setMember(hardCodedUserId))
       .unwrap()
@@ -59,32 +58,34 @@ const Login = ({updateUser}) => {
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleLogin}
-    >
-      <div className="d-flex justify-content-center align-items-center login-form">
-        <Form className="form-control">
-          <div>
-            <Field className="form-control form-item" name="username" type="text" placeholder="Username" />
-            <ErrorMessage name="username" component="div" />
-          </div>
-          <div>
-            <Field className="form-control form-item" name="password" type="password" placeholder="Password" />
-            <ErrorMessage name="password" component="div" />
-          </div>
-          <div>
-            <button className="btn btn-primary form-item" type="submit" disabled={loading}>
-              {loading && (
-                  <span className="spinner-border spinner-border-sm"></span>
-                )}
-                <span>Login</span>
-            </button>
-          </div>
-        </Form>
-      </div>
-    </Formik>
+    <div className="container login-div">
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleLogin}
+      >
+        <div className="d-flex justify-content-center align-items-center login-form">
+          <Form className="form-control">
+            <div>
+              <Field className="form-control form-item" name="username" type="text" placeholder="Username" />
+              <ErrorMessage name="username" component="div" />
+            </div>
+            <div>
+              <Field className="form-control form-item" name="password" type="password" placeholder="Password" />
+              <ErrorMessage name="password" component="div" />
+            </div>
+            <div>
+              <button className="btn btn-primary form-item" type="submit" disabled={loading}>
+                {loading && (
+                    <span className="spinner-border spinner-border-sm"></span>
+                  )}
+                  <span>Login</span>
+              </button>
+            </div>
+          </Form>
+        </div>
+      </Formik>
+    </div>
   )
 };
 
