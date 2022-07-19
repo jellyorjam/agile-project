@@ -14,7 +14,7 @@ const WorkspaceList = () => {
     if (workspacesLoaded) {
       return workspaces.map((workspace, i) => {
         return (
-          <div key={i} onClick={handleClick}>{workspace.title}</div>
+          <div className="workspace-box col" key={i} onClick={handleClick}>{workspace.title}</div>
         )
       })
     }
@@ -40,14 +40,12 @@ const WorkspaceList = () => {
       });
     }
 
-    navigate("/boards")
+    navigate("/" + workspaceId + "/boards")
   }
 
   return (
     <div className="comp">
-      <h2>Workspaces</h2>
-      <div>{renderWorkspaces()}</div>
-      <Workspace />
+      <div className="row ws-div d-flex align-center">{renderWorkspaces()}</div>
     </div>
   )
 }

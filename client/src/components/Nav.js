@@ -7,7 +7,7 @@ const Nav = () => {
   const randomColor = Math.floor(Math.random()*16777215).toString(16);
   const firstInitial = login.name.first[0];
   const lastInitial = login.name.last[0];
-  const pfpStyle = { backgroundColor: "#" + randomColor, color: "white", borderRadius: "50%", width: "40px", height: "40px", paddingTop: "11px", fontSize: "12px" };
+  const pfpStyle = { backgroundColor: "#" + randomColor, color: "white", borderRadius: "50%", width: "40px", height: "40px", paddingTop: "11px", fontSize: "13px", paddingLeft: "10px", fontWeight: "bold", marginLeft: "30px" };
 
   if(login.login){
     return (
@@ -17,16 +17,18 @@ const Nav = () => {
               <li className="nav-item">
                 <Dropdown>
                   <Dropdown.Toggle className="style-button" id="dropdown-basic">
-                    Profile
+                    @{login.login.username}
                   </Dropdown.Toggle>
                   <Dropdown.Menu >
                     <Dropdown.Item>
-                      <Link className="" to={login._id}>
-                        <div className="row container profile-nav" >
-                          <div className="col-3" style={pfpStyle}>{firstInitial}{lastInitial}</div>
-                          <p className="col-7 username">{login.login.username}</p>
-                        </div>
-                        {/* <img className="pfp col-7" src={login.picture} alt={login.name.first} /> */}
+                      <Link to={login._id}>
+                          {/* <img className="pfp" src={login.picture} alt={login.name.first} /> */}
+                          <div className="row profile-drop">
+                            <div className="col-3" style={pfpStyle}>{firstInitial}{lastInitial}</div>
+                            <p className="col profile-name">{login.name.first} {login.name.last}</p>
+                            <p className="email">@{login.email}</p>
+                          </div>
+                        
                         
                       </Link>
                     </Dropdown.Item>

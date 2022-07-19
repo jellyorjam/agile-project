@@ -52,7 +52,6 @@
 
 .pfp {
   margin-top: 10px;
-  margin-bottom: 10px;
   object-fit: cover;
   width: 50px;
   height: 50px;
@@ -61,9 +60,19 @@
   margin-right: auto;
 }
 
-.username {
+.profile-drop {
+  padding-top: 10px;
+}
+
+.profile-name {
   color: #0a2749;
   font-weight: bold;
+  padding-top: 10px;
+}
+
+.email {
+  color: grey;
+  font-size: 15px;
 }
 
 .dropdown-text {
@@ -105,11 +114,30 @@ a:link {
 .home-title {
   margin-top: 60px;
   margin-bottom: 30px;
-  color: #757575;
+  color: #0a2749;
 }
 
 .login-div {
   margin-top: 150px;
   min-width: 100px;
   max-width: 600px;
+}
+
+.workspace-box {
+  background-color: #99d2f7;
+  margin: 20px;
+  padding: 40px;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+.workspace-box:hover {
+  opacity: 70%;
+  transition-duration: 0.5s;
+}
+
+.ws-div {
+  max-width: 600px;
+  text-align: center;
 }

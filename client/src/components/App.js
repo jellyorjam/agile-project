@@ -27,7 +27,7 @@ function App() {
             <Route path="/" element={<Nav />} />
             <Route path="/home" element={<Home />} />
             <Route path="/workspaces" element={<WorkspaceList />} />
-            <Route path="/boards" element={<BoardList />} />
+            <Route path="/:workspaceId/boards" element={<BoardList />} />
             <Route path="/:userId" element={<Profile />} />
             <Route path="/logout" element={<Logout />} />
           </Routes>
