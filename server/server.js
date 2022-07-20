@@ -286,6 +286,29 @@ router.post("/workspaces/:workspaceID/boards", (req, res, next) => {
     }
 });
 
+router.post("/boards/:boardID/lists/:listID/cards", (req, res, next) => {
+    if(req.body.title) {
+        if(req.board.lists.includes(req.list._id)) {
+            let card = new Card();
+            card.title = req.body.title;
+            card.board = req.board._id;
+            card.save((err, card) => {
+                if(err) throw err;
+                req.list.cards.push(card);
+                req.list.save(err => {
+                    if(err) throw err;
+                    res.status(200).send(`Card ${card.title} successfully added to ${req.list.title} on the ${req.board.title} board`);
+                });
+            });
+        } else {
+            res.status(400).send("Requested list does not belong to requested board");
+        }
+    } else {
+        res.status(400).send("Card must have a title");
+    }
+});
+
+
 router.get("/boards/:boardID", (req, res, next) => {
     console.log("Board found");
     res.status(200).send(req.board);
