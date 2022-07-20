@@ -272,6 +272,7 @@ router.post("/workspaces/:workspaceID/boards", (req, res, next) => {
     if(req.body.title) {
         let board = new Board();
         board.title = req.body.title;
+        board.members = req.workspace.members.slice();
         board.save((err, board) => {
             if(err) throw err;
             req.workspace.boards.push(board);
