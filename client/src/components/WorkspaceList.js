@@ -17,8 +17,25 @@ const WorkspaceList = () => {
   const renderWorkspaces = () => {
     if (workspacesLoaded) {
       return workspaces.map((workspace, i) => {
+        const initial = workspace.title[0];
+        const randomColor = Math.floor(Math.random()*16777215).toString(16);
+        const randomColor2 = Math.floor(Math.random()*16777215).toString(16);
+        const pfpStyle = {backgroundImage: "linear-gradient(#" + randomColor + ", #" + randomColor2 + ")"}
         return (
-          <div className="workspace-box col" key={i} onClick={handleClick}>{workspace.title}</div>
+          <div className="workspace-div" key={i} onClick={handleClick}>
+            <div className="row main">
+              <div className="ws-initial col-1" style={pfpStyle}>{initial}</div>
+              <div className="ws-title col">{workspace.title}</div>
+            </div>
+            <div className="row ws-buttons">
+              <div className="ws-members col">
+                {/*eslint-disable-next-line jsx-a11y/alt-text*/}
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"/>Members</div>
+              <div className="ws-boards col">
+                {/*eslint-disable-next-line jsx-a11y/alt-text*/}
+                <img src="https://icons.veryicon.com/png/o/miscellaneous/linear-icon-25/bulletin-board-4.png"/>Boards</div>
+            </div>
+          </div>
         )
       })
     }
@@ -41,12 +58,12 @@ const WorkspaceList = () => {
       });
     }
 
-    navigate("/" + workspaceId + "/boards")
+    navigate("/" + workspaceClicked._id + "/boards")
   }
 
   return (
     <div className="d-flex justify-content-center">
-      <div className="row ws-div container">{renderWorkspaces()}</div>
+      <div>{renderWorkspaces()}</div>
     </div>
   )
 }

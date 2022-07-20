@@ -4,7 +4,7 @@ const Home = () => {
   return (
     <div className="comp">
       <h3 className="home-title">Your Workspaces</h3>
-      <div className="">
+      <div className="card ws-card container">
         <WorkspaceList />
       </div>
     </div>

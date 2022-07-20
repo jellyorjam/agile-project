@@ -81,6 +81,7 @@
 
 .style-button {
   background-color: #0a2749 !important;
+  margin-right: 40px;
 }
 
 a:link {
@@ -123,26 +124,102 @@ a:link {
   max-width: 600px;
 }
 
-.workspace-box {
-  background-color: #99d2f7;
+.workspace-div {
+  background-color: #eef4fa;
   margin: 20px;
   padding: 40px;
-  color: white;
+  color: #0a2749;
+  line-height: 30px;
   font-weight: bold;
   border-radius: 8px;
-  line-height: 105px;
+  width: 75vw;
+  min-width: 300px;
+  max-width: 900px;
 }
 
-.workspace-box:hover {
-  opacity: 70%;
-  transition-duration: 0.5s;
-}
-
-.ws-div {
-  max-width: 600px;
+.ws-card {
+  width: 90vw;
   padding-top: 30px;
+  align-items: center;
 }
 
 .email-profile {
   color: grey !important;
+}
+
+.pfp-color {
+  color: white;
+  border-radius: 50%;
+  width: 3vw;
+  height: 3vw;
+  line-height: 3vw;
+  padding-left: 7px;
+  margin-left: 15px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.ws-initial {
+  width: 15vw;
+  max-width: 40px !important;
+  max-height: 40px;
+  line-height: 5.5vw;
+  line-height: 40px;
+  color: white;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.ws-title {
+  text-align: left;
+  overflow: visible;
+  white-space: nowrap;
+  float: left;
+  font-size: 25px;
+  padding-top: 5px;
+}
+
+.ws-members {
+  background-color: white;
+  min-width: 123px;
+  max-width: 124px;
+  border-radius: 5px;
+  color: #0a2749;
+  margin-right: 15px;
+  float: left;
+}
+
+.ws-members img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  padding-right: 5px;
+  opacity: 50%;
+  line-height: 20px;
+  padding-bottom: 3px;
+}
+
+.ws-boards {
+  background-color: white;
+  min-width: 123px;
+  max-width: 124px;
+  border-radius: 5px;
+  color: #0a2749;
+  width: 10%;
+  margin-left: 15px;
+  float: left;
+}
+
+.ws-boards img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  padding-right: 7px;
+  opacity: 50%;
+  line-height: 20px;
+  padding-bottom: 3px;
+}
+
+.ws-buttons {
+  padding-top: 30px;
 }
