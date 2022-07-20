@@ -63,7 +63,7 @@ const WorkspaceList = () => {
 
   return (
     <div className="d-flex justify-content-center">
-      <div className="card ws-card container">{renderWorkspaces()}</div>
+      <div>{renderWorkspaces()}</div>
     </div>
   )
 }

@@ -26,6 +26,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Nav />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/boards" element={<BoardList />} />
             <Route path="/workspaces" element={<WorkspaceList />} />
             <Route path="/:workspaceId/boards" element={<BoardList />} />
             <Route path="/:userId" element={<Profile />} />

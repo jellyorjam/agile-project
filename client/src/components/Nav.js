@@ -6,15 +6,23 @@ const Nav = () => {
   const navigate = useNavigate();
   const login = useSelector(state => state.login);
   const randomColor = Math.floor(Math.random()*16777215).toString(16);
-  const firstInitial = login.name.first[0];
-  const lastInitial = login.name.last[0];
   const pfpStyle = { backgroundColor: "#" + randomColor };
 
   if(login.login){
     return (
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav">
+      <nav className="navbar navbar-expand-lg navbar-light bg-light ">
+          <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul className="navbar-nav ">
+              <li className="nav-item">
+                <Link className="nav-link" to="/workspaces">
+                  Workspaces
+                </Link>
+              </li>
+              <li className="nav-item active">
+                <Link className="nav-link" to="/home" >
+                  Home
+                </Link>
+              </li>
               <li className="nav-item">
                 <Dropdown>
                   <Dropdown.Toggle className="style-button" id="dropdown-basic">
@@ -24,7 +32,7 @@ const Nav = () => {
                     <Dropdown.Item onClick={() => navigate("/" + login._id, {relpace: true})}>
                       {/* <img className="pfp" src={login.picture} alt={login.name.first} /> */}
                       <div className="row profile-drop">
-                        <div className="col-2 pfp-color" style={pfpStyle}>{firstInitial}{lastInitial}</div>
+                        <div className="col-2 pfp-color" style={pfpStyle}>{login.name.first[0]}{login.name.last[0]}</div>
                         <p className="col profile-name">{login.name.first} {login.name.last}</p>
                         <p className="email-nav">@{login.email}</p>
                       </div>
@@ -40,16 +48,6 @@ const Nav = () => {
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
-              </li>
-              <li className="nav-item active">
-                <Link className="nav-link" to="/home" >
-                  Home
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/workspaces">
-                  Workspaces
-                </Link>
               </li>
             </ul>
           </div>
