@@ -1,8 +1,9 @@
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Nav = () => {
+  const navigate = useNavigate();
   const login = useSelector(state => state.login);
   const randomColor = Math.floor(Math.random()*16777215).toString(16);
   const firstInitial = login.name.first[0];
@@ -20,30 +21,22 @@ const Nav = () => {
                     @{login.login.username}
                   </Dropdown.Toggle>
                   <Dropdown.Menu >
-                    <Dropdown.Item>
-                      <Link to={login._id}>
-                          {/* <img className="pfp" src={login.picture} alt={login.name.first} /> */}
-                          <div className="row profile-drop">
-                            <div className="col-2 pfp-color" style={pfpStyle}>{firstInitial}{lastInitial}</div>
-                            <p className="col profile-name">{login.name.first} {login.name.last}</p>
-                            <p className="email-nav">@{login.email}</p>
-                          </div>
-                      </Link>
+                    <Dropdown.Item onClick={() => navigate("/" + login._id, {relpace: true})}>
+                      {/* <img className="pfp" src={login.picture} alt={login.name.first} /> */}
+                      <div className="row profile-drop">
+                        <div className="col-2 pfp-color" style={pfpStyle}>{firstInitial}{lastInitial}</div>
+                        <p className="col profile-name">{login.name.first} {login.name.last}</p>
+                        <p className="email-nav">@{login.email}</p>
+                      </div>
                     </Dropdown.Item>
-                    <Dropdown.Item>
-                      <Link className="dropdown-text" to="/workspaces">
-                        Workspaces
-                      </Link>
+                    <Dropdown.Item className="dropdown-text" onClick={() => navigate("/workspaces", {relpace: true})}>
+                      Workspaces
                     </Dropdown.Item>
-                    <Dropdown.Item>
-                      <Link className="dropdown-text" to="/boards">
-                        Boards
-                      </Link>
+                    <Dropdown.Item className="dropdown-text" onClick={() => navigate("/boards", {relpace: true})}>
+                      Boards
                     </Dropdown.Item>
-                    <Dropdown.Item>
-                      <Link className="dropdown-text" to="/logout">
-                        Logout
-                      </Link>
+                    <Dropdown.Item className="dropdown-text" onClick={() => navigate("/logout", {relpace: true})}>
+                      Logout
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
