@@ -158,7 +158,7 @@ router.param("workspaceID", function(req, res, next, workspaceID) {
             res.status(500).send("There was an error with the format of your request");
             throw err;
         };
-        if(!workspaceID) {
+        if(!workspace) {
             res.status(404).send("Workspace not found");
         } else {
             req.workspace = workspace;
@@ -173,7 +173,7 @@ router.param("boardID", function(req, res, next, boardID) {
             res.status(500).send("There was an error with the format of your request");
             throw err;
         };
-        if(!boardID) {
+        if(!board) {
             res.status(404).send("Board not found");
         } else {
             req.board = board;
@@ -188,7 +188,7 @@ router.param("listID", function(req, res, next, listID) {
             res.status(500).send("There was an error with the format of your request");
             throw err;
         };
-        if(!listID) {
+        if(!list) {
             res.status(404).send("List not found");
         } else {
             req.list = list;
@@ -203,7 +203,7 @@ router.param("cardID", function(req, res, next, cardID) {
             res.status(500).send("There was an error with the format of your request");
             throw err;
         };
-        if(!cardID) {
+        if(!card) {
             res.status(404).send("Card not found");
         } else {
             req.card = card;
@@ -218,7 +218,7 @@ router.param("activityID", function(req, res, next, activityID) {
             res.status(500).send("There was an error with the format of your request");
             throw err;
         };
-        if(!activityID) {
+        if(!activity) {
             res.status(404).send("Activity not found");
         } else {
             req.activity = activity;
@@ -232,7 +232,7 @@ router.param("labelID", function(req, res, next, labelID) {
             res.status(500).send("There was an error with the format of your request");
             throw err;
         };
-        if(!labelID) {
+        if(!label) {
             res.status(404).send("Label not found");
         } else {
             req.label = label;
