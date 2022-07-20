@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { loadBoardsInWorkspace, boardsLoaded, clearBoards } from "../reducers/workspaceSlice";
+import { loadBoardsInWorkspace, getMembers, boardsLoaded, clearBoards } from "../reducers/workspaceSlice";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 
@@ -28,10 +28,10 @@ const WorkspaceList = () => {
               <div className="ws-title col">{workspace.title}</div>
             </div>
             <div className="row ws-buttons">
-              <div className="ws-members col">
+              <div className="ws-members col" onClick={handleClickOnMembers}>
                 {/*eslint-disable-next-line jsx-a11y/alt-text*/}
-                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"/>Members</div>
-              <div className="ws-boards col"  onClick={handleClick}>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" />Members</div>
+              <div className="ws-boards col"  onClick={handleClickOnBoards}>
                 {/*eslint-disable-next-line jsx-a11y/alt-text*/}
                 <img src="https://icons.veryicon.com/png/o/miscellaneous/linear-icon-25/bulletin-board-4.png"/>Boards</div>
             </div>
@@ -41,7 +41,7 @@ const WorkspaceList = () => {
     }
   }
 
-  const handleClick = (e) => {
+  const handleClickOnBoards = (e) => {
     const titleClicked = e.target.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML;
 
     const workspaceClicked = workspaces.find((workspace) => {
@@ -59,6 +59,20 @@ const WorkspaceList = () => {
     }
 
     navigate("/" + workspaceClicked._id + "/boards")
+  }
+
+  const handleClickOnMembers = (e) => {
+    const titleClicked = e.target.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML;
+
+    const workspaceClicked = workspaces.find((workspace) => {
+      return workspace.title === titleClicked
+    })
+
+    const members = workspaceClicked.members
+    for (let i = 0; i < members.length; i++) {
+      let member = members[i];
+      dispatch(getMembers(member))
+    }
   }
 
   return (
