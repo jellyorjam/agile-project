@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { loadBoardsInWorkspace, boardsLoaded, clearBoards } from "../reducers/workspaceSlice";
+import { loadBoardsInWorkspace, getMembersOfWorkspace, boardsLoaded, clearBoards } from "../reducers/workspaceSlice";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 
@@ -22,16 +22,16 @@ const WorkspaceList = () => {
         const randomColor2 = Math.floor(Math.random()*16777215).toString(16);
         const pfpStyle = {backgroundImage: "linear-gradient(#" + randomColor + ", #" + randomColor2 + ")"}
         return (
-          <div className="workspace-div" key={i} onClick={handleClick}>
+          <div className="workspace-div" key={i}>
             <div className="row main">
               <div className="ws-initial col-1" style={pfpStyle}>{initial}</div>
               <div className="ws-title col">{workspace.title}</div>
             </div>
             <div className="row ws-buttons">
-              <div className="ws-members col">
+              <div className="ws-members col" onClick={handleClickOnMembers}>
                 {/*eslint-disable-next-line jsx-a11y/alt-text*/}
-                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"/>Members</div>
-              <div className="ws-boards col">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" />Members</div>
+              <div className="ws-boards col"  onClick={handleClickOnBoards}>
                 {/*eslint-disable-next-line jsx-a11y/alt-text*/}
                 <img src="https://icons.veryicon.com/png/o/miscellaneous/linear-icon-25/bulletin-board-4.png"/>Boards</div>
             </div>
@@ -41,8 +41,8 @@ const WorkspaceList = () => {
     }
   }
 
-  const handleClick = (e) => {
-    const titleClicked = e.target.innerHTML;
+  const handleClickOnBoards = (e) => {
+    const titleClicked = e.target.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML;
 
     const workspaceClicked = workspaces.find((workspace) => {
       return workspace.title === titleClicked
@@ -59,6 +59,20 @@ const WorkspaceList = () => {
     }
 
     navigate("/" + workspaceClicked._id + "/boards")
+  }
+
+  const handleClickOnMembers = (e) => {
+    const titleClicked = e.target.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML;
+
+    const workspaceClicked = workspaces.find((workspace) => {
+      return workspace.title === titleClicked
+    })
+
+    const members = workspaceClicked.members
+    for (let i = 0; i < members.length; i++) {
+      let member = members[i];
+      dispatch(getMembersOfWorkspace(member))
+    }
   }
 
   return (
