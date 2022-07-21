@@ -33,7 +33,11 @@ const WorkspaceList = () => {
               <div className="ws-title col">{workspace.title}</div>
             </div>
             <div className="row ws-buttons">
-              <div className="ws-members col" onClick={handleClickOnMembers}>
+              <div 
+                className="ws-members col" 
+                onClick={handleClickOnMembers}
+                
+              >
                 {/*eslint-disable-next-line jsx-a11y/alt-text*/}
                 <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" />Members
                 
@@ -89,17 +93,22 @@ const WorkspaceList = () => {
       return element.classList.remove("show");
     }
     if(!element.classList.contains("show")){
-      return element.classList.add("show")
+      return element.classList.add("show");
     }
   }
 
   const handleClickOnMembers = (e) => {
-    dispatch(clearMembers());
+    dispatch(clearMembers())
+    var elems = document.querySelectorAll(".members-dropdown");
 
+    [].forEach.call(elems, function(el) {
+      el.classList.remove("show");
+    });
     const titleClicked = e.target.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML;
     const workspaceClicked = workspaces.find((workspace) => {
       return workspace.title === titleClicked
     })
+
     const dropdown = e.target.parentElement.childNodes[2];
     const members = workspaceClicked.members
 
@@ -107,6 +116,7 @@ const WorkspaceList = () => {
       let member = members[i];
       dispatch(getMembersOfWorkspace(member))
     }
+
     toggleShow(dropdown);
   }
 
