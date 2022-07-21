@@ -1,11 +1,13 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, Provider } from "react-redux";
 import { getBoard } from "../reducers/boardSlice";
+import { useNavigate } from "react-router"
 
 
 const BoardList = () => {
   const dispatch = useDispatch();
   const boards = useSelector(state => state.workspace.boards)
   const boardsLoaded = useSelector(state => state.workspace.boardsLoaded);
+  const navigate = useNavigate();
 
   const renderBoards = () => {
     if (boardsLoaded) {
@@ -25,7 +27,10 @@ const BoardList = () => {
     })
 
     const boardId = boardClicked._id;
-    dispatch(getBoard(boardId));
+
+    dispatch(getBoard(boardId)).then(() => {
+      navigate("/boards/" + boardId);
+    })
   }
   
   return (

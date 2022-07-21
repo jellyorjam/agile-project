@@ -76,6 +76,3 @@ exports.Activity = mongoose.model("activity", ActivitySchema);
 exports.Label = mongoose.model("label", LabelSchema);
 
 
-
-//Why have a listsId endpoint?
-////The board will render a bunch of list components that will be mapped from the lists array retrieved by the board request, then each list will make a request by the ID it's passed down in that mapping to get all the cards in it
