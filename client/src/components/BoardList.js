@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, Provider } from "react-redux";
 import { getBoard } from "../reducers/boardSlice";
 import { useNavigate } from "react-router"
 
@@ -27,10 +27,10 @@ const BoardList = () => {
     })
 
     const boardId = boardClicked._id;
-    dispatch(getBoard(boardId));
 
-
-    navigate("/boards/" + boardId)
+    dispatch(getBoard(boardId)).then(() => {
+      navigate("/boards/" + boardId);
+    })
   }
   
   return (

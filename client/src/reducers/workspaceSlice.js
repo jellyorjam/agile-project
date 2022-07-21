@@ -19,7 +19,7 @@ export const loadBoardsInWorkspace = createAsyncThunk('workspace/loadBoardsInWor
   }
 })
 
-export const getMembers = createAsyncThunk('workspace/getMembers', async (member) => {
+export const getMembersOfWorkspace = createAsyncThunk('workspace/getMembers', async (member) => {
   try {
     const response = await axios.get(baseUrl + '/members/' + member);
     return {
@@ -44,7 +44,7 @@ export const workspaceSlice = createSlice({
     builder.addCase(loadBoardsInWorkspace.fulfilled, (state, action) => {
       state.boards.push(action.payload)
     });
-    builder.addCase(getMembers.fulfilled, (state, action) => {
+    builder.addCase(getMembersOfWorkspace.fulfilled, (state, action) => {
       state.members.push(action.payload)
     })
   }

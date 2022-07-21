@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { loadBoardsInWorkspace, getMembers, boardsLoaded, clearBoards } from "../reducers/workspaceSlice";
+import { loadBoardsInWorkspace, getMembersOfWorkspace, boardsLoaded, clearBoards } from "../reducers/workspaceSlice";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 
@@ -71,7 +71,7 @@ const WorkspaceList = () => {
     const members = workspaceClicked.members
     for (let i = 0; i < members.length; i++) {
       let member = members[i];
-      dispatch(getMembers(member))
+      dispatch(getMembersOfWorkspace(member))
     }
   }
 
