@@ -251,6 +251,31 @@ router.get("/workspaces/:workspaceID", (req, res, next) => {
     res.status(200).send(req.workspace);
 });
 
+router.get("/boards/:boardID", (req, res, next) => {
+    console.log("Board found");
+    res.status(200).send(req.board);
+});
+
+router.get("/lists/:listID", (req, res, next) => {
+    console.log("List found");
+    res.status(200).send(req.list);
+});
+
+router.get("/cards/:cardID", (req, res, next) => {
+    console.log("Card found");
+    res.status(200).send(req.card);
+});
+
+router.get("/activites/:activityID", (req, res, next) => {
+    console.log("Actvity found");
+    res.status(200).send(req.activity);
+});
+
+router.get("/labels/:labelID", (req, res, next) => {
+    console.log("Label found");
+    res.status(200).send(req.label);
+});
+
 router.post("/members/:memberID/workspaces", (req, res, next) => {
     if(req.body.title && req.body.description) {
         let workspace = new Workspace();
@@ -286,6 +311,23 @@ router.post("/workspaces/:workspaceID/boards", (req, res, next) => {
     }
 });
 
+router.post("/boards/:boardID/lists", (req, res, next) => {
+    if(req.list.title) {
+        let list = new List();
+        list.title = req.list.title;
+        list.save((err, list) => {
+            if(err) throw err;
+            req.board.lists.push(list);
+            req.board.save(err => {
+                if(err) throw err;
+                res.status(200).send(`List ${list.title} sucessfully added to board ${req.board.title}`);
+            });
+        });
+    } else {
+        res.status(400).send("List must have a title");
+    }
+});
+
 router.post("/boards/:boardID/lists/:listID/cards", (req, res, next) => {
     if(req.body.title) {
         if(req.board.lists.includes(req.list._id)) {
@@ -308,30 +350,90 @@ router.post("/boards/:boardID/lists/:listID/cards", (req, res, next) => {
     }
 });
 
-
-router.get("/boards/:boardID", (req, res, next) => {
-    console.log("Board found");
-    res.status(200).send(req.board);
+router.post("/boards/:boardID/cards/:cardID/activity", (req, res, next) => {
+    if(!req.body.activityType || !req.body.member) {
+        res.status(400).send("Activity must have a member and a type");
+    } else {
+        let activity = new Activity();
+        activity.activityType = req.body.activityType;
+        activity.member = req.body.member;
+        activity.date = new Date();
+        switch(req.body.activityType) {
+            case "comment":
+                if(req.body.comment) {
+                    activity.comment = req.body.comment;
+                } else {
+                    res.status(400).send("Activity must have a title");
+                }
+                break;
+            case "add":
+                if(req.body.targetListId) {
+                    activity.targetListId = req.body.targetListId;
+                } else {
+                    res.status(400).send("Activity must have a target location");
+                }
+                break;
+            case "move":
+                if(req.body.previousListId && req.body.targetListId) {
+                    activity.previousListId = req.body.previousListId;
+                    activity.targetListId = req.body.targetListId;
+                } else {
+                    res.status(400).send("Activity must have a starting location and target location");
+                }
+                break;
+            default: 
+                res.status(400).send("Activity type is invalid");
+        }
+        activity.save((err, activity) => {
+            if(err) throw err;
+            req.card.activity.push(activity);
+            req.card.save(err => {
+                if(err) throw err;
+                res.status(200).send(`Activity of type ${activity.activityType} has been added to card ${req.card.title}`);
+            });
+        });
+    }
 });
 
-router.get("/lists/:listID", (req, res, next) => {
-    console.log("List found");
-    res.status(200).send(req.list);
-});
-
-router.get("/cards/:cardID", (req, res, next) => {
-    console.log("Card found");
-    res.status(200).send(req.card);
-});
-
-router.get("/activites/:activityID", (req, res, next) => {
-    console.log("Actvity found");
-    res.status(200).send(req.activity);
-});
-
-router.get("/labels/:labelID", (req, res, next) => {
-    console.log("Label found");
-    res.status(200).send(req.label);
+router.post("/boards/:boardID/cards/:cardID/labels", (req, res, next) => {
+    if(req.body.title && req.body.color) {
+        Label.findOne({title: req.body.title, color: req.body.color}, function(err, label) {
+            if(err) throw err;
+            if(label) {
+                req.card.labels.push(label);
+                req.card.save(err => {
+                    if(err) throw err;
+                    if(!req.board.labels.includes(label._id)) {
+                        res.status(200).send(`Label ${label.title}/${label.color} successfully added to card ${req.card.title}`);
+                    } else {
+                        req.board.labels.push(label);
+                        req.board.save(err => {
+                            if(err) throw err;
+                            res.status(200).send(`Label ${label.title}/${label.color} successfully added to card ${req.card.title} and board ${req.board.title}`);
+                        });
+                    }
+                });
+            } else {
+                let label = new Label();
+                label.title = req.body.title;
+                label.color = req.body.color;
+                label.save((err, label) => {
+                    if(err) throw err;
+                    req.board.labels.push(label);
+                    req.board.save(err => {
+                        if(err) throw err;
+                        req.card.labels.push(label);
+                        req.card.save(err => {
+                            if(err) throw err;
+                            res.status(200).send(`Label ${label.title}/${label.color} successfully created and added to card ${req.card.title} and board ${req.board.title}`);
+                        })
+                    });
+                });
+            }
+        });
+    } else {
+        res.status(400).send("Label must have a title and a color");
+    }
 });
 
 app.use(router);
