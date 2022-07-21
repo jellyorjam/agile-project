@@ -2,30 +2,30 @@ import { useSelector, useDispatch } from "react-redux";
 import { loadBoardsInWorkspace, getMembersOfWorkspace, boardsLoaded, clearBoards, clearMembers } from "../reducers/workspaceSlice";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
+import { random_rgba } from "./BoardList";
 
 export const randomColorGenerator = () => {
   return Math.floor(Math.random()*16777215).toString(16);
 }
-
 const WorkspaceList = () => {
   const dispatch = useDispatch();
-
+  
   useEffect(() => {
     dispatch(clearBoards())
   }, [dispatch]);
-
+  
   const workspacesLoaded = useSelector(state => state.home.workspacesLoaded);
   const workspaces = useSelector(state => state.home.workspaces);
-  const members = useSelector(state => state.workspace.members)
+  const members = useSelector(state => state.workspace.members);
   const navigate = useNavigate();
-
+  
   const renderWorkspaces = () => {
     if (workspacesLoaded) {
       return workspaces.map((workspace, i) => {
         const initial = workspace.title[0];
-        const randomColor = randomColorGenerator();
-        const randomColor2 = randomColorGenerator();
-        const pfpStyle = {backgroundImage: "linear-gradient(#" + randomColor + ", #" + randomColor2 + ")"}
+        const random = random_rgba();
+        const pfpStyle = {backgroundColor: "rgba(" + random + "0.9)"}
+
         return (
           <div className="workspace-div" key={i}>
             <div className="row main">
@@ -46,7 +46,7 @@ const WorkspaceList = () => {
                 {/*eslint-disable-next-line jsx-a11y/alt-text*/}
                 <img src="https://icons.veryicon.com/png/o/miscellaneous/linear-icon-25/bulletin-board-4.png"/>Boards</div>
               <div className="members-dropdown">
-                {renderMembers()}
+                {renderMembers()}<p className="members-number">{'(' + members.length + ') Members'}</p>
               </div>
             </div>
           </div>
@@ -58,8 +58,9 @@ const WorkspaceList = () => {
   const renderMembers = () => {
     if(members[0]){
       return members.map((member) => {
-        const randomColor = randomColorGenerator();
-        const colorStyle = { backgroundColor: "#" + randomColor };
+        const values = random_rgba();
+        const randomColor = 'rgba(' + values + '1)'
+        const colorStyle = { backgroundColor: randomColor };
 
         return (
           <div onClick={() => navigate(`../${member._id}`, {replace: true})} style={colorStyle} className="member-style" >{member.name.first[0]}{member.name.last[0]}</div>
@@ -89,6 +90,13 @@ const WorkspaceList = () => {
   }
 
   const toggleShow = (element) => {
+    var elems = document.querySelectorAll(".members-dropdown");
+
+    [].forEach.call(elems, function(el) {
+      if(el !== element){
+        el.classList.remove("show");
+      }
+    });
     if(element.classList.contains("show")){
       return element.classList.remove("show");
     }
@@ -99,11 +107,6 @@ const WorkspaceList = () => {
 
   const handleClickOnMembers = (e) => {
     dispatch(clearMembers())
-    var elems = document.querySelectorAll(".members-dropdown");
-
-    [].forEach.call(elems, function(el) {
-      el.classList.remove("show");
-    });
     const titleClicked = e.target.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML;
     const workspaceClicked = workspaces.find((workspace) => {
       return workspace.title === titleClicked

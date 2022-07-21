@@ -38,7 +38,7 @@ export const homeSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(setWorkspaces.fulfilled, (state, action) => {
-      state.workspaces.push(action.payload)
+      state.workspaces.push(action.payload);
     });
     builder.addCase(findMember.fulfilled, (state, action) => {
       state.viewedMember = action.payload;

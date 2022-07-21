@@ -1,7 +1,11 @@
-import { useSelector, useDispatch, Provider } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getBoard } from "../reducers/boardSlice";
 import { useNavigate } from "react-router"
 
+export const random_rgba = () => {
+  const o = Math.round, r = Math.random, s = 255;
+  return o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',';
+}
 
 const BoardList = () => {
   const dispatch = useDispatch();
@@ -12,8 +16,11 @@ const BoardList = () => {
   const renderBoards = () => {
     if (boardsLoaded) {
         return boards.map((board, i) => {
+          const values = random_rgba();
+          const color = 'rgba(' + values + '0.6)'
+          const style = { backgroundColor: color }
           return (
-            <div key={i} onClick={handleClick}>{board.title}</div>
+            <div style={style} className="board-box col" key={i} onClick={handleClick}>{board.title}</div>
           )
         })
     }
@@ -34,9 +41,9 @@ const BoardList = () => {
   }
   
   return (
-    <div className="comp">
-      <h3>BoardList</h3>
-      <div>{renderBoards()}</div>
+    <div className="boards-div">
+      <h2 className="ws-boards-title">Workspace Name Here</h2>
+      <div className="boards-div row d-flex justify-content-center">{renderBoards()}</div>
     </div>
   )
 }
