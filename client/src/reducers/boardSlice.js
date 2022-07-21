@@ -15,6 +15,16 @@ export const getBoard = createAsyncThunk('board/getBoard', async (boardId) => {
   }
 })
 
+export const getWorkspaceBoard = createAsyncThunk('board/getWorkspaceBoard', async (boardId) => {
+  try {
+    const response = await axios.get(baseUrl + '/boards/' + boardId);
+    return response.data
+  }
+  catch (err) {
+    return err
+  }
+})
+
 
 export const boardSlice = createSlice({
   name: 'board',
@@ -26,8 +36,10 @@ export const boardSlice = createSlice({
     builder.addCase(getBoard.fulfilled, (state, action) => {
       state.boardInfo = action.payload
     })
+    builder.addCase(getWorkspaceBoard.fulfilled, (state, action) => {
+      state.workpace.boards.push(action.payload)
+    })
   }
 })
 
-export const {} = boardSlice.actions;
 export default boardSlice.reducer
