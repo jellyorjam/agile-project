@@ -4,7 +4,8 @@ import axios from 'axios';
 const baseUrl = 'http://localhost:8000';
 
 const initialState = {
-  lists: []
+  lists: [],
+  cards: []
 };
 
 export const getLists = createAsyncThunk('list/getLists', async (list) => {
@@ -17,36 +18,38 @@ export const getLists = createAsyncThunk('list/getLists', async (list) => {
   }
 })
 
-// export const getMembersOfBoard = createAsyncThunk('board/getMembersOfBoard', async (member) => {
-//   try {
-//     const response = await axios.get(baseUrl + '/members/' + member);
-//     return {
-//       name: response.data.name,
-//       _id: response.data._id
-//     }
-
-//   }
-//   catch (err) {
-//     return err
-//   }
-// })
+export const getCards = createAsyncThunk('list/getCards', async (card) => {
+  try {
+    const response = await axios.get(baseUrl + '/cards/' + card);
+    return {
+      _id: response.data._id,
+      title: response.data.title,
+      members: response.data.members,
+      labels: response.data.labels
+    }
+  }
+  catch (err) {
+    return err
+  }
+})
 
 export const listSlice = createSlice({
   name: 'list',
   initialState,
   reducers: {
-   
+   listsLoaded: (state) => {
+     state.listsLoaded = true
+   }
   },
   extraReducers: (builder) => {
     builder.addCase(getLists.fulfilled, (state, action) => {
       state.lists.push(action.payload)
     });
+    builder.addCase(getCards.fulfilled, (state, action) => {
+      state.cards.push(action.payload)
+    })
   }
-  //   builder.addCase(getMembersOfBoard.fulfilled, (state, action) => {
-  //     state.members.push(action.payload)
-  //   })
-  // }
 })
 
-export const {} = listSlice.actions;
+export const {listsLoaded} = listSlice.actions;
 export default listSlice.reducer
