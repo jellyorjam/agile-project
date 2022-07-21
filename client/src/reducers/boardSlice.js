@@ -24,7 +24,6 @@ export const getMembersOfBoard = createAsyncThunk('board/getMembersOfBoard', asy
       name: response.data.name,
       _id: response.data._id
     }
-
   }
   catch (err) {
     return err
@@ -47,5 +46,4 @@ export const boardSlice = createSlice({
   }
 })
 
-export const {} = boardSlice.actions;
 export default boardSlice.reducer

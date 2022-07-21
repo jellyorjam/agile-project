@@ -92,11 +92,11 @@ a:link {
   min-width: 100px;
 }
 
-.full-pfp {
-  border-radius: 50%;
-  width: 20vw;
-  height: 20vw;
+.full-cover-pic {
+  width: 100%;
+  height: 150px;
   object-fit: cover;
+  object-position: 30% 50%;
 }
 
 .profile-page h3 {
