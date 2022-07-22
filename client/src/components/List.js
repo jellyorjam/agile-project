@@ -14,7 +14,7 @@ const List = () => {
       return dispatch(getLists(list)).then((response) => {
         const cards = response.payload.cards;
         cards.map((card) => {
-          dispatch(getCards(card))
+          return dispatch(getCards(card))
         })
       })
     })

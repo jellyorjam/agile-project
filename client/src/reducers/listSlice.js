@@ -39,11 +39,12 @@ export const listSlice = createSlice({
   reducers: {
    listsLoaded: (state) => {
      state.listsLoaded = true
-   }
+   },
+   clearListsAndCards: () => initialState
   },
   extraReducers: (builder) => {
     builder.addCase(getLists.fulfilled, (state, action) => {
-      state.lists.push(action.payload)
+        state.lists.push(action.payload)
     });
     builder.addCase(getCards.fulfilled, (state, action) => {
       state.cards.push(action.payload)
@@ -51,5 +52,5 @@ export const listSlice = createSlice({
   }
 })
 
-export const {listsLoaded} = listSlice.actions;
+export const {listsLoaded, clearListsAndCards} = listSlice.actions;
 export default listSlice.reducer
