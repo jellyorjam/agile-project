@@ -42,15 +42,17 @@ const BoardList = () => {
 
     const boardId = boardClicked._id;
 
-    dispatch(getBoard(boardId)).then((payload) => {
-        const members = payload.payload.members
-        for (let i = 0; i < members.length; i++) {
-                let member = members[i];
-                dispatch(getMembersOfBoard(member))
-              }
-    }).then(() => {
-      navigate("/boards/" + boardId);
-    })
+    navigate("/boards/" + boardId)
+
+    // dispatch(getBoard(boardId)).then((payload) => {
+    //     const members = payload.payload.members
+    //     for (let i = 0; i < members.length; i++) {
+    //             let member = members[i];
+    //             dispatch(getMembersOfBoard(member))
+    //           }
+    // }).then(() => {
+    //   navigate("/boards/" + boardId);
+    // })
   }
   
   return (

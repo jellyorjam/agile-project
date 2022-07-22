@@ -2,14 +2,26 @@ import List from "./List"
 import AddList from "./AddList"
 import { useSelector, useDispatch } from "react-redux"
 import { useEffect } from "react"
-import { getMembersOfBoard } from "../reducers/boardSlice"
+import { getMembersOfBoard, getBoard } from "../reducers/boardSlice"
+import { useParams } from "react-router"
 
 const Board = () => {
   const dispatch = useDispatch();
   const board = useSelector(state => state.board.boardInfo)
   const members = useSelector(state => state.board.members)
 
+  let {boardId} = useParams();
 
+
+  useEffect(() => {
+    dispatch(getBoard(boardId)).then((response) => {
+      const members = response.payload.members
+      members.map((member) => {
+        return dispatch(getMembersOfBoard(member))
+       })
+     }
+    )
+  }, [])
 
 
   const renderTitle = () => {
