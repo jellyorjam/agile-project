@@ -250,6 +250,15 @@ a:link {
   border: 2px #eef4fa solid;
 }
 
+.member-style:hover {
+  cursor: pointer;
+  width: 3.3vw;
+  height: 3.3vw;
+  line-height: 2.9vw;
+  margin-top: 17px;
+  border: 2px #aec5dc solid;
+}
+
 .board-box {
   color: #0a2749;
   font-size: 2vw;
