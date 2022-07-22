@@ -1,6 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
 import { getBoard } from "../reducers/boardSlice";
-import { useNavigate } from "react-router"
+import { useNavigate } from "react-router";
+import { getMembersOfBoard, clearMembers } from "../reducers/boardSlice"
+import { useEffect } from "react";
 
 export const random_rgba = () => {
   const o = Math.round, r = Math.random, s = 255;
@@ -12,6 +14,11 @@ const BoardList = () => {
   const boards = useSelector(state => state.workspace.boards)
   const boardsLoaded = useSelector(state => state.workspace.boardsLoaded);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(clearMembers())
+  }, [dispatch])
+
 
   const renderBoards = () => {
     if (boardsLoaded) {
@@ -35,7 +42,13 @@ const BoardList = () => {
 
     const boardId = boardClicked._id;
 
-    dispatch(getBoard(boardId)).then(() => {
+    dispatch(getBoard(boardId)).then((payload) => {
+        const members = payload.payload.members
+        for (let i = 0; i < members.length; i++) {
+                let member = members[i];
+                dispatch(getMembersOfBoard(member))
+              }
+    }).then(() => {
       navigate("/boards/" + boardId);
     })
   }

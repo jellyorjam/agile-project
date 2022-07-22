@@ -9,15 +9,7 @@ const Board = () => {
   const board = useSelector(state => state.board.boardInfo)
   const members = useSelector(state => state.board.members)
 
-  useEffect(() => {
-    if (board.members) {
-      for (let i = 0; i < board.members.length; i++) {
-        let member = board.members[i];
-        dispatch(getMembersOfBoard(member)).then()
-      }
-    }
-  }, [dispatch, board.members])
-  
+
 
 
   const renderTitle = () => {
