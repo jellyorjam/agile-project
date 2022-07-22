@@ -28,12 +28,28 @@ export const findMember = createAsyncThunk('profile/findMember', async (member) 
   }
 })
 
+export const setViewedMemberWorkspace = createAsyncThunk('profile/setViewedMemberWorkspace', async (workspace) => {
+  try {
+    const response = await axios.get(baseUrl + '/workspaces/' + workspace);
+    return response.data
+  }
+  catch (err) {
+    return err
+  }
+});
+
 export const homeSlice = createSlice({
   name: 'home',
   initialState,
   reducers: {
     workspacesLoaded: (state) => {
       state.workspacesLoaded = true;
+    },
+    memberLoaded: (state) => {
+      state.memberLoaded = true;
+    },
+    memberWSLoaded: (state) => {
+      state.memberWSLoaded = true;
     }
   },
   extraReducers: (builder) => {
@@ -43,8 +59,11 @@ export const homeSlice = createSlice({
     builder.addCase(findMember.fulfilled, (state, action) => {
       state.viewedMember = action.payload;
     })
+    builder.addCase(setViewedMemberWorkspace.fulfilled, (state, action) => {
+      state.viewedMember.workspaces.push(action.payload)
+    })
   }
 })
 
-export const {workspacesLoaded} = homeSlice.actions;
+export const {workspacesLoaded, memberLoaded, memberWSLoaded} = homeSlice.actions;
 export default homeSlice.reducer
