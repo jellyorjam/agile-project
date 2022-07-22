@@ -1,7 +1,8 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, Provider } from "react-redux";
 import { getBoard } from "../reducers/boardSlice";
 import { useNavigate } from "react-router";
-import { getMembersOfBoard, clearMembers } from "../reducers/boardSlice"
+import { getMembersOfBoard, clearMembers} from "../reducers/boardSlice"
+import { clearListsAndCards } from "../reducers/listSlice";
 import { useEffect } from "react";
 
 export const random_rgba = () => {
@@ -19,6 +20,10 @@ const BoardList = () => {
     dispatch(clearMembers())
   }, [])
 
+  useEffect(() => {
+    dispatch(clearListsAndCards())
+  }, [])
+ 
 
   const renderBoards = () => {
     if (boardsLoaded) {

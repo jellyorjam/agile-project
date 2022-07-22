@@ -46,6 +46,6 @@ export const boardSlice = createSlice({
   }
 })
 
-export const {clearMembers} = boardSlice.actions
+export const {clearMembers, clearBoard} = boardSlice.actions
 
 export default boardSlice.reducer
