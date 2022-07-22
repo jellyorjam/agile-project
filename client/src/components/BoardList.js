@@ -17,7 +17,7 @@ const BoardList = () => {
 
   useEffect(() => {
     dispatch(clearMembers())
-  }, [dispatch])
+  }, [])
 
 
   const renderBoards = () => {

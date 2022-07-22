@@ -1,25 +1,35 @@
 import List from "./List"
 import AddList from "./AddList"
 import { useSelector, useDispatch } from "react-redux"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { getMembersOfBoard, getBoard } from "../reducers/boardSlice"
 import { useParams } from "react-router"
 
 const Board = () => {
   const dispatch = useDispatch();
   const board = useSelector(state => state.board.boardInfo)
-  const members = useSelector(state => state.board.members)
+  const membersOfBoard = useSelector(state => state.board.members)
+  const [isLoading, setIsLoading] = useState(true)
 
   let {boardId} = useParams();
 
 
   useEffect(() => {
+    
     dispatch(getBoard(boardId)).then((response) => {
-      const members = response.payload.members
-      members.map((member) => {
-        return dispatch(getMembersOfBoard(member))
-       })
-     }
+      const members = response.payload.members;
+      if (members) {
+        for (let i = 0; i < members.length; i++) {
+          let member = members[i];
+          dispatch(getMembersOfBoard(member)).then(() => {
+            if (i === members.length - 1) {
+              setIsLoading(false)
+            }
+          })
+        }
+      }
+      }
+  
     )
   }, [])
 
@@ -33,12 +43,20 @@ const Board = () => {
   }
 
   const renderMembers = () => {
-    if (members) {
-      return members.map((member) => {
+    if (membersOfBoard) {
+      return membersOfBoard.map((member) => {
         return (
           <div>{member.name.first}</div>
         )
       })
+    }
+  }
+
+  const renderLists = () => {
+    if (!isLoading) {
+      return (
+       <div> <List/></div>
+      )
     }
   }
 
@@ -47,7 +65,7 @@ const Board = () => {
     <div className="comp">
       <h1>{renderTitle()}</h1>
       <div>{renderMembers()}</div>
-      <List />
+      <div>{renderLists()}</div>
       <AddList />
     </div>
   )
