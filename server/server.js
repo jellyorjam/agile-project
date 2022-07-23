@@ -312,9 +312,9 @@ router.post("/workspaces/:workspaceID/boards", (req, res, next) => {
 });
 
 router.post("/boards/:boardID/lists", (req, res, next) => {
-    if(req.list.title) {
+    if(req.body.list.title) {
         let list = new List();
-        list.title = req.list.title;
+        list.title = req.body.list.title;
         list.save((err, list) => {
             if(err) throw err;
             req.board.lists.push(list);
@@ -435,6 +435,20 @@ router.post("/boards/:boardID/cards/:cardID/labels", (req, res, next) => {
         res.status(400).send("Label must have a title and a color");
     }
 });
+
+
+router.put("/boards/:boardID", (req, res, next) => {
+    for(key in req.body) {
+        if(req.board.hasOwnProperty(key)) {
+            req.board[key] = req.body[key];
+        }
+    }
+    req.body.save((err, board) => {
+        if(err) throw err;
+        res.status(200).send(`Board ${board.title} updated`);
+    });
+});
+
 
 app.use(router);
 
