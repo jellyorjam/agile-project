@@ -11,32 +11,42 @@ const Profile = () => {
   const viewedMember = useSelector(state => state.home.viewedMember);
   const memberIsLoaded = useSelector(state => state.home.memberLoaded);
   const memberWSReady = useSelector(state => state.home.memberWSLoaded);
-  const workspaces = useSelector(state => state.home.viewedMember.workspaces)
+  const workspaces = useSelector(state => state.home.viewedMember.workspaces);
   const color = randomColorGenerator();
   const colorStyle = { backgroundColor: "#" + color }
 
   useEffect(() => {
-    dispatch(findMember(userId)).then(
-      dispatch(memberLoaded())
-    ).catch((err) => {
+    dispatch(findMember(userId)).catch((err) => {
       return err;
     })
+    if(viewedMember._id){
+      dispatch(memberLoaded())
+      return
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewedMember._id]);
+
+  useEffect(() => {
+    const fetchWorkspaces = (workspace) => {
+      dispatch(setViewedMemberWorkspace(workspace))
+    }
 
     if(memberIsLoaded){
-      workspaces.forEach((workspace) => {
-        dispatch(setViewedMemberWorkspace(workspace)).then(() => {
-          if(workspace.index === workspaces.length - 1){
-            return dispatch(memberWSLoaded()).catch(err => err)
-          }
-        }).catch((err) => {
-          return err;
-        });
+      workspaces.forEach(workspace => {
+        if(workspaces[0].boards === undefined && workspaces[workspaces.length - 1] !== undefined){
+          fetchWorkspaces(workspace);
+          setTimeout(() => {
+            dispatch(memberWSLoaded())
+          }, 1000)
+          
+        }
+        fetchWorkspaces(workspace)
       })
     }
-      
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-    
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [memberIsLoaded]);
+
   const renderWorkspaces = () => {
     if(memberWSReady) {
       return workspaces.map((workspace, i) => {
@@ -55,7 +65,6 @@ const Profile = () => {
         )
       })
     }
-
   }
 
 
