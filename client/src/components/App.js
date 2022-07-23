@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/js/dist/dropdown.js';
 import '../App.css';
+import '../lists.css';
 import Login from './Login'
 import {
   BrowserRouter as Router,

@@ -1,7 +1,7 @@
 const AddCard = () => {
   return (
     <div>
-      <button>Add Card</button>
+      <button type="button" className="btn btn-outline-secondary">+ Add Card</button>
     </div>
   )
 }
