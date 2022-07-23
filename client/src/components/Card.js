@@ -7,17 +7,17 @@ const Card = ({trigger, toggle}) => {
   const {cardId} = useParams();
   const lists = useSelector(state => state.list);
   const newCards = [];
-  lists.forEach(list => {
-    list.cards.forEach(cards => {
-      cards.forEach(card => {
-        newCards.push(card)
+  if(lists[0]){
+    lists.forEach(list => {
+      list.cards.forEach(cards => {
+        cards.forEach(card => {
+          newCards.push(card)
+        })
       })
-    })
-  });
+    });
+  }
 
   const currentCard = newCards.find(card => card._id === cardId)
-  // const card = cards.find(card => card._id === cardId)
-  console.log(currentCard)
   return (trigger) ? (
     <div className="card list-card" id="card-component">
       <div className="list-card-inner">
