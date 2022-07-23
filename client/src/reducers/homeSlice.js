@@ -60,10 +60,15 @@ export const homeSlice = createSlice({
       state.viewedMember = action.payload;
     })
     builder.addCase(setViewedMemberWorkspace.fulfilled, (state, action) => {
-      state.viewedMember.workspaces.push(action.payload)
+      state.viewedMember.workspaces.forEach(ws => {
+        if(ws === action.payload._id){
+          state.viewedMember.workspaces.splice(ws.index, 1);
+          state.viewedMember.workspaces.push(action.payload);
+        } 
+      })
     })
   }
 })
 
-export const {workspacesLoaded, memberLoaded, memberWSLoaded} = homeSlice.actions;
+export const {workspacesLoaded, memberLoaded, memberWSLoaded } = homeSlice.actions;
 export default homeSlice.reducer
