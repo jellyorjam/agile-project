@@ -1,5 +1,6 @@
 import Card from "./Card"
 import AddCard from "./AddCard"
+import AddList from "./AddList"
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getLists, getCards, listsLoaded, setListsAndCards} from "../reducers/listSlice";
@@ -56,6 +57,7 @@ const List = () => {
                     )
                   })
                 })}</div>
+                <div><AddCard/></div>
               </div>
         )
       })
@@ -66,7 +68,9 @@ const List = () => {
 
   return (
     <div className="comp container">
-      <div className="row">{renderLists()}</div>
+      <div className="row">{renderLists()}
+        <div className="col list"><AddList/></div>
+      </div>
       {/* <Card />
       <AddCard /> */}
     </div>

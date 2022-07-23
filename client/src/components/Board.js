@@ -68,7 +68,6 @@ const Board = () => {
       <h1>{renderTitle()}</h1>
       {/* <div>{renderMembers()}</div> */}
       <div>{renderLists()}</div>
-      <AddList />
     </div>
   )
 }
