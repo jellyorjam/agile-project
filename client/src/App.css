@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  color: #0a2749;
 }
 
 .App-logo {
@@ -280,6 +281,7 @@ a:link {
 
 .ws-boards-title {
   margin-top: 50px;
+  color: #0a2749;
 }
 
 .members-number {
@@ -288,4 +290,71 @@ a:link {
   opacity: 70%;
   padding-top: 22px;
   padding-left: 10px;
+}
+
+.board-members {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.board-members .member-style {
+  margin-top: -5px;
+}
+
+.board-members p {
+  padding-right: 20px;
+  font-size: 17px;
+  font-weight: bold;
+  color: #0a2749;
+  opacity: 80%;
+}
+
+.list-card {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.list-card-inner {
+  position: relative;
+  padding: 32px;
+  width: 100%;
+  max-width: 500px;
+  height: 200px;
+  background-color: white;
+}
+
+.list-card-inner h1 {
+  line-height: 100px;
+}
+
+.close-card {
+  width: 15px;
+  float: right;
+  margin: -10px;
+  opacity: 50%;
+}
+
+.close-card:hover {
+  opacity: 100%;
+  cursor: pointer;
+}
+
+.sm-card {
+  background-color: white;
+  padding: 10px;
+  margin: 5px;
+  font-weight: bold;
+}
+
+.sm-card:hover {
+  cursor: pointer;
+  background-color: rgba(10, 39, 73, 0.1);
 }
