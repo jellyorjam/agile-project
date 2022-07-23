@@ -15,6 +15,7 @@ const BoardList = () => {
   const boards = useSelector(state => state.workspace.boards)
   const boardsLoaded = useSelector(state => state.workspace.boardsLoaded);
   const navigate = useNavigate();
+  const workspaceName = useSelector(state => state.workspace.workspaceClicked)
 
   useEffect(() => {
     dispatch(clearMembers())
@@ -62,7 +63,7 @@ const BoardList = () => {
   
   return (
     <div className="boards-div">
-      <h2 className="ws-boards-title">Workspace Name Here</h2>
+      <h2 className="ws-boards-title">{workspaceName}</h2>
       <div className="boards-div row d-flex justify-content-center">{renderBoards()}</div>
     </div>
   )
