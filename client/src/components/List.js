@@ -5,9 +5,13 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getLists, getCards, listsLoaded, setListsAndCards} from "../reducers/listSlice";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const List = () => {
+  const [trigger, toggleTrigger] = useState(false);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const boardId = useSelector(state => state.board.boardInfo._id)
   const lists = useSelector(state => state.board.boardInfo.lists);
   const listsDetail = useSelector(state => state.list);
   const [isLoading, setIsLoading] = useState(true)
@@ -53,7 +57,10 @@ const List = () => {
                 <div>{list.cards.map((cards) => {
                   return cards.map((card) => {
                     return (
-                      <div>{card.title}</div>
+                      <div className="sm-card" onClick={() => {
+                        navigate(`../boards/${boardId}/cards/${card._id}`, {replace: false})
+                        return toggleTrigger(true);
+                      }}>{card.title}</div>
                     )
                   })
                 })}</div>
@@ -64,10 +71,9 @@ const List = () => {
     }
   }
 
-
-
   return (
     <div className="comp container">
+      <Card trigger={trigger} toggle={toggleTrigger}/>
       <div className="row">{renderLists()}
         <div className="col list"><AddList/></div>
       </div>

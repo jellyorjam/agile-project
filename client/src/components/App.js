@@ -13,7 +13,8 @@ import Home from "./Home"
 import Logout from "./Logout"
 import WorkspaceList from './WorkspaceList';
 import BoardList from './BoardList';
-import Board from './Board'
+import Board from './Board';
+import Card from './Card';
 import { useSelector } from 'react-redux';
 import Profile from './Profile';
 
@@ -29,7 +30,9 @@ function App() {
             <Route path="/" element={<Nav />} />
             <Route path="/home" element={<Home />} />
             <Route path="/boards" element={<BoardList />} />
-            <Route path="/boards/:boardId" element={<Board/>}/>
+            <Route path="/boards/:boardId" element={<Board/>}>
+              <Route path="/boards/:boardId/cards/:cardId" element={<Card/>}/>
+            </Route>
             <Route path="/workspaces" element={<WorkspaceList />} />
             <Route path="/:workspaceId/boards" element={<BoardList />} />
             <Route path="/:userId" element={<Profile />} />

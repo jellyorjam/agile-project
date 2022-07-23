@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { useEffect, useState } from "react"
 import { getMembersOfBoard, getBoard } from "../reducers/boardSlice"
 import { useParams } from "react-router"
+import Card from "./Card"
 
 const Board = () => {
   const dispatch = useDispatch();
@@ -58,7 +59,7 @@ const Board = () => {
   const renderLists = () => {
     if (!isLoading) {
       return (
-       <div> <List/></div>
+       <div><List/></div>
       )
     }
   }
