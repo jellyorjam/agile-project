@@ -18,6 +18,9 @@ const Board = () => {
     
     dispatch(getBoard(boardId)).then((response) => {
       const members = response.payload.members;
+      if (members.length === 0) {
+        setIsLoading(false)
+      }
       if (members) {
         for (let i = 0; i < members.length; i++) {
           let member = members[i];
@@ -26,10 +29,9 @@ const Board = () => {
               setIsLoading(false)
             }
           })
-        }
+        }  
       }
     }
-  
     )
   }, [])
 
@@ -42,15 +44,15 @@ const Board = () => {
     }
   }
 
-  const renderMembers = () => {
-    if (membersOfBoard) {
-      return membersOfBoard.map((member) => {
-        return (
-          <div>{member.name.first}</div>
-        )
-      })
-    }
-  }
+  // const renderMembers = () => {
+  //   if (membersOfBoard) {
+  //     return membersOfBoard.map((member) => {
+  //       return (
+  //         <div className="test">{member.name.first}</div>
+  //       )
+  //     })
+  //   }
+  // }
 
   const renderLists = () => {
     if (!isLoading) {
@@ -64,7 +66,7 @@ const Board = () => {
   return (
     <div className="comp">
       <h1>{renderTitle()}</h1>
-      <div>{renderMembers()}</div>
+      {/* <div>{renderMembers()}</div> */}
       <div>{renderLists()}</div>
       <AddList />
     </div>
