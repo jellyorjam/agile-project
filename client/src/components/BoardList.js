@@ -1,8 +1,7 @@
-import { useSelector, useDispatch, Provider } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getBoard } from "../reducers/boardSlice";
 import { useNavigate } from "react-router";
-import { getMembersOfBoard, clearMembers} from "../reducers/boardSlice"
-import { clearListsAndCards } from "../reducers/listSlice";
+import { getMembersOfBoard, clearMembers } from "../reducers/boardSlice"
 import { useEffect } from "react";
 
 export const random_rgba = () => {
@@ -15,16 +14,11 @@ const BoardList = () => {
   const boards = useSelector(state => state.workspace.boards)
   const boardsLoaded = useSelector(state => state.workspace.boardsLoaded);
   const navigate = useNavigate();
-  const workspaceName = useSelector(state => state.workspace.workspaceClicked)
 
   useEffect(() => {
     dispatch(clearMembers())
   }, [])
 
-  useEffect(() => {
-    dispatch(clearListsAndCards())
-  }, [])
- 
 
   const renderBoards = () => {
     if (boardsLoaded) {
@@ -63,7 +57,7 @@ const BoardList = () => {
   
   return (
     <div className="boards-div">
-      <h2 className="ws-boards-title">{workspaceName}</h2>
+      <h2 className="ws-boards-title">Workspace Name Here</h2>
       <div className="boards-div row d-flex justify-content-center">{renderBoards()}</div>
     </div>
   )
