@@ -35,6 +35,9 @@ export const workspaceSlice = createSlice({
   name: 'workspace',
   initialState,
   reducers: {
+    setWorkspace: (state, action) => {
+      state.workspaceClicked = action.payload
+    },
     boardsLoaded: (state) => {
       state.boardsLoaded = true;
     },
@@ -51,5 +54,5 @@ export const workspaceSlice = createSlice({
   }
 })
 
-export const {boardsLoaded, clearBoards, clearMembers} = workspaceSlice.actions;
+export const {boardsLoaded, clearBoards, clearMembers, setWorkspace} = workspaceSlice.actions;
 export default workspaceSlice.reducer

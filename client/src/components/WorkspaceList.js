@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { loadBoardsInWorkspace, getMembersOfWorkspace, boardsLoaded, clearBoards, clearMembers } from "../reducers/workspaceSlice";
+import { loadBoardsInWorkspace, getMembersOfWorkspace, boardsLoaded, clearBoards, clearMembers, setWorkspace } from "../reducers/workspaceSlice";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import { random_rgba } from "./BoardList";
@@ -75,7 +75,7 @@ const WorkspaceList = () => {
     const workspaceClicked = workspaces.find((workspace) => {
       return workspace.title === titleClicked
     })
-
+    dispatch(setWorkspace(workspaceClicked.title))
     const boards = workspaceClicked.boards
     for (let i = 0; i < boards.length; i++) {
       let board = boards[i];
