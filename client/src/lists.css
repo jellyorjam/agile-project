@@ -1,9 +1,11 @@
 .list {
   background-color: #eef4fa;
+  margin: 10px;
 }
 
 .list-title {
   font-size: 30px;
+  margin: 10px;
 }
 
 .fill:hover,
@@ -13,6 +15,7 @@
 
 /*button from https://getcssscan.com/css-buttons-examples*/
 .button-55 {
+  margin: 10px;
   align-self: center;
   background-color: #fff;
   background-image: none;
