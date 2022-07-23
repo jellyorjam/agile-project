@@ -1,30 +1,25 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom"
-import { findMember, memberLoaded, memberWSLoaded, setViewedMemberWorkspace } from "../reducers/homeSlice";
+import { clearViewedMember, findMember, memberLoaded, memberWSLoaded, setViewedMemberWorkspace } from "../reducers/viewedMemberSlice";
 import { random_rgba } from "./BoardList";
 import { randomColorGenerator } from "./WorkspaceList";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const { userId } = useParams();
-  const viewedMember = useSelector(state => state.home.viewedMember);
-  const memberIsLoaded = useSelector(state => state.home.memberLoaded);
-  const memberWSReady = useSelector(state => state.home.memberWSLoaded);
-  const workspaces = useSelector(state => state.home.viewedMember.workspaces);
+  const viewedMember = useSelector(state => state.viewedMember.member[0]);
+  const memberIsLoaded = useSelector(state => state.viewedMember.memberLoaded);
+  const memberWSReady = useSelector(state => state.viewedMember.memberWSLoaded);
+  const workspaces = useSelector(state => state.viewedMember.workspaces);
   const color = randomColorGenerator();
   const colorStyle = { backgroundColor: "#" + color }
 
   useEffect(() => {
-    dispatch(findMember(userId)).catch((err) => {
-      return err;
-    })
-    if(viewedMember._id){
-      dispatch(memberLoaded())
-      return
-    }
+    dispatch(clearViewedMember())
+    dispatch(findMember(userId)).then(dispatch(memberLoaded()))
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewedMember._id]);
+  }, []);
 
   useEffect(() => {
     const fetchWorkspaces = (workspace) => {
@@ -55,7 +50,7 @@ const Profile = () => {
         const pfpStyle = {backgroundColor: "rgba(" + random + "0.9)"}
 
         return (
-          <div className="workspace-div" key={i}>
+          <div className="workspace-div col" key={i}>
             <div className="row main">
               <div className="col-2"></div>
               <div className="ws-initial col-1" style={pfpStyle}>{initial}</div>
@@ -69,7 +64,7 @@ const Profile = () => {
 
 
   
-  if(viewedMember.name){
+  if(memberIsLoaded){
     return (
       <div className="container profile-page">
         <img className="full-cover-pic" src={viewedMember.picture} alt={viewedMember.name.first} />

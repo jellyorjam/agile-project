@@ -34,7 +34,10 @@ export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
-   clearMembers: () => initialState
+   clearMembers: () => initialState,
+   membersLoaded: (state) => {
+    state.membersLoaded = true;
+   }
   },
   extraReducers: (builder) => {
     builder.addCase(getBoard.fulfilled, (state, action) => {
@@ -46,6 +49,6 @@ export const boardSlice = createSlice({
   }
 })
 
-export const {clearMembers, clearBoard} = boardSlice.actions
+export const {clearMembers, clearBoard, membersLoaded} = boardSlice.actions
 
 export default boardSlice.reducer

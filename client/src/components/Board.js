@@ -15,7 +15,6 @@ const Board = () => {
 
 
   useEffect(() => {
-    
     dispatch(getBoard(boardId)).then((response) => {
       const members = response.payload.members;
       if (members) {
@@ -24,7 +23,9 @@ const Board = () => {
           dispatch(getMembersOfBoard(member)).then(() => {
             if (i === members.length - 1) {
               setIsLoading(false)
+              
             }
+
           })
         }
       }
