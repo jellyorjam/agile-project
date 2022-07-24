@@ -2,9 +2,9 @@ import WorkspaceList from "./WorkspaceList";
 
 const Home = () => {
   return (
-    <div className="comp">
+    <div className="background">
       <h3 className="home-title">Your Workspaces</h3>
-      <div className="card ws-card container">
+      <div className="ws-card container">
         <WorkspaceList />
       </div>
     </div>

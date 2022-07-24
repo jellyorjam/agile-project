@@ -10,7 +10,7 @@ export const random_rgba = () => {
   return o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',';
 }
 
-const BoardList = () => {
+const BoardList = ({setColor}) => {
   const dispatch = useDispatch();
   const { workspaceId } = useParams();
   const boards = useSelector(state => state.workspace.boards)
@@ -45,7 +45,7 @@ const BoardList = () => {
     if (boardsReady) {
         return boards.map((board, i) => {
           const values = random_rgba();
-          const color = 'rgba(' + values + '0.6)'
+          const color = 'rgba(' + values + '0.4)'
           const style = { backgroundColor: color }
           return (
             <div style={style} className="board-box col" key={i} onClick={handleClick}>{board.title}</div>
@@ -74,15 +74,16 @@ const BoardList = () => {
       return board.title === titleClicked
     })
     const boardId = boardClicked._id;
+    setColor(e.target.style.backgroundColor)
 
-    navigate("/boards/" + boardId)
+    navigate("/" + workspaceId + "/boards/" + boardId)
   }
   
   return (
     <div className="boards-div">
       <h2 className="ws-boards-title">{workspace.title}</h2>
       <div className="members-dropdown board-members">
-        <p>{`Board Members (${workspace.members.length}): `}</p>
+        <p>{`Workspace Members (${workspace.members.length}): `}</p>
         {renderMembers()}
       </div>
       <div className="boards-div row d-flex justify-content-center">{renderBoards()}</div>
