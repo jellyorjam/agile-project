@@ -4,6 +4,7 @@ import AddList from "./AddList"
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {  setListsAndCards} from "../reducers/listSlice";
+import { setCardDetail } from "../reducers/cardSlice";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -65,7 +66,7 @@ const List = () => {
 
   const currentCard = newCards.find(card => card._id === id) //reusing Natalie's code from Card.js, should figure out how to pass down currentCard
 
-  getCardDetail(currentCard);
+  getCardDetail(currentCard).then(dispatchCardDetail);
   }
 
   const members = [];
@@ -75,7 +76,6 @@ const List = () => {
   const getCardDetail =  async (currentCard) => {
     
     if (currentCard.members.length) {
-      console.log(currentCard)
       for (let i = 0; i < currentCard.members.length; i++) {
         let member = currentCard.members[i];
         let memberInfo = await axios.get("http://localhost:8000/members/" + member)
@@ -96,13 +96,19 @@ const List = () => {
         let activities = currentCard.activity[i];
         let activityInfo = await axios.get("http://localhost:8000/activities/" + activities)
         activity.push(activityInfo.data)
-        console.log(activity)
       }
     }
-    //activities not working right now
     
   }
 
+  const dispatchCardDetail = () => {
+    const detailObj = {
+      members: members,
+      labels: labels,
+      activity: activity
+    }
+    dispatch(setCardDetail(detailObj));
+  }
   const renderLists = () => {
     if (!isLoading) {
       return listsDetail.map((list, i) => {
