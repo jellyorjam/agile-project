@@ -64,7 +64,7 @@ const Login = () => {
         onSubmit={handleLogin}
       >
         <div className="d-flex justify-content-center align-items-center login-form">
-          <Form className="form-control">
+          <Form className="form-control form">
             <div>
               <Field className="form-control form-item" name="username" type="text" placeholder="Username" />
               <ErrorMessage name="username" component="div" />
@@ -74,7 +74,7 @@ const Login = () => {
               <ErrorMessage name="password" component="div" />
             </div>
             <div>
-              <button className="btn btn-primary form-item" type="submit" disabled={loading}>
+              <button className="btn btn-outline-secondary form-item" type="submit" disabled={loading}>
                 {loading && (
                     <span className="spinner-border spinner-border-sm"></span>
                   )}

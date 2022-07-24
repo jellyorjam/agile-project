@@ -3,9 +3,9 @@ import AddCard from "./AddCard"
 import AddList from "./AddList"
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getLists, getCards, listsLoaded, setListsAndCards} from "../reducers/listSlice";
+import {  setListsAndCards} from "../reducers/listSlice";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const List = () => {
   const [trigger, toggleTrigger] = useState(false);
@@ -14,11 +14,13 @@ const List = () => {
   const boardId = useSelector(state => state.board.boardInfo._id)
   const lists = useSelector(state => state.board.boardInfo.lists);
   const listsDetail = useSelector(state => state.list);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
+  const {workspaceId} = useParams();
 
 
   useEffect(() => {
     getLists().then(() => getCards()).then(() => dispatch(setListsAndCards(returnedLists))).then(() => setIsLoading(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
  const returnedLists = [];
@@ -58,7 +60,7 @@ const List = () => {
                   return cards.map((card) => {
                     return (
                       <div className="sm-card" onClick={() => {
-                        navigate(`../boards/${boardId}/cards/${card._id}`, {replace: false})
+                        navigate(`/${workspaceId}/boards/${boardId}/cards/${card._id}`, {replace: false})
                         return toggleTrigger(true);
                       }}>{card.title}</div>
                     )

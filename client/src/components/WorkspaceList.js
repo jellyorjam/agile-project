@@ -28,7 +28,7 @@ const WorkspaceList = () => {
 
         return (
           <div className="workspace-div" key={i}>
-            <div className="row main">
+            <div onClick={handleClickOnTitle} className="row main">
               <div className="ws-initial col-1" style={pfpStyle}>{initial}</div>
               <div className="ws-title col">{workspace.title}</div>
             </div>
@@ -67,6 +67,16 @@ const WorkspaceList = () => {
         )
       })
     }
+  }
+
+  const handleClickOnTitle = (e) => {
+    const titleClicked = e.target.parentElement.childNodes[1].innerHTML;
+
+    const workspaceClicked = workspaces.find((workspace) => {
+      return workspace.title === titleClicked
+    })
+
+    navigate("/" + workspaceClicked._id + "/boards")
   }
 
   const handleClickOnBoards = (e) => {
@@ -114,8 +124,10 @@ const WorkspaceList = () => {
   }
 
   return (
-    <div className="d-flex justify-content-center">
-      <div>{renderWorkspaces()}</div>
+    <div className="d-flex justify-content-center background">
+      <div className="render-ws">
+        {renderWorkspaces()}
+      </div>
     </div>
   )
 }

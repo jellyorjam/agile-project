@@ -1,19 +1,14 @@
 import List from "./List"
-import AddList from "./AddList"
 import { useSelector, useDispatch } from "react-redux"
 import { useEffect, useState } from "react"
 import { getMembersOfBoard, getBoard } from "../reducers/boardSlice"
 import { useParams } from "react-router"
-import Card from "./Card"
 
-const Board = () => {
+const Board = ({color}) => {
   const dispatch = useDispatch();
   const board = useSelector(state => state.board.boardInfo)
-  const membersOfBoard = useSelector(state => state.board.members)
   const [isLoading, setIsLoading] = useState(true)
-
   let {boardId} = useParams();
-
 
   useEffect(() => {
     dispatch(getBoard(boardId)).then((response) => {
@@ -35,13 +30,14 @@ const Board = () => {
       }
     }
     )
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
+  const backgroundStyle = { backgroundColor: color}
 
   const renderTitle = () => {
     if (board) {
       return (
-        <div>{board.title}</div>
+        <div className="board-title">{board.title.toUpperCase()}</div>
       )
     }
   }
@@ -66,7 +62,7 @@ const Board = () => {
 
 
   return (
-    <div className="comp">
+    <div className="board-background" style={backgroundStyle}>
       <h1>{renderTitle()}</h1>
       {/* <div>{renderMembers()}</div> */}
       <div>{renderLists()}</div>
