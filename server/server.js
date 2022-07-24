@@ -266,7 +266,7 @@ router.get("/cards/:cardID", (req, res, next) => {
     res.status(200).send(req.card);
 });
 
-router.get("/activites/:activityID", (req, res, next) => {
+router.get("/activities/:activityID", (req, res, next) => {
     console.log("Actvity found");
     res.status(200).send(req.activity);
 });
