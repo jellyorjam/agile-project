@@ -2,7 +2,6 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom"
-import { setWorkspaces } from "../reducers/homeSlice";
 import { clearViewedMember, setMember } from "../reducers/viewedMemberSlice";
 import { random_rgba } from "./BoardList";
 import { randomColorGenerator } from "./WorkspaceList";
