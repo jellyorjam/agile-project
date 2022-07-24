@@ -3,18 +3,24 @@ import AddCard from "./AddCard"
 import AddList from "./AddList"
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getLists, getCards, listsLoaded, setListsAndCards} from "../reducers/listSlice";
+import {  setListsAndCards} from "../reducers/listSlice";
 import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 
 const List = () => {
+  const [trigger, toggleTrigger] = useState(false);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const boardId = useSelector(state => state.board.boardInfo._id)
   const lists = useSelector(state => state.board.boardInfo.lists);
   const listsDetail = useSelector(state => state.list);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
+  const {workspaceId} = useParams();
 
 
   useEffect(() => {
     getLists().then(() => getCards()).then(() => dispatch(setListsAndCards(returnedLists))).then(() => setIsLoading(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
  const returnedLists = [];
@@ -53,7 +59,10 @@ const List = () => {
                 <div>{list.cards.map((cards) => {
                   return cards.map((card) => {
                     return (
-                      <div>{card.title}</div>
+                      <div className="sm-card" onClick={() => {
+                        navigate(`/${workspaceId}/boards/${boardId}/cards/${card._id}`, {replace: false})
+                        return toggleTrigger(true);
+                      }}>{card.title}</div>
                     )
                   })
                 })}</div>
@@ -64,10 +73,9 @@ const List = () => {
     }
   }
 
-
-
   return (
     <div className="comp container">
+      <Card trigger={trigger} toggle={toggleTrigger}/>
       <div className="row">{renderLists()}
         <div className="col list"><AddList/></div>
       </div>

@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  color: #0a2749;
 }
 
 .App-logo {
@@ -45,9 +46,23 @@
   margin-top: 80px;
 }
 
+.form {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
 .form-item {
   margin-top: 15px;
   margin-bottom: 15px;
+}
+
+.form button {
+  background-color: rgba(255, 255, 255, 0.4);
+  outline: #0a2749 solid 1px;
+  color: #0a2749;
+}
+
+.form button:hover {
+  background-color: rgba(10, 39, 73);
 }
 
 .pfp {
@@ -124,9 +139,35 @@ a:link {
 }
 
 .login-div {
-  margin-top: 150px;
-  min-width: 100px;
-  max-width: 600px;
+  margin-top: 120px;
+  width: 80vw;
+  height: 80vh;
+}
+
+.logo {
+  margin-top: 130px;
+  position: fixed;
+  width: 100%;
+}
+
+.login-background {
+  position: fixed;
+  display: flex;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 39, 73, 0.3);
+}
+
+.background {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 10px;
+  padding-bottom: 50px;
+  background-color: rgba(10, 39, 73, 0.3);
 }
 
 .workspace-div {
@@ -144,8 +185,14 @@ a:link {
 
 .ws-card {
   width: 90vw;
-  padding-top: 30px;
+  outline: 0px !important;
   align-items: center;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.render-ws {
+  padding-top: 30px;
+  margin-bottom: 100px;
 }
 
 .email-profile {
@@ -280,6 +327,7 @@ a:link {
 
 .ws-boards-title {
   margin-top: 50px;
+  color: #0a2749;
 }
 
 .members-number {
@@ -288,4 +336,101 @@ a:link {
   opacity: 70%;
   padding-top: 22px;
   padding-left: 10px;
+}
+
+.board-members {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.board-members .member-style {
+  margin-top: -5px;
+}
+
+.board-members p {
+  padding-right: 20px;
+  font-size: 17px;
+  font-weight: bold;
+  color: #0a2749;
+  opacity: 80%;
+}
+
+.list-card {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 110%;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.list-card-inner {
+  position: relative;
+  padding: 32px;
+  width: 100%;
+  max-width: 500px;
+  height: 200px;
+  background-color: white;
+}
+
+.list-card-inner h1 {
+  line-height: 100px;
+}
+
+.close-card {
+  width: 15px;
+  float: right;
+  margin: -10px;
+  opacity: 50%;
+}
+
+.close-card:hover {
+  opacity: 100%;
+  cursor: pointer;
+}
+
+.sm-card {
+  background-color: white;
+  padding: 10px;
+  margin: 5px;
+  font-weight: bold;
+}
+
+.sm-card:hover {
+  cursor: pointer;
+  background-color: rgba(10, 39, 73, 0.1);
+}
+
+.add-card {
+  background-color: white;
+  margin: 20px;
+  color: #0a2749;
+  outline: 1px solid #0a2749;
+}
+
+.add-card:hover {
+  background-color: rgba(10, 39, 73, 0.1);
+  color: rgba(10, 39, 73, 1);
+}
+
+.board-title {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.board-background {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 10px;
+  padding-bottom: 40px;
+}
+
+.list {
+  background-color: rgba(255, 255, 255, 0.4) !important;
 }

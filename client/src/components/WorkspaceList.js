@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { loadBoardsInWorkspace, getMembersOfWorkspace, boardsLoaded, clearBoards, clearMembers, setWorkspace } from "../reducers/workspaceSlice";
+import { getMembersOfWorkspace, clearBoards, clearMembers } from "../reducers/workspaceSlice";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import { random_rgba } from "./BoardList";
@@ -28,7 +28,7 @@ const WorkspaceList = () => {
 
         return (
           <div className="workspace-div" key={i}>
-            <div className="row main">
+            <div onClick={handleClickOnTitle} className="row main">
               <div className="ws-initial col-1" style={pfpStyle}>{initial}</div>
               <div className="ws-title col">{workspace.title}</div>
             </div>
@@ -69,22 +69,22 @@ const WorkspaceList = () => {
     }
   }
 
+  const handleClickOnTitle = (e) => {
+    const titleClicked = e.target.parentElement.childNodes[1].innerHTML;
+
+    const workspaceClicked = workspaces.find((workspace) => {
+      return workspace.title === titleClicked
+    })
+
+    navigate("/" + workspaceClicked._id + "/boards")
+  }
+
   const handleClickOnBoards = (e) => {
     const titleClicked = e.target.parentElement.parentElement.childNodes[0].childNodes[1].innerHTML;
 
     const workspaceClicked = workspaces.find((workspace) => {
       return workspace.title === titleClicked
     })
-    dispatch(setWorkspace(workspaceClicked.title))
-    const boards = workspaceClicked.boards
-    for (let i = 0; i < boards.length; i++) {
-      let board = boards[i];
-      dispatch(loadBoardsInWorkspace(board)).then((payload) => {
-        if (i === boards.length - 1) {
-          dispatch(boardsLoaded())
-        }
-      });
-    }
 
     navigate("/" + workspaceClicked._id + "/boards")
   }
@@ -124,8 +124,10 @@ const WorkspaceList = () => {
   }
 
   return (
-    <div className="d-flex justify-content-center">
-      <div>{renderWorkspaces()}</div>
+    <div className="d-flex justify-content-center background">
+      <div className="render-ws">
+        {renderWorkspaces()}
+      </div>
     </div>
   )
 }
