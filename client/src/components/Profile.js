@@ -1,60 +1,61 @@
+import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom"
-import { clearViewedMember, findMember, memberLoaded, memberWSLoaded, setViewedMemberWorkspace } from "../reducers/viewedMemberSlice";
+import { useNavigate, useParams } from "react-router-dom"
+import { setWorkspaces } from "../reducers/homeSlice";
+import { clearViewedMember, setMember } from "../reducers/viewedMemberSlice";
 import { random_rgba } from "./BoardList";
 import { randomColorGenerator } from "./WorkspaceList";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userId } = useParams();
-  const viewedMember = useSelector(state => state.viewedMember.member[0]);
-  const memberIsLoaded = useSelector(state => state.viewedMember.memberLoaded);
-  const memberWSReady = useSelector(state => state.viewedMember.memberWSLoaded);
-  const workspaces = useSelector(state => state.viewedMember.workspaces);
+  const viewedMember = useSelector(state => state.viewedMember[0]?.member);
+  const workspaces = useSelector(state => state.viewedMember[0]?.workspaces);
+  const homeWorkspaces = useSelector(state => state.home.workspaces)
   const color = randomColorGenerator();
   const colorStyle = { backgroundColor: "#" + color }
 
   useEffect(() => {
     dispatch(clearViewedMember())
-    dispatch(findMember(userId)).then(dispatch(memberLoaded()))
+    getMember().then(() => getWorkspaces()).then(() => dispatch(setMember(returnedMember)))
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
-  useEffect(() => {
-    const fetchWorkspaces = (workspace) => {
-      dispatch(setViewedMemberWorkspace(workspace))
+  const returnedMember = [];
+
+  const getMember = async () => {
+    const response = await axios.get("http://localhost:8000/members/" + userId)
+    returnedMember.push({
+      member: response.data,
+      workspaces: []
+    });
+  }
+
+  const getWorkspaces = async () => {
+    let workspaces = returnedMember[0].member.workspaces;
+    let returnedWorkspaces = [];
+    for (let i = 0; i < workspaces.length; i++) {
+      let workspace = workspaces[i]
+      const response = await axios.get("http://localhost:8000/workspaces/" + workspace)
+      returnedWorkspaces.push(response.data)
     }
-
-    if(memberIsLoaded){
-      workspaces.forEach(workspace => {
-        if(workspaces[0].boards === undefined && workspaces[workspaces.length - 1] !== undefined){
-          fetchWorkspaces(workspace);
-          setTimeout(() => {
-            dispatch(memberWSLoaded())
-          }, 1000)
-          
-        }
-        fetchWorkspaces(workspace)
-      })
-    }
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [memberIsLoaded]);
+    returnedMember[0].workspaces.push(returnedWorkspaces)
+  }
 
   const renderWorkspaces = () => {
-    if(memberWSReady) {
-      return workspaces.map((workspace, i) => {
-        const initial = workspace.title[0];
+    if(workspaces[0]) {
+      return workspaces[0].map((ws, i) => {
+        const initial = ws.title[0];
         const random = random_rgba();
         const pfpStyle = {backgroundColor: "rgba(" + random + "0.9)"}
-
+        
         return (
-          <div className="workspace-div col" key={i}>
+          <div className="profile-ws col" key={i}>
             <div className="row main">
-              <div className="col-2"></div>
-              <div className="ws-initial col-1" style={pfpStyle}>{initial}</div>
-              <div className="ws-title col">{workspace.title}</div>
+              <div onClick={handleClickOnTitle} className="ws-initial col-1" style={pfpStyle}>{initial}</div>
+              <div onClick={handleClickOnTitle} className="ws-title col">{ws.title}</div>
             </div>
           </div>
         )
@@ -62,9 +63,23 @@ const Profile = () => {
     }
   }
 
+  const handleClickOnTitle = (e) => {
+    const titleClicked = e.target.parentElement.childNodes[1].innerHTML;
+    let workspaceClicked = homeWorkspaces.find((workspace) => {
+      return workspace.title === titleClicked
+    })
+
+    if(workspaceClicked){
+      navigate("/" + workspaceClicked._id + "/boards")
+    } else {
+      workspaceClicked = workspaces[0].find(ws => ws.title === titleClicked)
+      navigate("/" + workspaceClicked._id + "/boards")
+    }
+  }
+
 
   
-  if(memberIsLoaded){
+  if(workspaces){
     return (
       <div className="container profile-page">
         <img className="full-cover-pic" src={viewedMember.picture} alt={viewedMember.name.first} />
@@ -72,14 +87,14 @@ const Profile = () => {
         <h1>{viewedMember.name.first} {viewedMember.name.last}</h1>
         <h3 className="email-profile col">{viewedMember.email}</h3>
         <h2>Workspaces</h2>
-        <div className="row card">
+        <div className="row">
           {renderWorkspaces()}
         </div>
       </div>
   
     )
   }
-
 }
+
 
 export default Profile;

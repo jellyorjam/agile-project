@@ -31,10 +31,12 @@ const Nav = () => {
                   <Dropdown.Menu >
                     <Dropdown.Item onClick={() => navigate("/" + login._id, {relpace: true})}>
                       {/* <img className="pfp" src={login.picture} alt={login.name.first} /> */}
-                      <div className="row profile-drop">
-                        <div className="col-2 pfp-color" style={pfpStyle}>{login.name.first[0]}{login.name.last[0]}</div>
-                        <p className="col profile-name">{login.name.first} {login.name.last}</p>
-                        <p className="email-nav">@{login.email}</p>
+                      <div className="profile-drop">
+                        <div className="row"> 
+                          <div className="col-2 pfp-color" style={pfpStyle}>{login.name.first[0]}{login.name.last[0]}</div>
+                          <p className="col profile-name">{login.name.first} {login.name.last}</p>
+                        </div>
+                        <p className="email-nav">View Profile</p>
                       </div>
                     </Dropdown.Item>
                     <Dropdown.Item className="dropdown-text" onClick={() => navigate("/workspaces", {relpace: true})}>
