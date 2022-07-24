@@ -50,6 +50,59 @@ const List = () => {
     }
   }
 
+  
+  const getCurrentCard = (id) => {
+    const newCards = [];
+    if(listsDetail[0]){
+    listsDetail.forEach(list => {
+      list.cards.forEach(cards => {
+        cards.forEach(card => {
+          newCards.push(card)
+        })
+      })
+    });
+  }
+
+  const currentCard = newCards.find(card => card._id === id) //reusing Natalie's code from Card.js, should figure out how to pass down currentCard
+
+  getCardDetail(currentCard);
+  }
+
+  const members = [];
+  const labels = [];
+  const activity = [];
+
+  const getCardDetail =  async (currentCard) => {
+    
+    if (currentCard.members.length) {
+      console.log(currentCard)
+      for (let i = 0; i < currentCard.members.length; i++) {
+        let member = currentCard.members[i];
+        let memberInfo = await axios.get("http://localhost:8000/members/" + member)
+        members.push(memberInfo.data)
+      }
+    }
+
+    if (currentCard.labels.length) {
+      for (let i = 0; i < currentCard.labels.length; i++) {
+        let label = currentCard.labels[i];
+        let labelInfo = await axios.get("http://localhost:8000/labels/" + label)
+        labels.push(labelInfo.data)
+      }
+    }
+
+    if (currentCard.activity.length) {
+      for (let i = 0; i < currentCard.activity.length; i++) {
+        let activities = currentCard.activity[i];
+        let activityInfo = await axios.get("http://localhost:8000/activities/" + activities)
+        activity.push(activityInfo.data)
+        console.log(activity)
+      }
+    }
+    //activities not working right now
+    
+  }
+
   const renderLists = () => {
     if (!isLoading) {
       return listsDetail.map((list, i) => {
@@ -60,6 +113,7 @@ const List = () => {
                   return cards.map((card) => {
                     return (
                       <div className="sm-card" onClick={() => {
+                        getCurrentCard(card._id);
                         navigate(`/${workspaceId}/boards/${boardId}/cards/${card._id}`, {replace: false})
                         return toggleTrigger(true);
                       }}>{card.title}</div>
