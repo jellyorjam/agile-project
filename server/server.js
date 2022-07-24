@@ -312,9 +312,9 @@ router.post("/workspaces/:workspaceID/boards", (req, res, next) => {
 });
 
 router.post("/boards/:boardID/lists", (req, res, next) => {
-    if(req.body.list.title) {
+    if(req.body.title) {
         let list = new List();
-        list.title = req.body.list.title;
+        list.title = req.body.title;
         list.save((err, list) => {
             if(err) throw err;
             req.board.lists.push(list);
