@@ -25,7 +25,7 @@ const Profile = () => {
   const returnedMember = [];
 
   const getMember = async () => {
-    const response = await axios.get("http://localhost:8000/members/" + userId)
+    const response = await axios.get("/members/" + userId)
     returnedMember.push({
       member: response.data,
       workspaces: []
@@ -37,7 +37,7 @@ const Profile = () => {
     let returnedWorkspaces = [];
     for (let i = 0; i < workspaces.length; i++) {
       let workspace = workspaces[i]
-      const response = await axios.get("http://localhost:8000/workspaces/" + workspace)
+      const response = await axios.get("/workspaces/" + workspace)
       returnedWorkspaces.push(response.data)
     }
     returnedMember[0].workspaces.push(returnedWorkspaces)
