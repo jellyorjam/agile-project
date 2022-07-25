@@ -437,15 +437,87 @@ router.post("/boards/:boardID/cards/:cardID/labels", (req, res, next) => {
 });
 
 
+router.put("/members/:memberID", (req, res, next) => {
+    for(key in req.body) {
+        if(key in req.member) {
+            req.member[key] = req.body[key];
+        }
+    }
+    req.member.save((err, member) => {
+        if(err) throw err;
+        res.status(200).send(`Member ${member._id} updated`);
+    });
+});
+
+router.put("/workspaces/:workspaceID", (req, res, next) => {
+    for(key in req.body) {
+        if(key in req.workspace) {
+            req.workspace[key] = req.body[key];
+        }
+    }
+    req.workspace.save((err, workspace) => {
+        if(err) throw err;
+        res.status(200).send(`Workspace ${workspace.title} updated`);
+    });
+});
+
 router.put("/boards/:boardID", (req, res, next) => {
     for(key in req.body) {
-        if(req.board.hasOwnProperty(key)) {
+        if(key in req.board) {
             req.board[key] = req.body[key];
         }
     }
-    req.body.save((err, board) => {
+    req.board.save((err, board) => {
         if(err) throw err;
         res.status(200).send(`Board ${board.title} updated`);
+    });
+});
+
+router.put("/lists/:listID", (req, res, next) => {
+    for(key in req.body) {
+        if(key in req.list) {
+            req.list[key] = req.body[key];
+        }
+    }
+    req.list.save((err, list) => {
+        if(err) throw err;
+        res.status(200).send(`List ${list.title} updated`);
+    });
+});
+
+router.put("/cards/:cardID", (req, res, next) => {
+    for(key in req.body) {
+        if(key in req.card) {
+            req.card[key] = req.body[key];
+        }
+    }
+    req.card.save((err, card) => {
+        if(err) throw err;
+        res.status(200).send(`Card ${card.title} updated`);
+    });
+});
+
+router.put("/activities/:activityID", (req, res, next) => {
+    for(key in req.body) {
+        if(key in req.activity) {
+            req.activity[key] = req.body[key];
+        }
+    }
+    req.activity.save((err, activity) => {
+        if(err) throw err;
+        res.status(200).send(`Activity ${activity._id} updated`);
+    });
+});
+
+router.put("/labels/:labelID", (req, res, next) => {
+    for(key in req.body) {
+        if(key in req.label) {
+            req.label[key] = req.body[key];
+        }
+    }
+    req.label.save((err, label) => {
+        if(err) throw err;
+        res.status(200).send(`Label ${label.title} updated`);
     });
 });
 
