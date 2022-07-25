@@ -7,6 +7,10 @@ import {  setListsAndCards} from "../reducers/listSlice";
 import { setCardDetail } from "../reducers/cardSlice";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import {url} from "../config/keys"
+
+// const baseUrl = 'http://localhost:8000';
+
 
 const List = () => {
   const [trigger, toggleTrigger] = useState(false);
@@ -17,6 +21,8 @@ const List = () => {
   const listsDetail = useSelector(state => state.list);
   const [isLoading, setIsLoading] = useState(true);
   const {workspaceId} = useParams();
+
+  const baseUrl = url;
 
 
   useEffect(() => {
@@ -30,7 +36,7 @@ const List = () => {
   const getLists = async () => {
     for (let i = 0; i < lists.length; i++) {
       let list = lists[i];
-      const response = await axios.get("/lists/" + list)
+      const response = await axios.get(baseUrl + "/lists/" + list)
       returnedLists.push({
         list: response.data,
         cards: []
@@ -44,7 +50,7 @@ const List = () => {
     let returnedCards = []
       for (let i = 0; i < cards.length; i++) {
         let card = cards[i]
-        const response = await axios.get("/cards/" + card)
+        const response = await axios.get(baseUrl + "/cards/" + card)
         returnedCards.push(response.data)
       }
       returnedLists[i].cards.push(returnedCards)
@@ -78,7 +84,7 @@ const List = () => {
     if (currentCard.members.length) {
       for (let i = 0; i < currentCard.members.length; i++) {
         let member = currentCard.members[i];
-        let memberInfo = await axios.get("/members/" + member)
+        let memberInfo = await axios.get(baseUrl + "/members/" + member)
         members.push(memberInfo.data)
       }
     }
@@ -86,7 +92,7 @@ const List = () => {
     if (currentCard.labels.length) {
       for (let i = 0; i < currentCard.labels.length; i++) {
         let label = currentCard.labels[i];
-        let labelInfo = await axios.get("/labels/" + label)
+        let labelInfo = await axios.get(baseUrl + "/labels/" + label)
         labels.push(labelInfo.data)
       }
     }
@@ -94,7 +100,7 @@ const List = () => {
     if (currentCard.activity.length) {
       for (let i = 0; i < currentCard.activity.length; i++) {
         let activities = currentCard.activity[i];
-        let activityInfo = await axios.get("/activities/" + activities)
+        let activityInfo = await axios.get(baseUrl + "/activities/" + activities)
         activity.push(activityInfo.data)
       }
     }

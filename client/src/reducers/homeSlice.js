@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
+import {url} from "../config/keys"
 
 // const baseUrl = 'http://localhost:8000';
+const baseUrl = url;
 
 const initialState = {
   workspaces: []
@@ -9,7 +11,7 @@ const initialState = {
 
 export const setWorkspaces = createAsyncThunk('home/setWorkspaces', async (workspace) => {
   try {
-    const response = await axios.get('/workspaces/' + workspace);
+    const response = await axios.get(baseUrl + '/workspaces/' + workspace);
     return response.data
   }
   catch (err) {
