@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:8000';
+// const baseUrl = 'http://localhost:8000';
 
 const initialState = {};
 
 export const addList = createAsyncThunk('list/addList', async (newList) => {
   try {
-     const response = await axios.post(baseUrl + "/boards/" + newList.boardId + "/lists", {
+     const response = await axios.post("/boards/" + newList.boardId + "/lists", {
       title: newList.title
     })
     return JSON.parse(response.config.data)

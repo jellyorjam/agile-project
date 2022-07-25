@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:8000';
+// const baseUrl = 'http://localhost:8000';
 
 const initialState = {
   members: []
@@ -9,7 +9,7 @@ const initialState = {
 
 export const getBoard = createAsyncThunk('board/getBoard', async (boardId) => {
   try {
-    const response = await axios.get(baseUrl + '/boards/' + boardId);
+    const response = await axios.get('/boards/' + boardId);
     return response.data
   }
   catch (err) {
@@ -19,7 +19,7 @@ export const getBoard = createAsyncThunk('board/getBoard', async (boardId) => {
 
 export const getMembersOfBoard = createAsyncThunk('board/getMembersOfBoard', async (member) => {
   try {
-    const response = await axios.get(baseUrl + '/members/' + member);
+    const response = await axios.get('/members/' + member);
     return {
       name: response.data.name,
       _id: response.data._id

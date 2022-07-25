@@ -30,7 +30,7 @@ const List = () => {
   const getLists = async () => {
     for (let i = 0; i < lists.length; i++) {
       let list = lists[i];
-      const response = await axios.get("http://localhost:8000/lists/" + list)
+      const response = await axios.get("/lists/" + list)
       returnedLists.push({
         list: response.data,
         cards: []
@@ -44,7 +44,7 @@ const List = () => {
     let returnedCards = []
       for (let i = 0; i < cards.length; i++) {
         let card = cards[i]
-        const response = await axios.get("http://localhost:8000/cards/" + card)
+        const response = await axios.get("/cards/" + card)
         returnedCards.push(response.data)
       }
       returnedLists[i].cards.push(returnedCards)
@@ -78,7 +78,7 @@ const List = () => {
     if (currentCard.members.length) {
       for (let i = 0; i < currentCard.members.length; i++) {
         let member = currentCard.members[i];
-        let memberInfo = await axios.get("http://localhost:8000/members/" + member)
+        let memberInfo = await axios.get("/members/" + member)
         members.push(memberInfo.data)
       }
     }
@@ -86,7 +86,7 @@ const List = () => {
     if (currentCard.labels.length) {
       for (let i = 0; i < currentCard.labels.length; i++) {
         let label = currentCard.labels[i];
-        let labelInfo = await axios.get("http://localhost:8000/labels/" + label)
+        let labelInfo = await axios.get("/labels/" + label)
         labels.push(labelInfo.data)
       }
     }
@@ -94,7 +94,7 @@ const List = () => {
     if (currentCard.activity.length) {
       for (let i = 0; i < currentCard.activity.length; i++) {
         let activities = currentCard.activity[i];
-        let activityInfo = await axios.get("http://localhost:8000/activities/" + activities)
+        let activityInfo = await axios.get("/activities/" + activities)
         activity.push(activityInfo.data)
       }
     }

@@ -5,11 +5,11 @@ const initialState = {
   boards: [],
   members: []
 };
-const baseUrl = 'http://localhost:8000';
+// const baseUrl = 'http://localhost:8000';
 
 export const loadBoardsInWorkspace = createAsyncThunk('workspace/loadBoardsInWorkspace', async (board) => {
   try {
-    const response = await axios.get(baseUrl + '/boards/' + board);
+    const response = await axios.get('/boards/' + board);
     return {
       title: response.data.title,
       _id: response.data._id}
@@ -21,7 +21,7 @@ export const loadBoardsInWorkspace = createAsyncThunk('workspace/loadBoardsInWor
 
 export const getMembersOfWorkspace = createAsyncThunk('workspace/getMembers', async (member) => {
   try {
-    const response = await axios.get(baseUrl + '/members/' + member);
+    const response = await axios.get('/members/' + member);
     return {
       name: response.data.name,
       _id: response.data._id}
