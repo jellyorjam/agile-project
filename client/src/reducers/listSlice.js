@@ -5,25 +5,12 @@ const baseUrl = 'http://localhost:8000';
 
 const initialState = {};
 
-export const getLists = createAsyncThunk('list/getLists', async (list) => {
+export const addList = createAsyncThunk('list/addList', async (newList) => {
   try {
-    const response = await axios.get(baseUrl + '/lists/' + list);
-    return response.data
-  }
-  catch (err) {
-    return err
-  }
-})
-
-export const getCards = createAsyncThunk('list/getCards', async (card) => {
-  try {
-    const response = await axios.get(baseUrl + '/cards/' + card);
-    return {
-      _id: response.data._id,
-      title: response.data.title,
-      members: response.data.members,
-      labels: response.data.labels
-    }
+     const response = await axios.post(baseUrl + "/boards/" + newList.boardId + "/lists", {
+      title: newList.title
+    })
+    return JSON.parse(response.config.data)
   }
   catch (err) {
     return err
@@ -43,12 +30,11 @@ export const listSlice = createSlice({
    clearListsAndCards: () => initialState
   },
   extraReducers: (builder) => {
-    builder.addCase(getLists.fulfilled, (state, action) => {
-      state.lists.push(action.payload)
-    });
-    builder.addCase(getCards.fulfilled, (state, action) => {
-      state.cards.push(action.payload)
-    })
+    builder.addCase(addList.fulfilled, (state, action) => {
+      state.push({
+        list: {title: action.payload}
+      })
+  })
   }
 })
 
