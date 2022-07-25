@@ -8,7 +8,7 @@ const shuffleArray = require("./utils");
 const e = require("express");
 const keys = require('./config/keys');
 
-const port = process.env.PORT || 8000;
+
 
 mongoose.connect(keys.MONGODB_URI, {
     useNewUrlParser: true,
@@ -544,6 +544,8 @@ router.put("/labels/:labelID", (req, res, next) => {
 
 
 app.use(router);
+
+const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
     console.log("Node.js listening on port " + port);
