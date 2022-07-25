@@ -32,7 +32,8 @@ export const listSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(addList.fulfilled, (state, action) => {
       state.push({
-        list: {title: action.payload}
+        list: action.payload,
+        cards: []
       })
   })
   }
