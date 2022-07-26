@@ -6,8 +6,11 @@ const faker = require("faker");
 const {Member, Workspace, Board, List, Card, Activity, Label} = require("./models/models");
 const shuffleArray = require("./utils");
 const e = require("express");
+const keys = require('./config/keys');
 
-mongoose.connect("mongodb://localhost/trello-clone", {
+
+
+mongoose.connect(keys.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -31,6 +34,24 @@ app.use(
         extended: true
     })
 );
+
+if (process.env.NODE_ENV === "production") {
+    // Express will serve up production assets
+    // like our main.js file, or main.css file!
+    // app.use(express.static("../client/build"));
+  
+    // // Express will serve up the index.html file
+    // // if it doesn't recognize the route
+    const path = require("path");
+    // app.get("*", (req, res) => {
+    //   res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+    // });
+
+    app.use(express.static(path.join(__dirname, '/../client/build')));
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname + '/../client/build/index.html'));
+      });
+  }
 
 // router.get("/generate-fake-data", (req, res, next) => {
 //     console.log('Generating fake data');
@@ -524,6 +545,8 @@ router.put("/labels/:labelID", (req, res, next) => {
 
 app.use(router);
 
-app.listen(8000, () => {
-    console.log("Node.js listening on port " + 8000);
+const port = process.env.PORT || 8000;
+
+app.listen(port, () => {
+    console.log("Node.js listening on port " + port);
 });

@@ -1,11 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import {url} from "../config/keys"
+
+// const baseUrl = 'http://localhost:8000';
+const baseUrl = url;
 
 const initialState = {
   boards: [],
   members: []
 };
-const baseUrl = 'http://localhost:8000';
+// const baseUrl = 'http://localhost:8000';
 
 export const loadBoardsInWorkspace = createAsyncThunk('workspace/loadBoardsInWorkspace', async (board) => {
   try {
@@ -21,7 +25,7 @@ export const loadBoardsInWorkspace = createAsyncThunk('workspace/loadBoardsInWor
 
 export const getMembersOfWorkspace = createAsyncThunk('workspace/getMembers', async (member) => {
   try {
-    const response = await axios.get(baseUrl + '/members/' + member);
+    const response = await axios.get( baseUrl + '/members/' + member);
     return {
       name: response.data.name,
       _id: response.data._id}
