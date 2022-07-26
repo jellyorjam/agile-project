@@ -521,6 +521,28 @@ router.put("/labels/:labelID", (req, res, next) => {
     });
 });
 
+router.delete("/boards/boardID")
+
+router.delete("/boards/:boardID", (req, res, next) => {
+    //find board and delete it
+    console.log("in delete board");
+    Board.findByIdAndDelete(req.params.boardID, (err, board) => {
+        if(err) throw err;
+        //delete all cards that were in the board
+        console.log("board deleted");
+        Card.deleteMany({board: board._id}, err => {
+            if(err) throw err;
+            //remove the board from the workspace array that contained it
+            console.log("card deleted");
+            // console.log(board.id);
+            Workspace.findOneAndUpdate({boards: req.params.boardID}, {$pull: {boards: req.params.boardID}}, (err, workspace) => {
+                if(err) throw err;
+                console.log('board deleted from workspace');
+                res.status(200).send(`Board: ${board.title} removed from workspace: ${workspace.title}`);
+            })
+        });
+    });
+});
 
 app.use(router);
 
