@@ -57,13 +57,13 @@ const WorkspaceList = () => {
 
   const renderMembers = () => {
     if(members[0]){
-      return members.map((member) => {
+      return members.map((member, i) => {
         const values = random_rgba();
         const randomColor = 'rgba(' + values + '1)'
         const colorStyle = { backgroundColor: randomColor };
 
         return (
-          <div onClick={() => navigate(`../${member._id}`, {replace: true})} style={colorStyle} className="member-style" >{member.name.first[0]}{member.name.last[0]}</div>
+          <div key={i} onClick={() => navigate(`../${member._id}`, {replace: true})} style={colorStyle} className="member-style" >{member.name.first[0]}{member.name.last[0]}</div>
         )
       })
     }
