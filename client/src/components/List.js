@@ -7,10 +7,7 @@ import {  setListsAndCards} from "../reducers/listSlice";
 import { setCardDetail } from "../reducers/cardSlice";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import {url} from "../config/keys"
-
-// const baseUrl = 'http://localhost:8000';
-
+import { DragDropContext, Draggable, Droppable } from "react-dnd-beautiful";
 
 const List = () => {
   const [trigger, toggleTrigger] = useState(false);
@@ -21,8 +18,6 @@ const List = () => {
   const listsDetail = useSelector(state => state.list);
   const [isLoading, setIsLoading] = useState(true);
   const {workspaceId} = useParams();
-
-  const baseUrl = url;
 
 
   useEffect(() => {
@@ -36,7 +31,7 @@ const List = () => {
   const getLists = async () => {
     for (let i = 0; i < lists.length; i++) {
       let list = lists[i];
-      const response = await axios.get(baseUrl + "/lists/" + list)
+      const response = await axios.get("http://localhost:8000/lists/" + list)
       returnedLists.push({
         list: response.data,
         cards: []
@@ -50,7 +45,7 @@ const List = () => {
     let returnedCards = []
       for (let i = 0; i < cards.length; i++) {
         let card = cards[i]
-        const response = await axios.get(baseUrl + "/cards/" + card)
+        const response = await axios.get("http://localhost:8000/cards/" + card)
         returnedCards.push(response.data)
       }
       returnedLists[i].cards.push(returnedCards)
@@ -84,7 +79,7 @@ const List = () => {
     if (currentCard.members.length) {
       for (let i = 0; i < currentCard.members.length; i++) {
         let member = currentCard.members[i];
-        let memberInfo = await axios.get(baseUrl + "/members/" + member)
+        let memberInfo = await axios.get("http://localhost:8000/members/" + member)
         members.push(memberInfo.data)
       }
     }
@@ -92,7 +87,7 @@ const List = () => {
     if (currentCard.labels.length) {
       for (let i = 0; i < currentCard.labels.length; i++) {
         let label = currentCard.labels[i];
-        let labelInfo = await axios.get(baseUrl + "/labels/" + label)
+        let labelInfo = await axios.get("http://localhost:8000/labels/" + label)
         labels.push(labelInfo.data)
       }
     }
@@ -100,7 +95,7 @@ const List = () => {
     if (currentCard.activity.length) {
       for (let i = 0; i < currentCard.activity.length; i++) {
         let activities = currentCard.activity[i];
-        let activityInfo = await axios.get(baseUrl + "/activities/" + activities)
+        let activityInfo = await axios.get("http://localhost:8000/activities/" + activities)
         activity.push(activityInfo.data)
       }
     }
@@ -115,40 +110,71 @@ const List = () => {
     }
     dispatch(setCardDetail(detailObj));
   }
+
+  const handleOnDragEnd = (result) => {
+    console.log(result)
+  }
+
   const renderLists = () => {
-    if (!isLoading) {
+    if(!isLoading){
       return listsDetail.map((list, i) => {
         return (
-              <div key={i} className="col list">
-                <div className="list-title">{list.list.title}</div>
-                <div>{list.cards.map((cards) => {
-                  return cards.map((card) => {
-                    return (
-                      <div className="sm-card" onClick={() => {
-                        getCurrentCard(card._id);
-                        navigate(`/${workspaceId}/boards/${boardId}/cards/${card._id}`, {replace: false})
-                        return toggleTrigger(true);
-                      }}>{card.title}</div>
-                    )
-                  })
-                })}</div>
-                <div><AddCard/></div>
-              </div>
+          <div key={i} className="col list">
+            <div className="list-title">{list.list.title}</div>
+              <Droppable droppableId={list.list._id}>
+                {(provided) => {
+                  return (
+                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                      {list.cards.map((cards) => {
+                        return cards.map((card, index) => {
+                          return (
+                            <Draggable key={card._id} draggableId={card._id.toString()} index={index}>
+                              {(provided) => {
+                                return (
+                                  <div  ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}className="sm-card" onClick={() => {
+                                    getCurrentCard(card._id);
+                                    navigate(`/${workspaceId}/boards/${boardId}/cards/${card._id}`, {replace: false})
+                                    return toggleTrigger(true);
+                                  }}>
+                                    {card.title}
+                                  </div>
+                                )
+                              }} 
+                            </Draggable>
+                          )
+                        })
+                      })}
+                      {provided.placeholder}
+                    </div>
+                  )
+                }}
+              </Droppable>
+            <div><AddCard/></div>
+          </div>
         )
       })
     }
   }
+  
+  if(!isLoading){
+    return (
+      <div className="list-con container row">
+        <Card trigger={trigger} toggle={toggleTrigger}/>
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          {renderLists()}
+        </DragDropContext>
+      </div>
+    )
+  }
 
   return (
-    <div className="comp container">
-      <Card trigger={trigger} toggle={toggleTrigger}/>
-      <div className="row">{renderLists()}
-        <div className="col list"><AddList/></div>
-      </div>
-      {/* <Card />
-      <AddCard /> */}
+    <div>
+      <img src="https://i.stack.imgur.com/ATB3o.gif" alt="Loading..." />
     </div>
   )
 }
+
 
 export default List;

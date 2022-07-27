@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router";
 import { clearMembers } from "../reducers/boardSlice"
 import { useEffect } from "react";
 import { clearBoards, getMembersOfWorkspace, loadBoardsInWorkspace, setWorkspace } from "../reducers/workspaceSlice";
-import { boardsLoaded } from "../reducers/workspaceSlice";
 import { setWorkspaces } from "../reducers/homeSlice";
 
 export const random_rgba = () => {
