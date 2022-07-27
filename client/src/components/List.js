@@ -1,6 +1,5 @@
 import Card from "./Card"
 import AddCard from "./AddCard"
-import AddList from "./AddList"
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {  setListsAndCards} from "../reducers/listSlice";
@@ -112,7 +111,7 @@ const List = () => {
   }
 
   const handleOnDragEnd = (result) => {
-    console.log(result)
+    
   }
 
   const renderLists = () => {
