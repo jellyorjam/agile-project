@@ -7,13 +7,14 @@ const {Member, Workspace, Board, List, Card, Activity, Label} = require("./model
 const shuffleArray = require("./utils");
 const e = require("express");
 const keys = require('./config/keys');
-
+const { Provider } = require("react-redux");
 
 
 mongoose.connect(keys.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
+
 
 const app = express();
 
@@ -267,6 +268,7 @@ router.get("/members/:memberID", (req, res, next) => {
     console.log("Member found");
     res.status(200).send(req.member);
 });
+
 
 router.get("/workspaces/:workspaceID", (req, res, next) => {
     console.log("Workspace found");
