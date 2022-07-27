@@ -521,40 +521,38 @@ router.put("/labels/:labelID", (req, res, next) => {
     });
 });
 
-router.delete("/boards/:boardID", (req, res, next) => {
-    //find board and delete it
-    console.log("in delete board");
-    Board.findByIdAndDelete(req.params.boardID, (err, board) => {
-        if(err) throw err;
-        //delete all cards that were in the board
-        console.log("board deleted");
-        Card.deleteMany({board: board._id}, err => {
-            if(err) throw err;
-            //remove the board from the workspace array that contained it
-            console.log("card deleted");
-            // console.log(board.id);
-            Workspace.findOneAndUpdate({boards: req.params.boardID}, {$pull: {boards: req.params.boardID}}, (err, workspace) => {
-                if(err) throw err;
-                console.log('board deleted from workspace');
-                res.status(200).send(`Board: ${board.title} removed from workspace: ${workspace.title}`);
-            })
-        });
-    });
-});
+//find board
+//get map of labelIDs from board
+//get map of listIDs
+//get map of cardIDs from lists
+//get map of activityIDs
 
-router.delete("/lists/:listID", (req, res, next) => {
-    //find list and delete it
-    List.findByIdAndDelete(req.params.listID, (err, list) => {
+router.delete("/boards/:boardID", (req, res, next) => {
+    Workspace.findOneAndUpdate({boards: req.params.boardID}, {$pull: {boards: req.params.boardID}}, (err, workspace) => {
         if(err) throw err;
-        //delete all cards in that list
-        Card.deleteMany({_id: {$in: [...list.cards]}}, (err, cards) => {
+        Board.findByIdAndDelete(req.params.boardID, (err, board) => {
             if(err) throw err;
-            //remove the list from the board's list array
-            Board.findOneAndUpdate({lists: req.params.listID}, {$pull: {lists: req.params.listID}}, (err, board) => {
+            let labelIds = board.labels;
+            Label.deleteMany({_id: {$in: [...labelIds]}}, (err) => {
                 if(err) throw err;
-                res.status(200).send(`List: ${list.title} and all of its cards have been removed from board: ${board.title}`);
+                let listIds = board.lists;
+                listIds.forEach(listId => {
+                    List.findByIdAndDelete(listId, (err, list) => {
+                        if(err) throw err;
+                        let cardIds = list.cards;
+                        cardIds.forEach(cardId => {
+                            Card.findByIdAndDelete(cardId, (err, card) => {
+                                let activityIds = card.activity;
+                                Activity.deleteMany({_id: {$in: [...activityIds]}}, err => {
+                                    if(err) throw err;
+                                });
+                            });
+                        });
+                    });
+                });
             });
-        });
+            res.status(200).send("Board deleted");
+        })
     });
 });
 
