@@ -543,6 +543,40 @@ router.put("/labels/:labelID", (req, res, next) => {
     });
 });
 
+//find board
+//get map of labelIDs from board
+//get map of listIDs
+//get map of cardIDs from lists
+//get map of activityIDs
+
+router.delete("/boards/:boardID", (req, res, next) => {
+    Workspace.findOneAndUpdate({boards: req.params.boardID}, {$pull: {boards: req.params.boardID}}, (err, workspace) => {
+        if(err) throw err;
+        Board.findByIdAndDelete(req.params.boardID, (err, board) => {
+            if(err) throw err;
+            let labelIds = board.labels;
+            Label.deleteMany({_id: {$in: [...labelIds]}}, (err) => {
+                if(err) throw err;
+                let listIds = board.lists;
+                listIds.forEach(listId => {
+                    List.findByIdAndDelete(listId, (err, list) => {
+                        if(err) throw err;
+                        let cardIds = list.cards;
+                        cardIds.forEach(cardId => {
+                            Card.findByIdAndDelete(cardId, (err, card) => {
+                                let activityIds = card.activity;
+                                Activity.deleteMany({_id: {$in: [...activityIds]}}, err => {
+                                    if(err) throw err;
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+            res.status(200).send("Board deleted");
+        })
+    });
+});
 
 app.use(router);
 
