@@ -15,6 +15,8 @@ const AddCard = ({list}) => {
   const lists = useSelector(state => state.list)
   const baseUrl = url;
 
+  const randomNum = Math.floor(Math.random() * (100 - 1 + 1)) + 1
+
   const handleChange = (e) => {
     setInput(e.target.value)
   }
@@ -45,7 +47,8 @@ const AddCard = ({list}) => {
           }).then((response) => {
             const responseObj = {
               title: JSON.parse(response.config.data),
-              index: cardObj.index
+              index: cardObj.index,
+              _id: randomNum
             }
             dispatch(addCard(responseObj))
           })

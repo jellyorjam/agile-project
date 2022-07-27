@@ -17,12 +17,15 @@ const List = () => {
   const listsDetail = useSelector(state => state.list);
   const [isLoading, setIsLoading] = useState(true);
   const {workspaceId} = useParams();
+  
 
 
   useEffect(() => {
     getLists().then(() => getCards()).then(() => dispatch(setListsAndCards(returnedLists))).then(() => setIsLoading(false));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  console.log(listsDetail)
 
  const returnedLists = [];
  
