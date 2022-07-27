@@ -2,7 +2,7 @@ import List from "./List"
 import { useSelector, useDispatch } from "react-redux"
 import { useEffect, useState } from "react"
 import { getMembersOfBoard, getBoard } from "../reducers/boardSlice"
-import { useParams } from "react-router"
+import { useParams } from "react-router";
 
 const Board = ({color}) => {
   const dispatch = useDispatch();
