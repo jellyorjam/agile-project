@@ -132,7 +132,7 @@ const List = () => {
                     )
                   })
                 })}</div>
-                <div><AddCard/></div>
+                <div><AddCard list={list.list._id}/></div>
               </div>
         )
       })
