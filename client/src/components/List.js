@@ -6,7 +6,7 @@ import {  setListsAndCards} from "../reducers/listSlice";
 import { setCardDetail } from "../reducers/cardSlice";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { DragDropContext, Draggable, Droppable } from "react-dnd-beautiful";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 const List = () => {
   const [trigger, toggleTrigger] = useState(false);
