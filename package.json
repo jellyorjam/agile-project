@@ -4,7 +4,8 @@
   "description": "",
   "main": "./server/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./server/server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "repository": {
     "type": "git",
@@ -23,10 +24,13 @@
     "faker": "^5.5.3",
     "formik": "^2.2.9",
     "mongoose": "^6.4.4",
-    "react-redux": "^8.0.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
+  },
+  "engines": {
+    "node": "16.13.1",
+    "npm": "8.1.2"
   }
 }

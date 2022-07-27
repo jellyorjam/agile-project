@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom"
+import { setWorkspaces } from "../reducers/homeSlice";
 import { clearViewedMember, setMember } from "../reducers/viewedMemberSlice";
 import { random_rgba } from "./BoardList";
 import { randomColorGenerator } from "./WorkspaceList";
@@ -12,7 +13,6 @@ const Profile = () => {
   const { userId } = useParams();
   const viewedMember = useSelector(state => state.viewedMember[0]?.member);
   const workspaces = useSelector(state => state.viewedMember[0]?.workspaces);
-  const homeWorkspaces = useSelector(state => state.home.workspaces)
   const color = randomColorGenerator();
   const colorStyle = { backgroundColor: "#" + color }
 
@@ -25,7 +25,7 @@ const Profile = () => {
   const returnedMember = [];
 
   const getMember = async () => {
-    const response = await axios.get("http://localhost:8000/members/" + userId)
+    const response = await axios.get("/members/" + userId)
     returnedMember.push({
       member: response.data,
       workspaces: []
@@ -37,7 +37,7 @@ const Profile = () => {
     let returnedWorkspaces = [];
     for (let i = 0; i < workspaces.length; i++) {
       let workspace = workspaces[i]
-      const response = await axios.get("http://localhost:8000/workspaces/" + workspace)
+      const response = await axios.get("/workspaces/" + workspace)
       returnedWorkspaces.push(response.data)
     }
     returnedMember[0].workspaces.push(returnedWorkspaces)
@@ -53,30 +53,20 @@ const Profile = () => {
         return (
           <div className="profile-ws col" key={i}>
             <div className="row main">
-              <div onClick={handleClickOnTitle} className="ws-initial col-1" style={pfpStyle}>{initial}</div>
-              <div onClick={handleClickOnTitle} className="ws-title col">{ws.title}</div>
+              <div onClick={() => {
+                dispatch(setWorkspaces(ws._id))
+                navigate("/" + ws._id + "/boards")
+              }} className="ws-initial col-1" style={pfpStyle}>{initial}</div>
+              <div onClick={() => {
+                dispatch(setWorkspaces(ws._id))
+                navigate("/" + ws._id + "/boards")
+              }} className="ws-title col">{ws.title}</div>
             </div>
           </div>
         )
       })
     }
   }
-
-  const handleClickOnTitle = (e) => {
-    const titleClicked = e.target.parentElement.childNodes[1].innerHTML;
-    let workspaceClicked = homeWorkspaces.find((workspace) => {
-      return workspace.title === titleClicked
-    })
-
-    if(workspaceClicked){
-      navigate("/" + workspaceClicked._id + "/boards")
-    } else {
-      workspaceClicked = workspaces[0].find(ws => ws.title === titleClicked)
-      navigate("/" + workspaceClicked._id + "/boards")
-    }
-  }
-
-
   
   if(workspaces){
     return (

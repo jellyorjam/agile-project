@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import { clearMembers } from "../reducers/boardSlice"
 import { useEffect } from "react";
 import { clearBoards, getMembersOfWorkspace, loadBoardsInWorkspace, setWorkspace } from "../reducers/workspaceSlice";
-import { boardsLoaded } from "../reducers/workspaceSlice";
+import { setWorkspaces } from "../reducers/homeSlice";
 
 export const random_rgba = () => {
   const o = Math.round, r = Math.random, s = 255;
@@ -13,38 +13,40 @@ export const random_rgba = () => {
 const BoardList = ({setColor}) => {
   const dispatch = useDispatch();
   const { workspaceId } = useParams();
-  const boards = useSelector(state => state.workspace.boards)
-  const boardsReady = useSelector(state => state.workspace.boardsLoaded);
   const workspaces = useSelector(state => state.home.workspaces);
   const members = useSelector(state => state.workspace.members);
+  const boards = useSelector(state => state.workspace.boards)
   const workspace = workspaces.find(ws => ws._id === workspaceId);
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(clearMembers())
-    dispatch(clearBoards())
+    dispatch(clearMembers());
+    dispatch(clearBoards());
+
+    if(!workspace){
+      dispatch(setWorkspaces(workspaceId))
+    }
+    
     if(workspace){
       dispatch(setWorkspace(workspace.name))
       const boards = workspace.boards
+  
       for (let i = 0; i < boards.length; i++) {
         let board = boards[i];
-        dispatch(loadBoardsInWorkspace(board)).then((payload) => {
-          if (i === boards.length - 1) {
-            dispatch(boardsLoaded())
-          }
-        });
+        dispatch(loadBoardsInWorkspace(board))
       }
+  
       for (let i = 0; i < workspace.members.length; i++) {
         let member = workspace.members[i];
         dispatch(getMembersOfWorkspace(member))
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspace])
 
 
   const renderBoards = () => {
-    if (boardsReady) {
+    if (boards[0]) {
         return boards.map((board, i) => {
           const values = random_rgba();
           const color = 'rgba(' + values + '0.4)'

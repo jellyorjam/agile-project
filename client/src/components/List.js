@@ -1,12 +1,12 @@
 import Card from "./Card"
 import AddCard from "./AddCard"
-import AddList from "./AddList"
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {  setListsAndCards} from "../reducers/listSlice";
 import { setCardDetail } from "../reducers/cardSlice";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { DragDropContext, Draggable, Droppable } from "react-dnd-beautiful";
 
 const List = () => {
   const [trigger, toggleTrigger] = useState(false);
@@ -109,40 +109,71 @@ const List = () => {
     }
     dispatch(setCardDetail(detailObj));
   }
+
+  const handleOnDragEnd = (result) => {
+    
+  }
+
   const renderLists = () => {
-    if (!isLoading) {
+    if(!isLoading){
       return listsDetail.map((list, i) => {
         return (
-              <div key={i} className="col list">
-                <div className="list-title">{list.list.title}</div>
-                <div>{list.cards.map((cards) => {
-                  return cards.map((card) => {
-                    return (
-                      <div className="sm-card" onClick={() => {
-                        getCurrentCard(card._id);
-                        navigate(`/${workspaceId}/boards/${boardId}/cards/${card._id}`, {replace: false})
-                        return toggleTrigger(true);
-                      }}>{card.title}</div>
-                    )
-                  })
-                })}</div>
-                <div><AddCard/></div>
-              </div>
+          <div key={i} className="col list">
+            <div className="list-title">{list.list.title}</div>
+              <Droppable droppableId={list.list._id}>
+                {(provided) => {
+                  return (
+                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                      {list.cards.map((cards) => {
+                        return cards.map((card, index) => {
+                          return (
+                            <Draggable key={card._id} draggableId={card._id.toString()} index={index}>
+                              {(provided) => {
+                                return (
+                                  <div  ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}className="sm-card" onClick={() => {
+                                    getCurrentCard(card._id);
+                                    navigate(`/${workspaceId}/boards/${boardId}/cards/${card._id}`, {replace: false})
+                                    return toggleTrigger(true);
+                                  }}>
+                                    {card.title}
+                                  </div>
+                                )
+                              }} 
+                            </Draggable>
+                          )
+                        })
+                      })}
+                      {provided.placeholder}
+                    </div>
+                  )
+                }}
+              </Droppable>
+            <div><AddCard/></div>
+          </div>
         )
       })
     }
   }
+  
+  if(!isLoading){
+    return (
+      <div className="list-con container row">
+        <Card trigger={trigger} toggle={toggleTrigger}/>
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          {renderLists()}
+        </DragDropContext>
+      </div>
+    )
+  }
 
   return (
-    <div className="comp container">
-      <Card trigger={trigger} toggle={toggleTrigger}/>
-      <div className="row">{renderLists()}
-        <div className="col list"><AddList/></div>
-      </div>
-      {/* <Card />
-      <AddCard /> */}
+    <div>
+      <img src="https://i.stack.imgur.com/ATB3o.gif" alt="Loading..." />
     </div>
   )
 }
+
 
 export default List;
