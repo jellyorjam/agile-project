@@ -7,7 +7,6 @@ const {Member, Workspace, Board, List, Card, Activity, Label} = require("./model
 const shuffleArray = require("./utils");
 const e = require("express");
 const keys = require('./config/keys');
-const { Provider } = require("react-redux");
 
 
 mongoose.connect(keys.MONGODB_URI, {
