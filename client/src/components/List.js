@@ -2,7 +2,7 @@ import Card from "./Card"
 import AddCard from "./AddCard"
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {  setListsAndCards} from "../reducers/listSlice";
+import {  editTitle, setListsAndCards} from "../reducers/listSlice";
 import { setCardDetail } from "../reducers/cardSlice";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
@@ -23,7 +23,7 @@ const List = () => {
   useEffect(() => {
     getLists().then(() => getCards()).then(() => dispatch(setListsAndCards(returnedLists))).then(() => setIsLoading(false));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [listsDetail])
 
   const returnedLists = [];
 
@@ -120,15 +120,59 @@ const List = () => {
           id: boardId,
           order: items
         }
-        dispatch(reorderBoard(order))
+        console.log(order)
         break;
       case "card":
         const cardItems = Array.from(newCards);
         const [reorderedCardItem] = cardItems.splice(result.source.index, 1);
         cardItems.splice(result.destination.index, 0, reorderedCardItem);
+        console.log(cardItems)
         break;
       default:
         return
+    }
+  }
+
+  const handleListEdit = (e) => {
+    if(!isLoading){
+      const div = e.target; 
+      const input = e.target.parentElement.childNodes[1];
+      input.value = div.innerHTML;
+      div.style.display = "none";
+      input.style.display = "block";
+      input.focus();
+    }
+  }
+
+  const handleTitleEnter = (e, id) => {
+    if(!isLoading){
+      const input = e.target;
+      const div = e.target.parentElement.childNodes[0];
+      if(e.key === 'Enter'){
+        const newTitle = input.value;
+        input.style.display = "none";
+        div.style.display = "block";
+
+        const list = listsDetail.find((list) => {
+          return list.list._id === div.id
+        })
+        const newList = {...list, list: {...list.list, title: newTitle}}
+        // dispatch(editTitle(newList))
+        dispatch(editTitle(newList))
+        console.log(newList)
+      }
+    }
+  }
+
+  const renderMembers = (card) => {
+    if(card.members){
+      return(
+        card.members.map((member) => {
+          return (
+            <div>{member.name.first[0]}</div>
+          )
+        })
+      )
     }
   }
 
@@ -142,7 +186,8 @@ const List = () => {
                 <div ref={provided.innerRef}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps} className="col list">
-                  <div className="list-title">{list.list.title}</div>
+                  <div id={list.list._id} onClick={handleListEdit} className="list-title">{list.list.title}</div>
+                  <input onKeyUp={handleTitleEnter} className="list-title-input" style={{display: "none"}} />
                     <Droppable type="card" droppableId={list.list._id}>
                       {(provided) => {
                         return (
@@ -161,6 +206,7 @@ const List = () => {
                                           return toggleTrigger(true);
                                         }}>
                                           {card.title}
+                                          {renderMembers(card)}
                                         </div>
                                       )
                                     }} 

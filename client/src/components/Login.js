@@ -27,8 +27,8 @@ const Login = () => {
     setLoading(true);
     navigate("/home", { replace: true });
 
-    const hardCodedUserId = '62dea68fb79afa738755affb' //emily's hardcoded user
-    // const hardCodedUserId = '62d4c5f2eb86a718a87a3d22' //natalie's hardcoded user
+    // const hardCodedUserId = '62dea68fb79afa738755affb' //emily's hardcoded user
+    const hardCodedUserId = '62d4c5f2eb86a718a87a3d22' //natalie's hardcoded user
    
     dispatch(setMember(hardCodedUserId))
       .unwrap()
