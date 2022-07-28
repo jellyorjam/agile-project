@@ -54,7 +54,9 @@ export const listSlice = createSlice({
       })
     })
     builder.addCase(editTitle.fulfilled, (state, action) => {
-      console.log(action.payload)
+      const index = action.meta.arg.list.index;
+      state.splice(index, 1, {cards: action.meta.arg.cards, list: action.payload});
+      return;
     })
   }
 })

@@ -123,10 +123,17 @@ const List = () => {
         dispatch(reorderBoard(updatedBoard))
         break;
       case "card":
-        const cardItems = Array.from(newCards);
-        const [reorderedCardItem] = cardItems.splice(result.source.index, 1);
-        cardItems.splice(result.destination.index, 0, reorderedCardItem);
-        console.log(cardItems)
+        if(result.destination.droppableId === result.source.droppableId){
+          const listId = result.destination.droppableId;
+          const list = listsDetail.find(list => {
+            return list.list._id === listId
+          });
+          const items = Array.from(list.list.cards);
+          const [reorderedItem] = items.splice(result.source.index, 1);
+          items.splice(result.destination.index, 0, reorderedItem);
+          const updatedList = {...list.list, cards: items}
+          console.log(updatedList)
+        }
         break;
       default:
         return
@@ -153,13 +160,9 @@ const List = () => {
         input.style.display = "none";
         div.style.display = "block";
 
-        const list = listsDetail.find((list) => {
-          return list.list._id === div.id
-        })
-        const newList = {...list, list: {...list.list, title: newTitle}}
-        // dispatch(editTitle(newList))
+        const list = listsDetail.find((list) => list.list._id === div.id)
+        const newList = {...list, list: {...list.list, title: newTitle, index: listsDetail.indexOf(list)}}
         dispatch(editTitle(newList))
-        console.log(newList)
       }
     }
   }

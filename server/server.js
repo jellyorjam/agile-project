@@ -514,7 +514,7 @@ router.put("/lists/:listID", (req, res, next) => {
     }
     req.list.save((err, list) => {
         if(err) throw err;
-        res.status(200).send(`List ${list.title} updated`);
+        res.status(200).send(list);
     });
 });
 
