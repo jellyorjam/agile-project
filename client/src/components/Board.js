@@ -65,11 +65,10 @@ const Board = ({color}) => {
   const renderLists = () => {
     if (!isLoading) {
       return (
-       <div><List/></div>
+        <div><List/></div> 
       )
     }
   }
-
 
   return (
     <div className="board-background" style={backgroundStyle}>

@@ -6,7 +6,8 @@ import {  setListsAndCards} from "../reducers/listSlice";
 import { setCardDetail } from "../reducers/cardSlice";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable } from "react-dnd-beautiful";
+import { reorderBoard } from "../reducers/boardSlice";
 
 const List = () => {
   const [trigger, toggleTrigger] = useState(false);
@@ -17,7 +18,6 @@ const List = () => {
   const listsDetail = useSelector(state => state.list);
   const [isLoading, setIsLoading] = useState(true);
   const {workspaceId} = useParams();
-  
 
 
   useEffect(() => {
@@ -25,9 +25,7 @@ const List = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-
- const returnedLists = [];
- 
+  const returnedLists = [];
 
   const getLists = async () => {
     for (let i = 0; i < lists.length; i++) {
@@ -53,10 +51,9 @@ const List = () => {
     }
   }
 
-  
-  const getCurrentCard = (id) => {
-    const newCards = [];
-    if(listsDetail[0]){
+  let newCards = [];
+
+  if(listsDetail[0]){
     listsDetail.forEach(list => {
       list.cards.forEach(cards => {
         cards.forEach(card => {
@@ -66,9 +63,10 @@ const List = () => {
     });
   }
 
-  const currentCard = newCards.find(card => card._id === id) //reusing Natalie's code from Card.js, should figure out how to pass down currentCard
+  const getCurrentCard = (id) => {
+    const currentCard = newCards.find(card => card._id === id) //reusing Natalie's code from Card.js, should figure out how to pass down currentCard
 
-  getCardDetail(currentCard).then(dispatchCardDetail);
+    getCardDetail(currentCard).then(dispatchCardDetail);
   }
 
   const members = [];
@@ -113,47 +111,73 @@ const List = () => {
   }
 
   const handleOnDragEnd = (result) => {
-    
+    switch(result.type){
+      case "list":
+        const items = Array.from(lists);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+        const order = {
+          id: boardId,
+          order: items
+        }
+        dispatch(reorderBoard(order))
+        break;
+      case "card":
+        const cardItems = Array.from(newCards);
+        const [reorderedCardItem] = cardItems.splice(result.source.index, 1);
+        cardItems.splice(result.destination.index, 0, reorderedCardItem);
+        break;
+      default:
+        return
+    }
   }
 
   const renderLists = () => {
     if(!isLoading){
       return listsDetail.map((list, i) => {
         return (
-          <div key={i} className="col list">
-            <div className="list-title">{list.list.title}</div>
-              <Droppable droppableId={list.list._id}>
-                {(provided) => {
-                  return (
-                    <div {...provided.droppableProps} ref={provided.innerRef}>
-                      {list.cards.map((cards) => {
-                        return cards.map((card, index) => {
-                          return (
-                            <Draggable key={card._id} draggableId={card._id.toString()} index={index}>
-                              {(provided) => {
+          <Draggable TypeId="list" draggableId={list.list._id.toString()} key={list.list._id} index={i}>
+            {(provided) => {
+              return (
+                <div ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps} className="col list">
+                  <div className="list-title">{list.list.title}</div>
+                    <Droppable type="card" droppableId={list.list._id}>
+                      {(provided) => {
+                        return (
+                          <div {...provided.droppableProps} ref={provided.innerRef}>
+                            {list.cards.map((cards) => {
+                              return cards.map((card, index) => {
                                 return (
-                                  <div  ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}className="sm-card" onClick={() => {
-                                    getCurrentCard(card._id);
-                                    navigate(`/${workspaceId}/boards/${boardId}/cards/${card._id}`, {replace: false})
-                                    return toggleTrigger(true);
-                                  }}>
-                                    {card.title}
-                                  </div>
+                                  <Draggable TypeId="card" key={card._id} draggableId={card._id.toString()} index={index}>
+                                    {(provided) => {
+                                      return (
+                                        <div ref={provided.innerRef}
+                                          {...provided.draggableProps}
+                                          {...provided.dragHandleProps}className="sm-card" onClick={() => {
+                                          getCurrentCard(card._id);
+                                          navigate(`/${workspaceId}/boards/${boardId}/cards/${card._id}`, {replace: false})
+                                          return toggleTrigger(true);
+                                        }}>
+                                          {card.title}
+                                        </div>
+                                      )
+                                    }} 
+                                  </Draggable>
                                 )
-                              }} 
-                            </Draggable>
-                          )
-                        })
-                      })}
-                      {provided.placeholder}
-                    </div>
-                  )
-                }}
-              </Droppable>
-            <div><AddCard list={list.list._id}/></div>
-          </div>
+                              })
+                            })}
+                            {provided.placeholder}
+                          </div>
+                        )
+                      }}
+                    </Droppable>
+                  <div><AddCard list={list.list._id}/></div>
+                </div>
+              )
+            }}
+          </Draggable>
         )
       })
     }
@@ -161,12 +185,18 @@ const List = () => {
   
   if(!isLoading){
     return (
-      <div className="list-con container row">
-        <Card trigger={trigger} toggle={toggleTrigger}/>
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          {renderLists()}
-        </DragDropContext>
-      </div>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <Droppable type="list" droppableId="list-row" direction="horizontal">
+          {(provided) => {
+            return (
+              <div {...provided.droppableProps} ref={provided.innerRef} className="list-con container row">
+                <Card trigger={trigger} toggle={toggleTrigger}/>
+                  {renderLists()}
+              </div>
+            )
+          }}
+        </Droppable>
+      </DragDropContext>
     )
   }
 
