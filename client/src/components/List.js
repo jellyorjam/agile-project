@@ -167,18 +167,6 @@ const List = () => {
     }
   }
 
-  const renderMembers = (card) => {
-    if(card.members){
-      return(
-        card.members.map((member) => {
-          return (
-            <div>{member.name.first[0]}</div>
-          )
-        })
-      )
-    }
-  }
-
   const renderLists = () => {
     if(!isLoading){
       return listsDetail.map((list, i) => {
@@ -209,7 +197,15 @@ const List = () => {
                                           return toggleTrigger(true);
                                         }}>
                                           {card.title}
-                                          {renderMembers(card)}
+                                          {() => {
+                                            if(card.members[0]){
+                                              return card.members.map((member) => {
+                                                return (
+                                                  <div>{member.name.first[0]}</div>
+                                                )
+                                              })   
+                                            }
+                                          }}
                                         </div>
                                       )
                                     }} 
