@@ -13,6 +13,7 @@ const List = () => {
   const [trigger, toggleTrigger] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const board = useSelector(state => state.board.boardInfo)
   const boardId = useSelector(state => state.board.boardInfo._id)
   const lists = useSelector(state => state.board.boardInfo.lists);
   const listsDetail = useSelector(state => state.list);
@@ -21,9 +22,11 @@ const List = () => {
 
 
   useEffect(() => {
+    setIsLoading(true)
     getLists().then(() => getCards()).then(() => dispatch(setListsAndCards(returnedLists))).then(() => setIsLoading(false));
+    
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listsDetail])
+  }, [board])
 
   const returnedLists = [];
 
@@ -113,14 +116,11 @@ const List = () => {
   const handleOnDragEnd = (result) => {
     switch(result.type){
       case "list":
-        const items = Array.from(lists);
+        const items = Array.from(board.lists);
         const [reorderedItem] = items.splice(result.source.index, 1);
         items.splice(result.destination.index, 0, reorderedItem);
-        const order = {
-          id: boardId,
-          order: items
-        }
-        console.log(order)
+        const updatedBoard = {...board, lists: items }
+        dispatch(reorderBoard(updatedBoard))
         break;
       case "card":
         const cardItems = Array.from(newCards);
@@ -238,6 +238,7 @@ const List = () => {
               <div {...provided.droppableProps} ref={provided.innerRef} className="list-con container row">
                 <Card trigger={trigger} toggle={toggleTrigger}/>
                   {renderLists()}
+                  {provided.placeholder}
               </div>
             )
           }}
@@ -248,7 +249,7 @@ const List = () => {
 
   return (
     <div>
-      <img src="https://i.stack.imgur.com/ATB3o.gif" alt="Loading..." />
+      <img style={{opacity: "60%", marginTop: "50px"}} width="30px" src="https://i.stack.imgur.com/kOnzy.gif" alt="Loading..." />
     </div>
   )
 }
