@@ -10,8 +10,9 @@ const Card = ({trigger, toggle}) => {
   const {boardId} = useParams();
   const {workspaceId} = useParams();
   const lists = useSelector(state => state.list);
+  const cardDetail = useSelector(state => state.card)
 
-  
+  console.log(cardDetail)
   const newCards = [];
   if(lists[0]){
     lists.forEach(list => {
