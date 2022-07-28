@@ -19,6 +19,17 @@ export const addList = createAsyncThunk('list/addList', async (newList) => {
   }
 })
 
+export const editTitle = createAsyncThunk('list/editTitle', async (list) => {
+  try {
+    const response = await axios.put(baseUrl + "/lists/" + list.list._id, list.list)
+    console.log(response)
+    return response.data;
+  }
+  catch (err) {
+    return err;
+  }
+})
+
 
 export const listSlice = createSlice({
   name: 'list',
@@ -42,7 +53,10 @@ export const listSlice = createSlice({
         list: action.payload,
         cards: []
       })
-  })
+    })
+    builder.addCase(editTitle.fulfilled, (state, action) => {
+      console.log(action.payload)
+    })
   }
 })
 
