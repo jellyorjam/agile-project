@@ -374,7 +374,7 @@ a:link {
   padding: 32px;
   width: 100%;
   max-width: 500px;
-  height: 200px;
+  height: fit-content;
   background-color: white;
 }
 

@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
+import { random_rgba } from "./BoardList";
 
 const Card = ({trigger, toggle}) => {
   const navigate = useNavigate();
@@ -10,9 +11,9 @@ const Card = ({trigger, toggle}) => {
   const {boardId} = useParams();
   const {workspaceId} = useParams();
   const lists = useSelector(state => state.list);
-  const cardDetail = useSelector(state => state.card)
+  const members = useSelector(state => state.card.members)
 
-  console.log(cardDetail)
+
   const newCards = [];
   if(lists[0]){
     lists.forEach(list => {
@@ -26,6 +27,21 @@ const Card = ({trigger, toggle}) => {
 
   const currentCard = newCards.find(card => card._id === cardId)
 
+  const renderMembers = () => {
+      if(members){
+        return members.map((member, i) => {
+          const values = random_rgba();
+          const randomColor = 'rgba(' + values + '1)'
+          const colorStyle = { backgroundColor: randomColor };
+  
+          return (
+            <div key={i} onClick={() => navigate(`../${member._id}`, {replace: true})} style={colorStyle} className="member-style" >{member.name.first[0]}{member.name.last[0]}</div>
+          )
+        })
+    }
+    
+  }
+
   
   return (trigger) ? (
     <div className="card list-card" id="card-component">
@@ -35,6 +51,10 @@ const Card = ({trigger, toggle}) => {
           navigate(-1);
           }} className="close-card" src="https://cdn.icon-icons.com/icons2/2518/PNG/512/x_icon_150997.png" alt="close card"/>
         <h1>{currentCard.title}</h1>
+        <div className="members-dropdown board-members">
+          <p>Members: </p>
+          {renderMembers()}
+        </div>
       </div>
     </div>
   ) : ""

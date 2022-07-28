@@ -68,7 +68,7 @@ const AddCard = ({list}) => {
     <div>
       <form>
         <div className="form-group">
-         <input onChange={handleChange} type="text" className={setFormShow} id="add-card-box" aria-describedby="add-list" placeholder="Enter card title" value={input}></input>
+         <input onChange={handleChange} type="text" className={setFormShow} id="add-card-box" aria-describedby="add-card" placeholder="Enter card title" value={input}></input>
         </div>
       </form>
       <button onClick={handleClick} type="button" className="btn btn-outline-secondary add-card">+ Add Card</button>
