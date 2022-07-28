@@ -19,8 +19,15 @@ export const getBoard = createAsyncThunk('board/getBoard', async (boardId) => {
   }
 });
 
-export const reorderBoard = createAsyncThunk('board/reorderBoard', async (order) => {
-  console.log(JSON.stringify(order.order))
+export const reorderBoard = createAsyncThunk('board/reorderBoard', async (board) => {
+  console.log(board)
+  try {
+    const response = await axios.put(baseUrl + '/boards/' + board._id, board);
+    return response.data;
+  }
+  catch (err) {
+    return err;
+  }
 })
 
 export const getMembersOfBoard = createAsyncThunk('board/getMembersOfBoard', async (member) => {
@@ -53,7 +60,7 @@ export const boardSlice = createSlice({
       state.members.push(action.payload)
     });
     builder.addCase(reorderBoard.fulfilled, (state, action) => {
-      state.boardInfo.push(action.payload)
+      state.boardInfo = action.payload;
     })
   }
 })
