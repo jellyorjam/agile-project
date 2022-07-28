@@ -378,10 +378,6 @@ a:link {
   background-color: white;
 }
 
-.list-card-inner h1 {
-  line-height: 100px;
-}
-
 .close-card {
   width: 15px;
   float: right;
@@ -447,4 +443,13 @@ a:link {
 
 .list-con {
   margin-left: 30px;
+}
+
+.add-description {
+  display: flex;
+}
+
+.description-label {
+  display: flex;
+  font-size: 20px;
 }
