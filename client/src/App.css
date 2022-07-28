@@ -374,12 +374,8 @@ a:link {
   padding: 32px;
   width: 100%;
   max-width: 500px;
-  height: 200px;
+  height: fit-content;
   background-color: white;
-}
-
-.list-card-inner h1 {
-  line-height: 100px;
 }
 
 .close-card {
@@ -447,4 +443,13 @@ a:link {
 
 .list-con {
   margin-left: 30px;
+}
+
+.add-description {
+  display: flex;
+}
+
+.description-label {
+  display: flex;
+  font-size: 20px;
 }

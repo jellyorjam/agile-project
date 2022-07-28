@@ -25,7 +25,6 @@ const List = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  console.log(listsDetail)
 
  const returnedLists = [];
  
