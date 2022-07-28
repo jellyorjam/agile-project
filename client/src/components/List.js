@@ -2,7 +2,7 @@ import Card from "./Card"
 import AddCard from "./AddCard"
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {  editTitle, setListsAndCards} from "../reducers/listSlice";
+import {  editTitle, moveCard, setListsAndCards} from "../reducers/listSlice";
 import { setCardDetail } from "../reducers/cardSlice";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
@@ -56,7 +56,7 @@ const List = () => {
 
   let newCards = [];
 
-  if(listsDetail[0]){
+  if(!isLoading){
     listsDetail.forEach(list => {
       list.cards.forEach(cards => {
         cards.forEach(card => {
@@ -128,11 +128,36 @@ const List = () => {
           const list = listsDetail.find(list => {
             return list.list._id === listId
           });
-          const items = Array.from(list.list.cards);
-          const [reorderedItem] = items.splice(result.source.index, 1);
-          items.splice(result.destination.index, 0, reorderedItem);
-          const updatedList = {...list.list, cards: items}
-          console.log(updatedList)
+          const cardItems = Array.from(list.list.cards);
+          const [reorderedCardItem] = cardItems.splice(result.source.index, 1);
+          cardItems.splice(result.destination.index, 0, reorderedCardItem);
+          const cards = Array.from(list.cards[0]);
+          const [reorderedCard] = cards.splice(result.source.index, 1);
+          cards.splice(result.destination.index, 0, reorderedCard);
+          const updatedList = {cards: cards, list: {...list.list, cards: cardItems}, index: listsDetail.indexOf(list)}
+          dispatch(moveCard(updatedList));
+        }
+        if(result.destination.droppableId !== result.source.droppableId){
+          const listId = result.destination.droppableId;
+          const oldListId = result.source.droppableId;
+          const list = listsDetail.find(list => {
+            return list.list._id === listId
+          });
+          const oldList = listsDetail.find(list => {
+            return list.list._id === oldListId
+          });
+          const oldCardItems = Array.from(oldList.list.cards);
+          const newCardItems = Array.from(list.list.cards);
+          const [reorderedCardItem] = oldCardItems.splice(result.source.index, 1);
+          newCardItems.splice(result.destination.index, 0, reorderedCardItem);
+          const oldCards = Array.from(oldList.cards[0]);
+          const cards = Array.from(list.cards[0])
+          const [reorderedCard] = oldCards.splice(result.source.index, 1);
+          cards.splice(result.destination.index, 0, reorderedCard);
+          const updatedNewList = {cards: cards, list: {...list.list, cards: newCardItems}, index: listsDetail.indexOf(list)};
+          const updatedOldList = {cards: oldCards, list: {...oldList.list, cards: oldCardItems}, index: listsDetail.indexOf(oldList)}
+          dispatch(moveCard(updatedNewList));
+          dispatch(moveCard(updatedOldList));
         }
         break;
       default:
