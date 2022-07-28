@@ -32,7 +32,7 @@ const Card = ({trigger, toggle}) => {
         <img onClick={() => {
           toggle(false);
           navigate(-1);
-          }} className="close-card" src="https://cdn.icon-icons.com/icons2/2518/PNG/512/x_icon_150997.png" alt="close card"/>
+          }} className="close-card" src="https://cdn0.iconfinder.com/data/icons/octicons/1024/x-512.png" alt="close card"/>
         <h1>{currentCard.title}</h1>
       </div>
     </div>
