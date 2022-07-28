@@ -8,11 +8,21 @@ const shuffleArray = require("./utils");
 const e = require("express");
 const keys = require('./config/keys');
 
+// keys.js - figure out what set of credentials to return
+if (process.env.NODE_ENV === "production") {
+    mongoose.connect(process.env.MONGODB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
+  } else {
+    mongoose.connect("mongodb://localhost/trello-clone", {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
+  }
 
-mongoose.connect(keys.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+
+
 
 
 const app = express();
