@@ -447,9 +447,15 @@ a:link {
 
 .add-description {
   display: flex;
+  margin-top: 5px;
 }
 
 .description-label {
+  display: flex;
+  font-size: 20px;
+}
+
+.activity-label {
   display: flex;
   font-size: 20px;
 }

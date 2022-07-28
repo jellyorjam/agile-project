@@ -64,6 +64,15 @@ const Card = ({trigger, toggle}) => {
     )
   }
 
+  const renderActivity = () => {
+    return (
+      <div className="activity">
+        <div className="activity-label">Activity</div>
+        <textarea class="form-control" id="description" rows="1" placeholder="Add comment"/>
+      </div>
+    )
+  }
+
   
   return (trigger) ? (
     <div className="card list-card" id="card-component">
@@ -78,6 +87,7 @@ const Card = ({trigger, toggle}) => {
           {renderMembers()}
         </div>
         <div>{renderForm()}</div>
+        <div>{renderActivity()}</div>
       </div>
     </div>
   ) : ""
