@@ -17,6 +17,10 @@ export const getBoard = createAsyncThunk('board/getBoard', async (boardId) => {
   catch (err) {
     return err
   }
+});
+
+export const reorderBoard = createAsyncThunk('board/reorderBoard', async (order) => {
+  console.log(JSON.stringify(order.order))
 })
 
 export const getMembersOfBoard = createAsyncThunk('board/getMembersOfBoard', async (member) => {
@@ -47,6 +51,9 @@ export const boardSlice = createSlice({
     });
     builder.addCase(getMembersOfBoard.fulfilled, (state, action) => {
       state.members.push(action.payload)
+    });
+    builder.addCase(reorderBoard.fulfilled, (state, action) => {
+      state.boardInfo.push(action.payload)
     })
   }
 })

@@ -492,7 +492,7 @@ router.put("/boards/:boardID", (req, res, next) => {
     }
     req.board.save((err, board) => {
         if(err) throw err;
-        res.status(200).send(`Board ${board.title} updated`);
+        res.status(200).send(`Board ${board} updated`);
     });
 });
 

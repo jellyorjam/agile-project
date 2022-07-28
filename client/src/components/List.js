@@ -7,6 +7,7 @@ import { setCardDetail } from "../reducers/cardSlice";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { DragDropContext, Draggable, Droppable } from "react-dnd-beautiful";
+import { reorderBoard } from "../reducers/boardSlice";
 
 const List = () => {
   const [trigger, toggleTrigger] = useState(false);
@@ -50,10 +51,9 @@ const List = () => {
     }
   }
 
-  
-  const getCurrentCard = (id) => {
-    const newCards = [];
-    if(listsDetail[0]){
+  let newCards = [];
+
+  if(listsDetail[0]){
     listsDetail.forEach(list => {
       list.cards.forEach(cards => {
         cards.forEach(card => {
@@ -63,9 +63,10 @@ const List = () => {
     });
   }
 
-  const currentCard = newCards.find(card => card._id === id) //reusing Natalie's code from Card.js, should figure out how to pass down currentCard
+  const getCurrentCard = (id) => {
+    const currentCard = newCards.find(card => card._id === id) //reusing Natalie's code from Card.js, should figure out how to pass down currentCard
 
-  getCardDetail(currentCard).then(dispatchCardDetail);
+    getCardDetail(currentCard).then(dispatchCardDetail);
   }
 
   const members = [];
@@ -110,11 +111,25 @@ const List = () => {
   }
 
   const handleOnDragEnd = (result) => {
-    console.log(result)
-  }
-
-  const handleListDragEnd = (result) => {
-    console.log(result)
+    switch(result.type){
+      case "list":
+        const items = Array.from(lists);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+        const order = {
+          id: boardId,
+          order: items
+        }
+        dispatch(reorderBoard(order))
+        break;
+      case "card":
+        const cardItems = Array.from(newCards);
+        const [reorderedCardItem] = cardItems.splice(result.source.index, 1);
+        cardItems.splice(result.destination.index, 0, reorderedCardItem);
+        break;
+      default:
+        return
+    }
   }
 
   const renderLists = () => {
@@ -170,7 +185,7 @@ const List = () => {
   
   if(!isLoading){
     return (
-      <DragDropContext onDragEnd={handleListDragEnd}>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable type="list" droppableId="list-row" direction="horizontal">
           {(provided) => {
             return (
