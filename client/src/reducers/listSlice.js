@@ -29,6 +29,23 @@ export const editTitle = createAsyncThunk('list/editTitle', async (list) => {
   }
 })
 
+export const moveCard = createAsyncThunk('list/moveCard', async (list) => {
+  try {
+    console.log(list.list._id)
+    const response = await axios.put(baseUrl + "/lists/" + list.list._id, list.list)
+    console.log(response.data)
+    const data = {
+      list: response.data,
+      cards: [list.cards],
+      index: list.index
+    }
+    return data;
+  }
+  catch (err) {
+    return err;
+  }
+})
+
 
 export const listSlice = createSlice({
   name: 'list',
@@ -55,7 +72,12 @@ export const listSlice = createSlice({
     })
     builder.addCase(editTitle.fulfilled, (state, action) => {
       const index = action.meta.arg.list.index;
-      state.splice(index, 1, {cards: action.meta.arg.cards, list: action.payload});
+      state.splice(index, 1, {list: action.payload, cards: action.meta.arg.cards});
+      return;
+    })
+    builder.addCase(moveCard.fulfilled, (state, action) => {
+      const index = action.payload.index;
+      state.splice(index, 1, action.payload);
       return;
     })
   }

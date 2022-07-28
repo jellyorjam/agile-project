@@ -20,7 +20,6 @@ export const getBoard = createAsyncThunk('board/getBoard', async (boardId) => {
 });
 
 export const reorderBoard = createAsyncThunk('board/reorderBoard', async (board) => {
-  console.log(board)
   try {
     const response = await axios.put(baseUrl + '/boards/' + board._id, board);
     return response.data;
