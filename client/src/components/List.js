@@ -8,7 +8,8 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { DragDropContext, Draggable, Droppable } from "react-dnd-beautiful";
 import { reorderBoard } from "../reducers/boardSlice";
-import { cardAdded } from "../reducers/cardSlice";
+import { cardAdded, activityAdded, detailsLoaded } from "../reducers/cardSlice";
+import {url} from "../config/keys"
 
 const List = () => {
   const [trigger, toggleTrigger] = useState(false);
@@ -19,8 +20,10 @@ const List = () => {
   const lists = useSelector(state => state.board.boardInfo.lists);
   const listsDetail = useSelector(state => state.list);
   const cardHasBeenAdded = useSelector(state => state.card.cardAdded)
+  const activityHasBeenAdded = useSelector(state => state.card.activityAdded)
   const [isLoading, setIsLoading] = useState(true);
   const {workspaceId} = useParams();
+  const {cardId} = useParams();
 
 
   useEffect(() => {
@@ -31,9 +34,10 @@ const List = () => {
   }, [board])
 
   useEffect(() => {
-    if (cardHasBeenAdded) {
+    if (cardHasBeenAdded || activityHasBeenAdded) {
       getLists().then(() => getCards()).then(() => dispatch(setListsAndCards(returnedLists))).then(() => {
         dispatch(cardAdded(false));
+        dispatch(activityAdded(false));
         setIsLoading(false)
       });
     }
@@ -44,7 +48,7 @@ const List = () => {
   const getLists = async () => {
     for (let i = 0; i < lists.length; i++) {
       let list = lists[i];
-      const response = await axios.get("http://localhost:8000/lists/" + list)
+      const response = await axios.get(url + "/lists/" + list)
       returnedLists.push({
         list: response.data,
         cards: []
@@ -58,7 +62,7 @@ const List = () => {
     let returnedCards = []
       for (let i = 0; i < cards.length; i++) {
         let card = cards[i]
-        const response = await axios.get("http://localhost:8000/cards/" + card)
+        const response = await axios.get(url + "/cards/" + card)
         returnedCards.push(response.data)
       }
       returnedLists[i].cards.push(returnedCards)
@@ -79,8 +83,8 @@ const List = () => {
 
   const getCurrentCard = (id) => {
     const currentCard = newCards.find(card => card._id === id) //reusing Natalie's code from Card.js, should figure out how to pass down currentCard
-
-    getCardDetail(currentCard).then(dispatchCardDetail);
+    dispatch(detailsLoaded(false))
+    getCardDetail(currentCard).then(dispatchCardDetail)
   }
 
   const members = [];
@@ -92,7 +96,7 @@ const List = () => {
     if (currentCard.members.length) {
       for (let i = 0; i < currentCard.members.length; i++) {
         let member = currentCard.members[i];
-        let memberInfo = await axios.get("http://localhost:8000/members/" + member)
+        let memberInfo = await axios.get( url +"/members/" + member)
         members.push(memberInfo.data)
       }
     }
@@ -100,7 +104,7 @@ const List = () => {
     if (currentCard.labels.length) {
       for (let i = 0; i < currentCard.labels.length; i++) {
         let label = currentCard.labels[i];
-        let labelInfo = await axios.get("http://localhost:8000/labels/" + label)
+        let labelInfo = await axios.get(url + "/labels/" + label)
         labels.push(labelInfo.data)
       }
     }
@@ -108,20 +112,29 @@ const List = () => {
     if (currentCard.activity.length) {
       for (let i = 0; i < currentCard.activity.length; i++) {
         let activities = currentCard.activity[i];
-        let activityInfo = await axios.get("http://localhost:8000/activities/" + activities)
+        let activityInfo = await axios.get(url + "/activities/" + activities)
         activity.push(activityInfo.data)
       }
     }
     
   }
 
-  const dispatchCardDetail = () => {
+  const dispatchCardDetail = async () => {
+    if (activity.length) {
+      for (let i = 0; i < activity.length; i++) {
+        let eachActivity = activity[i]
+        const response = await axios.get(url + "/members/" + eachActivity.member);
+        eachActivity.member = response.data
+      }  
+    }
+
     const detailObj = {
       members: members,
       labels: labels,
       activity: activity
     }
     dispatch(setCardDetail(detailObj));
+    dispatch(detailsLoaded(true));
   }
 
   const handleOnDragEnd = (result) => {

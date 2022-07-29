@@ -51,7 +51,6 @@ const CardSchema = new Schema({
 
 const ActivitySchema = new Schema({
   member: {type: Schema.Types.ObjectId, ref: "member"},
-
   activityType: String,
   previousListId: String,
   targetListId: String,
