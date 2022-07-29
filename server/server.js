@@ -569,6 +569,34 @@ router.delete("/boards/:boardID", (req, res, next) => {
     })
 });
 
+router.delete("/lists/:listID", (req, res, next) => {
+    Board.findOneAndeUpdate({lists: req.params.listID}, {$pull: {boards: req.params.boardID}}, (err, board) => {
+        if(err) throw err;
+        let cardIds = [...list.cards];
+        let activityIds = [];
+        List.findByIdAndDelete(req.params.listID, (err, list) => {
+            if(err) throw err;
+            if(cardIds.length > 0) {
+                Card.find({_id: {$in: [...cardIds]}}, (err, cards) => {
+                    if(err) throw err;
+                    for(let i = 0; i < cards.length; i++) {
+                        activityIds.push(...cards[i].activity);
+                    }
+                    Card.deleteMany({_id: {$in: [...cardIds]}}, err => {
+                        if(err) throw err;
+                        Activity.deleteMany({_id: [...activityIds]}, err => {
+                            if(err) throw err;
+                            res.status(200).send("List (and all subdoc) deletion complete");
+                        });
+                    });
+                });
+            } else {
+                res.status(200).send("List deletion complete");
+            }
+        });
+    })
+});
+
 // router.delete("/boards/:boardID", (req, res, next) => {
 //     Workspace.findOneAndUpdate({boards: req.params.boardID}, {$pull: {boards: req.params.boardID}}, (err, workspace) => {
 //         if(err) throw err;
