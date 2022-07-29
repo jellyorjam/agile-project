@@ -58,3 +58,8 @@
 .hide-form {
   display: none;
 }
+
+.comment-buttons {
+  display: flex;
+  gap: 5px;
+}

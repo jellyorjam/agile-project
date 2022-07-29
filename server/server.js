@@ -6,6 +6,7 @@ const faker = require("faker");
 const {Member, Workspace, Board, List, Card, Activity, Label} = require("./models/models");
 const shuffleArray = require("./utils");
 const e = require("express");
+
 // keys.js - figure out what set of credentials to return
 if (process.env.NODE_ENV === "production") {
     mongoose.connect(process.env.MONGODB_URI, {
@@ -23,8 +24,9 @@ const app = express();
 
 app.use(bodyParser.json());
 
+
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     res.header(
         "Access-Control-Allow-Headers",

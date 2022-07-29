@@ -2,9 +2,11 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { random_rgba } from "./BoardList";
 import { editCardTitle } from "../reducers/listSlice";
+import { addCommentToCard, activityAdded} from "../reducers/cardSlice";
+
 
 
 const Card = ({trigger, toggle}) => {
@@ -12,10 +14,15 @@ const Card = ({trigger, toggle}) => {
   const navigate = useNavigate();
   const {cardId} = useParams();
   const {boardId} = useParams();
-  const {workspaceId} = useParams();
   const lists = useSelector(state => state.list);
-  const members = useSelector(state => state.card.members)
+  const members = useSelector(state => state.card.members);
+  const activities = useSelector(state => state.card.activity)
+  const currentMember = useSelector(state => state.login.name)
+  const currentMemberId = useSelector(state => state.login._id)
+  const detailsAreLoaded = useSelector(state => state.card.detailsLoaded)
   const [descriptionInput, setDescriptionInput] = useState("");
+  const [clickOnComment, setClickOnComment] = useState(false)
+  const [commentInput, setCommentInput] = useState("");
 
 
   const newCards = [];
@@ -37,7 +44,32 @@ const Card = ({trigger, toggle}) => {
 
   const handleChange = (e) => {
     setDescriptionInput(e.target.value)
-    console.log(descriptionInput)
+  }
+
+  const addComment = () => {
+    const data = {
+      boardId: boardId,
+      cardId: cardId,
+      member: {
+        name: {
+          first: currentMember.first,
+          last: currentMember.last
+        }
+      }
+      ,
+      activity: {
+        member: currentMemberId,
+        comment: {
+          text: commentInput,
+          edited: false
+        },
+        activityType: "comment"
+      }
+    };
+
+    dispatch(addCommentToCard(data)).then(() => dispatch(activityAdded(true)))
+
+    setCommentInput("")
   }
 
   const renderMembers = () => {
@@ -55,7 +87,7 @@ const Card = ({trigger, toggle}) => {
     
   }
 
-  const renderForm = () => {
+  const renderDescriptionForm = () => {
     return (
       <form>
       <div className="form-row description-form">
@@ -67,11 +99,30 @@ const Card = ({trigger, toggle}) => {
     )
   }
 
+  const renderActivityBody = () => {
+    if (detailsAreLoaded && activities.length) {
+      return activities.map((activity) => {
+        if (activity.activityType === "comment") {
+          return (
+            <div>{activity.member.name.first + " " + activity.member.name.last + " commented: " + activity.comment.text}</div>
+          )
+        }
+      })
+    }
+  }
+
+ 
+
   const renderActivity = () => {
     return (
       <div className="activity">
         <div className="activity-label">Activity</div>
-        <textarea className="form-control" id="description" rows="1" placeholder="Add comment"/>
+        <textarea className="form-control" id="description" rows="1" placeholder="Add comment" onClick={() => setClickOnComment(true)} onChange={(e) => setCommentInput(e.target.value)} value={commentInput}/>
+        <div className="comment-buttons">
+          <button type="button" className={clickOnComment ? "btn btn-outline-secondary add-description" : "hide-form"} onClick={addComment}>Save</button>
+          <button type="button" className={clickOnComment ? "btn btn-outline-secondary add-description" : "hide-form"} onClick={() => setClickOnComment(false)}>Exit</button>
+        </div>
+       <div>{renderActivityBody()}</div>
       </div>
     )
   }
@@ -101,8 +152,7 @@ const Card = ({trigger, toggle}) => {
       dispatch(editCardTitle(newCard))
     }
   }
-
-  
+   
   return (trigger) ? (
     <div className="card list-card" id="card-component">
       <div className="list-card-inner">
@@ -119,7 +169,7 @@ const Card = ({trigger, toggle}) => {
           <p>Members: </p>
           {renderMembers()}
         </div>
-        <div>{renderForm()}</div>
+        <div>{renderDescriptionForm()}</div>
         <div>{renderActivity()}</div>
       </div>
     </div>
