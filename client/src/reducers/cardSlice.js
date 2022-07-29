@@ -19,9 +19,12 @@ export const cardSlice = createSlice({
       state.members = action.payload.members;
       state.labels = action.payload.labels;
       state.activity = action.payload.activity;
-    }
+    },
+    cardAdded: (state, action) => {
+      state.cardAdded = action.payload
+    },
   },
 })
 
-export const {setCardDetail} = cardSlice.actions
+export const {setCardDetail, cardAdded} = cardSlice.actions
 export default cardSlice.reducer

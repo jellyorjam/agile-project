@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useParams } from "react-router"
 import { useSelector, useDispatch } from "react-redux";
 import { addCard } from "../reducers/listSlice";
+import { cardAdded } from "../reducers/cardSlice";
 import {url} from "../config/keys";
 import axios from "axios";
 
@@ -36,7 +37,7 @@ const AddCard = ({list}) => {
     }
 
     if (input) {
-      postCard(cardObj)
+      postCard(cardObj).then(() => dispatch(cardAdded(true)))
     };
     setInput("")
   }
