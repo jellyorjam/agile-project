@@ -495,3 +495,15 @@ a:link {
   display: flex;
   font-size: 20px;
 }
+
+.edit-title {
+  width: 25px;
+  height: 25px;
+  opacity: 50%;
+}
+
+.card-title {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}

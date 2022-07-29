@@ -26,8 +26,9 @@ const Login = () => {
     // const { username, password } = formValue;
     setLoading(true);
     navigate("/home", { replace: true });
-    // const hardCodedUserId = '62dea68fb79afa738755affb' //emily's hardcoded user
-    const hardCodedUserId = '62e3414e66a3fd155259807e' //natalie's hardcoded user
+    
+    const hardCodedUserId = '62dea68fb79afa738755affb' //emily's hardcoded user
+    // const hardCodedUserId = '62e3414e66a3fd155259807e' //natalie's hardcoded user
     
     dispatch(setMember(hardCodedUserId))
       .unwrap()
