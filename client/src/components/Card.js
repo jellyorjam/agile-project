@@ -1,11 +1,14 @@
 import { useSelector } from "react-redux";
-// import { useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { useState } from "react";
 import { random_rgba } from "./BoardList";
+import { editCardTitle } from "../reducers/listSlice";
+
 
 const Card = ({trigger, toggle}) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const {cardId} = useParams();
   const {boardId} = useParams();
@@ -83,13 +86,19 @@ const Card = ({trigger, toggle}) => {
   }
 
   const handleTitleEnter = (e) => {
-    const div = e.target.previousElementSibling;
+    const div = e.target.previousElementSibling.previousElementSibling;
 
     if (e.key === "Enter") {
       const newTitle = e.target.value;
-      console.log(newTitle)
       e.target.style.display = "none";
       div.style.display = "block";
+      const listCardIsIn = lists.find((list) => list.cards[0].find(card => card._id === cardId))
+      const listIndex = lists.indexOf(listCardIsIn)
+      const card = listCardIsIn.cards[0].find(card => card._id === cardId)
+      const cardIndex = listCardIsIn.cards[0].indexOf(card);
+      const newCard = {...card, title: newTitle, listIndex: listIndex, cardIndex: cardIndex}
+
+      dispatch(editCardTitle(newCard))
     }
   }
 
