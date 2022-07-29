@@ -31,9 +31,7 @@ export const editTitle = createAsyncThunk('list/editTitle', async (list) => {
 
 export const moveCard = createAsyncThunk('list/moveCard', async (list) => {
   try {
-    console.log(list.list._id)
     const response = await axios.put(baseUrl + "/lists/" + list.list._id, list.list)
-    console.log(response.data)
     const data = {
       list: response.data,
       cards: [list.cards],

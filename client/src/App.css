@@ -224,6 +224,10 @@ a:link {
   object-fit: cover;
 }
 
+.ws-initial:hover {
+  cursor: pointer;
+}
+
 .ws-title {
   text-align: left;
   overflow: visible;
@@ -231,6 +235,10 @@ a:link {
   float: left;
   font-size: 25px;
   padding-top: 5px;
+}
+
+.ws-title:hover {
+  cursor: pointer;
 }
 
 .ws-members {
@@ -241,6 +249,12 @@ a:link {
   color: #0a2749;
   margin-right: 15px;
   float: left;
+}
+
+.ws-members:hover {
+  cursor: pointer;
+  background-color: rgba(10, 39, 73, 0.3);
+  color: rgba(10, 39, 73, 0.8);
 }
 
 .ws-members img {
@@ -262,6 +276,12 @@ a:link {
   width: 10%;
   margin-left: 15px;
   float: left;
+}
+
+.ws-boards:hover {
+  cursor: pointer;
+  background-color: rgba(10, 39, 73, 0.3);
+  color: rgba(10, 39, 73, 0.8);
 }
 
 .ws-boards img {
@@ -320,6 +340,12 @@ a:link {
   line-height: 6vw;
   margin: 20px;
   border-radius: 5px;
+  box-shadow: 2px 2px rgba(10, 39, 73, 0.3);
+}
+
+.board-box:hover {
+  opacity: 110%;
+  cursor: pointer;
 }
 
 .boards-div {
@@ -379,7 +405,7 @@ a:link {
 }
 
 .close-card {
-  width: 15px;
+  width: 2vw;
   float: right;
   margin: -10px;
   opacity: 50%;
@@ -392,6 +418,7 @@ a:link {
 
 .sm-card {
   background-color: white;
+  box-shadow: 2px 2px rgba(10, 39, 73, 0.1);
   padding: 10px;
   margin: 5px;
   font-weight: bold;
@@ -431,6 +458,15 @@ a:link {
 
 .list {
   background-color: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 2px 2px rgba(10, 39, 73, 0.1);
+}
+
+.list-title-input {
+  font-size: 30px;
+  text-align: center;
+  margin-left: 60px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 
 .profile-ws {
