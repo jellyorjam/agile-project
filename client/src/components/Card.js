@@ -57,7 +57,7 @@ const Card = ({trigger, toggle}) => {
       <form>
       <div className="form-row description-form">
           <label for="description" className="description-label">Description</label>
-          <textarea class="form-control" id="description" rows="3" placeholder="Enter a more detailed description here" onClick={clickOnDescription} onChange={handleChange}></textarea>
+          <textarea className="form-control" id="description" rows="3" placeholder="Enter a more detailed description here" onClick={clickOnDescription} onChange={handleChange}></textarea>
           <button type="button" className="btn btn-outline-secondary add-description">Save</button>
       </div>
     </form>
@@ -68,9 +68,29 @@ const Card = ({trigger, toggle}) => {
     return (
       <div className="activity">
         <div className="activity-label">Activity</div>
-        <textarea class="form-control" id="description" rows="1" placeholder="Add comment"/>
+        <textarea className="form-control" id="description" rows="1" placeholder="Add comment"/>
       </div>
     )
+  }
+
+  const editTitle = (e) => {
+    const div = e.target.previousElementSibling;
+    const input = e.target.nextSibling;
+    input.value = div.innerHTML;
+    div.style.display = "none";
+    input.style.display = "block";
+    input.focus()
+  }
+
+  const handleTitleEnter = (e) => {
+    const div = e.target.previousElementSibling;
+
+    if (e.key === "Enter") {
+      const newTitle = e.target.value;
+      console.log(newTitle)
+      e.target.style.display = "none";
+      div.style.display = "block";
+    }
   }
 
   
@@ -81,7 +101,11 @@ const Card = ({trigger, toggle}) => {
           toggle(false);
           navigate(-1);
           }} className="close-card" src="https://cdn0.iconfinder.com/data/icons/octicons/1024/x-512.png" alt="close card"/>
-        <h1>{currentCard.title}</h1>
+        <div className="card-title">
+          <h1>{currentCard.title}</h1>
+          <img className="edit-title"  onClick={editTitle} src="https://cdn4.iconfinder.com/data/icons/evil-icons-user-interface/64/pen-1024.png" alt="edit-title"/>
+          <input onKeyUp={handleTitleEnter} className="list-title-input" style={{display: "none"}} />
+        </div>
         <div className="members-dropdown board-members">
           <p>Members: </p>
           {renderMembers()}
