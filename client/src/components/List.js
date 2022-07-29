@@ -123,8 +123,10 @@ const List = () => {
     if (activity.length) {
       for (let i = 0; i < activity.length; i++) {
         let eachActivity = activity[i]
-        const response = await axios.get(url + "/members/" + eachActivity.member);
-        eachActivity.member = response.data
+        if (eachActivity.member) {
+          const response = await axios.get(url + "/members/" + eachActivity.member);
+          eachActivity.member = response.data
+        }
       }  
     }
 
