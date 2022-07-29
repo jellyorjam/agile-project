@@ -26,9 +26,16 @@ const Login = () => {
     // const { username, password } = formValue;
     setLoading(true);
     navigate("/home", { replace: true });
+<<<<<<< HEAD
     // const hardCodedUserId = '62dea68fb79afa738755affb' //emily's hardcoded user
     const hardCodedUserId = '62e3414e66a3fd155259807e' //natalie's hardcoded user
     
+=======
+
+    const hardCodedUserId = '62dea68fb79afa738755affb' //emily's hardcoded user
+    // const hardCodedUserId = '62d4c5f2eb86a718a87a3d22' //natalie's hardcoded user
+   
+>>>>>>> 1072810ddb02f7db0c7378479c15c33da111c614
     dispatch(setMember(hardCodedUserId))
       .unwrap()
       .then((payload) => {

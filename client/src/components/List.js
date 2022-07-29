@@ -187,6 +187,7 @@ const List = () => {
 
         const list = listsDetail.find((list) => list.list._id === div.id)
         const newList = {...list, list: {...list.list, title: newTitle, index: listsDetail.indexOf(list)}}
+    
         dispatch(editTitle(newList))
       }
     }
