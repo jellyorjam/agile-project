@@ -1,13 +1,14 @@
 import Card from "./Card"
 import AddCard from "./AddCard"
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, Provider } from "react-redux";
 import {  editTitle, moveCard, setListsAndCards} from "../reducers/listSlice";
 import { setCardDetail } from "../reducers/cardSlice";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { DragDropContext, Draggable, Droppable } from "react-dnd-beautiful";
 import { reorderBoard } from "../reducers/boardSlice";
+import { cardAdded } from "../reducers/cardSlice";
 
 const List = () => {
   const [trigger, toggleTrigger] = useState(false);
@@ -17,6 +18,7 @@ const List = () => {
   const boardId = useSelector(state => state.board.boardInfo._id)
   const lists = useSelector(state => state.board.boardInfo.lists);
   const listsDetail = useSelector(state => state.list);
+  const cardHasBeenAdded = useSelector(state => state.card.cardAdded)
   const [isLoading, setIsLoading] = useState(true);
   const {workspaceId} = useParams();
 
@@ -27,6 +29,15 @@ const List = () => {
     
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [board])
+
+  useEffect(() => {
+    if (cardHasBeenAdded) {
+      getLists().then(() => getCards()).then(() => dispatch(setListsAndCards(returnedLists))).then(() => {
+        dispatch(cardAdded(false));
+        setIsLoading(false)
+      });
+    }
+  })
 
   const returnedLists = [];
 
