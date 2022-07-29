@@ -103,9 +103,16 @@ const Card = ({trigger, toggle}) => {
     if (detailsAreLoaded && activities.length) {
       return activities.map((activity) => {
         if (activity.activityType === "comment") {
-          return (
-            <div>{activity.member.name.first + " " + activity.member.name.last + " commented: " + activity.comment.text}</div>
-          )
+          if (activity.member) {
+            return (
+              <div>{activity.member.name.first + " " + activity.member.name.last + " commented: " + activity.comment.text}</div>
+            )
+          }
+          else {
+            return (
+              <div>{"Unknwon member commented: " + activity.comment.text}</div>
+            )
+          }
         }
       })
     }
