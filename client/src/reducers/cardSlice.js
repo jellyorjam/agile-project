@@ -8,15 +8,7 @@ const baseUrl = url;
 const initialState = {
 };
 
-// export const editCardTitle = createAsyncThunk('card/editTitle', async (list) => {
-//   try {
-//     const response = await axios.put(baseUrl + "/lists/" + list.list._id, list.list)
-//     return response.data;
-//   }
-//   catch (err) {
-//     return err;
-//   }
-// })
+
 
 
 export const cardSlice = createSlice({

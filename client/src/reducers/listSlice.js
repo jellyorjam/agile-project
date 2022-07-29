@@ -44,6 +44,16 @@ export const moveCard = createAsyncThunk('list/moveCard', async (list) => {
   }
 })
 
+export const editCardTitle = createAsyncThunk('list/editCardTitle', async (card) => {
+  try {
+    const response = await axios.put(baseUrl + "/cards/" + card._id, card)
+    return response.data;
+  }
+  catch (err) {
+    return err;
+  }
+})
+
 
 export const listSlice = createSlice({
   name: 'list',
@@ -76,6 +86,12 @@ export const listSlice = createSlice({
     builder.addCase(moveCard.fulfilled, (state, action) => {
       const index = action.payload.index;
       state.splice(index, 1, action.payload);
+      return;
+    })
+    builder.addCase(editCardTitle.fulfilled, (state, action) => {
+      const listIndex = action.meta.arg.listIndex;
+      const cardIndex = action.meta.arg.cardIndex
+      state[listIndex].cards[0].splice(cardIndex, 1, action.meta.arg);
       return;
     })
   }
