@@ -267,6 +267,17 @@ a:link {
   padding-bottom: 3px;
 }
 
+.ws-title-profile {
+  text-align: center;
+  font-size: 25px;
+  margin-top: 20px;
+}
+
+.ws-title-profile:hover {
+  cursor: pointer;
+  opacity: 80%;
+}
+
 .ws-boards {
   background-color: white;
   min-width: 123px;
@@ -434,6 +445,14 @@ a:link {
   margin: 20px;
   color: #0a2749;
   outline: 1px solid #0a2749;
+}
+
+.workspaces-profile {
+  text-align: left;
+  font-size: 24px;
+  margin-top: 50px;
+  margin-left: 30px;
+  color: rgba(10, 39, 73, 0.5);
 }
 
 .add-card:hover {

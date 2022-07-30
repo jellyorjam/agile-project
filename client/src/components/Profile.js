@@ -52,16 +52,16 @@ const Profile = () => {
         
         return (
           <div className="profile-ws col" key={i}>
-            <div className="row main">
+            <div className="d-flex justify-content-center row main">
               <div onClick={() => {
                 dispatch(setWorkspaces(ws._id))
                 navigate("/" + ws._id + "/boards")
               }} className="ws-initial col-1" style={pfpStyle}>{initial}</div>
-              <div onClick={() => {
-                dispatch(setWorkspaces(ws._id))
-                navigate("/" + ws._id + "/boards")
-              }} className="ws-title col">{ws.title}</div>
             </div>
+            <div onClick={() => {
+              dispatch(setWorkspaces(ws._id))
+              navigate("/" + ws._id + "/boards")
+            }} className="ws-title-profile col">{ws.title}</div>
           </div>
         )
       })
@@ -75,7 +75,8 @@ const Profile = () => {
         <div style={colorStyle} className="full-pfp">{viewedMember.name.first[0]}{viewedMember.name.last[0]}</div>
         <h1>{viewedMember.name.first} {viewedMember.name.last}</h1>
         <h3 className="email-profile col">{viewedMember.email}</h3>
-        <h2>Workspaces</h2>
+        <p className="workspaces-profile">Workspaces:</p>
+        <hr/>
         <div className="row">
           {renderWorkspaces()}
         </div>
