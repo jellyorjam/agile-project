@@ -39,7 +39,8 @@ const Login = () => {
     password: Yup.string().required("^ This field is required")
   });
 
-  const handleLogin = (formValue) => {
+  const handleLogin = (formValue, e) => {
+    e.resetForm();
     dispatch(setLogin(formValue))
       .unwrap()
       .then((payload) => {

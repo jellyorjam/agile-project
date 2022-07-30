@@ -203,12 +203,12 @@ a:link {
 .pfp-color {
   color: white;
   border-radius: 50%;
-  width: 4vw;
-  height: 4vw;
-  line-height: 4.1vw;
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
   padding-left: 9px;
   margin-left: 15px;
-  font-size: 1.5vw;
+  font-size: 1.1vw;
   font-weight: bold;
   margin-top: 5px;
 }
@@ -633,4 +633,15 @@ a:link {
 .no:hover {
   background-color: rgba(10, 39, 73, 0.8);
   color: white;
+}
+
+.hamburger {
+  float: right;
+  margin: 10px;
+  opacity: 40%;
+}
+
+.hamburger:hover {
+  cursor: pointer;
+  opacity: 80%;
 }
