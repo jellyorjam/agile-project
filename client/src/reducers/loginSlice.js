@@ -3,7 +3,8 @@ import axios from 'axios';
 import {url} from "../config/keys"
 
 const initialState = {
-  userId: []
+  userId: [],
+  error: []
 };
 
 export const setLogin = createAsyncThunk('login/setLogin', async (userData) => {
@@ -11,7 +12,9 @@ export const setLogin = createAsyncThunk('login/setLogin', async (userData) => {
     const response = await axios.post('/login', userData);
     return response.data;
   } catch (err) {
-    return err;
+    if (err.response.data === "User not found"){
+      return err
+    }
   }
 })
 
@@ -36,7 +39,12 @@ export const loginSlice = createSlice({
       return action.payload
     })
     builder.addCase(setLogin.fulfilled, (state, action) => {
-      state.userId.push(action.payload);
+      if(action.payload.message){
+        state.error.push(action.payload)
+      }
+      if(action.payload._id){
+        state.userId.push(action.payload);
+      }
     })
   }
 })

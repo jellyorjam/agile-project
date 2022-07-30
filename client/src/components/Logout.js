@@ -17,7 +17,6 @@ const Logout = ({trigger, toggle}) => {
     dispatch(reset());
     dispatch(clearBoards());
     dispatch(resetHome());
-    navigate("../", {replace: true});
   }
 
   const handleNoClick = () => {
@@ -29,10 +28,10 @@ const Logout = ({trigger, toggle}) => {
     <div className="logout-outer">
       <div className="logout-inner">
         <p>Are you sure you want to logout?</p>
-        <button onClick={handleYesClick} className="btn btn-success">
+        <button onClick={handleYesClick} className="yes">
           Yes
         </button>
-        <button onClick={handleNoClick} className="btn btn-danger">
+        <button onClick={handleNoClick} className="no">
           No
         </button>
       </div>

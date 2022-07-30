@@ -3,12 +3,14 @@ import * as Yup from "yup";
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setLogin, setMember } from "../reducers/loginSlice";
+import { reset, setLogin, setMember } from "../reducers/loginSlice";
 import { setWorkspaces, workspacesLoaded } from "../reducers/homeSlice";
 
 
 const Login = () => {
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false);
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -17,42 +19,58 @@ const Login = () => {
     password: ""
   };
 
+  const handleFocus = () => {
+    dispatch(reset())
+    setError(false)
+  }
+
+  const renderErrors = () => {
+    if(error){
+      return (
+        <div id="incorrect-form">Incorrect username or password</div>
+      )
+    } else {
+      return ""
+    }
+  }
+
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required("* This field is required!"),
-    password: Yup.string().required("* This field is required!")
+    username: Yup.string().required("^ This field is required"),
+    password: Yup.string().required("^ This field is required")
   });
 
   const handleLogin = (formValue) => {
-    // const { username, password } = formValue;
     dispatch(setLogin(formValue))
       .unwrap()
       .then((payload) => {
-        console.log(payload)
-        dispatch(setMember(payload))
-          .unwrap()
-          .then((payload) => {
-            const workspaces = payload.workspaces;
-            for (let i = 0; i < workspaces.length; i++) {
-              let workspace = workspaces[i];
-              dispatch(setWorkspaces(workspace)).then((payload) => {
-                if (i === workspaces.length - 1) {
-                  dispatch(workspacesLoaded())
-                }
-              });
-            }
-          }).catch((err) => {
-            return err
-          });
+        if(!payload.message){
+          dispatch(setMember(payload))
+            .unwrap()
+            .then((payload) => {
+              const workspaces = payload.workspaces;
+              for (let i = 0; i < workspaces.length; i++) {
+                let workspace = workspaces[i];
+                dispatch(setWorkspaces(workspace)).then((payload) => {
+                  if (i === workspaces.length - 1) {
+                    dispatch(workspacesLoaded())
+                  }
+                });
+                setLoading(true);
+                navigate("/home", { replace: true });
+              }
+            }).catch((err) => {
+              return err
+            });
+        }
+        else {
+          setError(true)
+        }
       }).catch((err) => err)
-    setLoading(true);
-    navigate("/home", { replace: true });
-
-    // const hardCodedUserId = '62dea68fb79afa738755affb' //emily's hardcoded user
-    // const hardCodedUserId = '62e3414e66a3fd155259807e' //natalie's hardcoded user
   };
 
   return (
     <div className="container login-div">
+      {renderErrors()}
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -61,12 +79,12 @@ const Login = () => {
         <div className="d-flex justify-content-center align-items-center login-form">
           <Form className="form-control form">
             <div>
-              <Field className="form-control form-item" name="username" type="text" placeholder="Username" />
-              <ErrorMessage name="username" component="div" />
+              <Field onFocus={handleFocus} className="form-control form-item" name="username" type="text" placeholder="Username" />
+              <ErrorMessage className="error-message" name="username" component="div" />
             </div>
             <div>
               <Field className="form-control form-item" name="password" type="password" placeholder="Password" />
-              <ErrorMessage name="password" component="div" />
+              <ErrorMessage className="error-message" name="password" component="div" />
             </div>
             <div>
               <button className="btn btn-outline-secondary form-item" type="submit" disabled={loading}>
