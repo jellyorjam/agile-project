@@ -63,3 +63,14 @@
   display: flex;
   gap: 5px;
 }
+
+.comment {
+  display: flex;
+}
+
+.comment-date {
+  display: flex;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 200;
+}
