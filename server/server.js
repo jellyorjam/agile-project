@@ -570,7 +570,7 @@ router.delete("/boards/:boardID", (req, res, next) => {
 });
 
 router.delete("/lists/:listID", (req, res, next) => {
-    Board.findOneAndeUpdate({lists: req.params.listID}, {$pull: {boards: req.params.boardID}}, (err, board) => {
+    Board.findOneAndUpdate({lists: req.params.listID}, {$pull: {boards: req.params.boardID}}, (err, board) => {
         if(err) throw err;
         let cardIds = [...list.cards];
         let activityIds = [];
@@ -595,6 +595,19 @@ router.delete("/lists/:listID", (req, res, next) => {
             }
         });
     })
+});
+
+router.delete("/cards/:cardID", (req, res, next) => {
+    List.findOneAndUpdate({cards: req.params.cardID}, {$pull: {cards: req.params.cardID}}, (err, list) => {
+        if(err) throw err;
+        Card.findByIdAndDelete(req.params.cardID, (err, card) => {
+            if(err) throw err;
+            Activity.deleteMany({_id: [...card.activity]}, err => {
+                if(err) throw err;
+                res.status(200).send("Activity Deleted");
+            });
+        });
+    });
 });
 
 // router.delete("/boards/:boardID", (req, res, next) => {
