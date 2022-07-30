@@ -1,6 +1,8 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { resetHome } from "../reducers/homeSlice";
 import { reset } from "../reducers/loginSlice";
+import { clearBoards } from "../reducers/workspaceSlice";
 
 const Logout = () => {
   const navigate = useNavigate();
@@ -9,6 +11,8 @@ const Logout = () => {
   const handleYesClick = () => {
     
     dispatch(reset());
+    dispatch(clearBoards());
+    dispatch(resetHome());
     navigate("../", {replace: true});
   }
 

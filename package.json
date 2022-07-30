@@ -4,7 +4,8 @@
   "description": "",
   "main": "./server/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./server/server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "repository": {
     "type": "git",
@@ -19,14 +20,26 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.3",
     "body-parser": "^1.20.0",
+    "buffer": "^6.0.3",
     "express": "^4.18.1",
     "faker": "^5.5.3",
     "formik": "^2.2.9",
+    "jwt-decode": "^3.1.2",
+    "jwt-simple": "^0.5.6",
     "mongoose": "^6.4.4",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "querystring": "^0.2.1",
     "react-redux": "^8.0.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
-  }
+  },
+  "engines": {
+    "node": "16.13.1",
+    "npm": "8.1.2"
+  },
+  "proxy": "http://localhost:8000"
 }

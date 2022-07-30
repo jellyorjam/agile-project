@@ -1,26 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
+import {url} from "../config/keys"
 
-const baseUrl = 'http://localhost:8000';
+// const baseUrl = 'http://localhost:8000';
+const baseUrl = url;
 
 const initialState = {
-  workspaces: [],
-  viewedMember: {}
+  workspaces: []
 };
 
 export const setWorkspaces = createAsyncThunk('home/setWorkspaces', async (workspace) => {
   try {
     const response = await axios.get(baseUrl + '/workspaces/' + workspace);
-    return response.data
-  }
-  catch (err) {
-    return err
-  }
-})
-
-export const findMember = createAsyncThunk('profile/findMember', async (member) => {
-  try {
-    const response = await axios.get(baseUrl + '/members/' + member);
     return response.data
   }
   catch (err) {
@@ -34,17 +25,15 @@ export const homeSlice = createSlice({
   reducers: {
     workspacesLoaded: (state) => {
       state.workspacesLoaded = true;
-    }
+    },
+    resetHome: () => initialState
   },
   extraReducers: (builder) => {
     builder.addCase(setWorkspaces.fulfilled, (state, action) => {
-      state.workspaces.push(action.payload)
+      state.workspaces.push(action.payload);
     });
-    builder.addCase(findMember.fulfilled, (state, action) => {
-      state.viewedMember = action.payload;
-    })
   }
 })
 
-export const {workspacesLoaded} = homeSlice.actions;
+export const {workspacesLoaded, resetHome} = homeSlice.actions;
 export default homeSlice.reducer

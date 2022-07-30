@@ -1,13 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
-
-const baseUrl = 'http://localhost:8000';
+import {url} from "../config/keys"
 
 const initialState = [];
 
 export const setMember = createAsyncThunk('login/setMember', async (hardCodedUserId) => {
   try {
-    const response = await axios.get(baseUrl + '/members/' + hardCodedUserId);
+    const response = await axios.get(url + '/members/' + hardCodedUserId);
     return response.data
   }
   catch (err) {

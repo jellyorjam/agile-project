@@ -1,10 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import {url} from "../config/keys"
+
+// const baseUrl = 'http://localhost:8000';
+const baseUrl = url;
 
 const initialState = {
-  boards: []
+  boards: [],
+  members: []
 };
-const baseUrl = 'http://localhost:8000';
+// const baseUrl = 'http://localhost:8000';
 
 export const loadBoardsInWorkspace = createAsyncThunk('workspace/loadBoardsInWorkspace', async (board) => {
   try {
@@ -18,21 +23,40 @@ export const loadBoardsInWorkspace = createAsyncThunk('workspace/loadBoardsInWor
   }
 })
 
+export const getMembersOfWorkspace = createAsyncThunk('workspace/getMembers', async (member) => {
+  try {
+    const response = await axios.get( baseUrl + '/members/' + member);
+    return {
+      name: response.data.name,
+      _id: response.data._id}
+  }
+  catch (err) {
+    return err
+  }
+})
+
 export const workspaceSlice = createSlice({
   name: 'workspace',
   initialState,
   reducers: {
+    setWorkspace: (state, action) => {
+      state.workspaceClicked = action.payload
+    },
     boardsLoaded: (state) => {
       state.boardsLoaded = true;
     },
-    clearBoards: () => initialState 
+    clearBoards: () => initialState,
+    clearMembers: () => initialState
   },
   extraReducers: (builder) => {
     builder.addCase(loadBoardsInWorkspace.fulfilled, (state, action) => {
       state.boards.push(action.payload)
+    });
+    builder.addCase(getMembersOfWorkspace.fulfilled, (state, action) => {
+      state.members.push(action.payload)
     })
   }
 })
 
-export const {boardsLoaded, clearBoards} = workspaceSlice.actions;
+export const {boardsLoaded, clearBoards, clearMembers, setWorkspace} = workspaceSlice.actions;
 export default workspaceSlice.reducer

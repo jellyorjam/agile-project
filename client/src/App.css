@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  color: #0a2749;
 }
 
 .App-logo {
@@ -45,9 +46,23 @@
   margin-top: 80px;
 }
 
+.form {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
 .form-item {
   margin-top: 15px;
   margin-bottom: 15px;
+}
+
+.form button {
+  background-color: rgba(255, 255, 255, 0.4);
+  outline: #0a2749 solid 1px;
+  color: #0a2749;
+}
+
+.form button:hover {
+  background-color: rgba(10, 39, 73);
 }
 
 .pfp {
@@ -92,24 +107,29 @@ a:link {
   min-width: 100px;
 }
 
-.full-pfp {
-  border-radius: 50%;
-  width: 20vw;
-  height: 20vw;
+.full-cover-pic {
+  width: 100%;
+  height: 150px;
   object-fit: cover;
+  background-attachment: local;
 }
 
-.profile-page h3 {
-  margin-top: 20px;
-  color: #2328ff;
+.full-pfp {
+  display: inline-block;
+  align-items: center;
+  color: white;
+  width: 90px;
+  height: 90px;
+  font-size: 30px;
+  border-radius: 50%;
+  line-height: 80px;
+  margin-top: -200px;
+  border: 5px white solid;
 }
 
 .profile-page h1 {
   margin-top: 20px;
-}
-
-.profile-page img {
-  margin-top: 40px;
+  color: #0a2749;
 }
 
 .home-title {
@@ -119,9 +139,35 @@ a:link {
 }
 
 .login-div {
-  margin-top: 150px;
-  min-width: 100px;
-  max-width: 600px;
+  margin-top: 120px;
+  width: 80vw;
+  height: 80vh;
+}
+
+.logo {
+  margin-top: 130px;
+  position: fixed;
+  width: 100%;
+}
+
+.login-background {
+  position: fixed;
+  display: flex;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 39, 73, 0.3);
+}
+
+.background {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 10px;
+  padding-bottom: 50px;
+  background-color: rgba(10, 39, 73, 0.3);
 }
 
 .workspace-div {
@@ -139,24 +185,32 @@ a:link {
 
 .ws-card {
   width: 90vw;
-  padding-top: 30px;
+  outline: 0px !important;
   align-items: center;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.render-ws {
+  padding-top: 30px;
+  margin-bottom: 100px;
 }
 
 .email-profile {
-  color: grey !important;
+  color: #0a2749;
+  opacity: 70%;
 }
 
 .pfp-color {
   color: white;
   border-radius: 50%;
-  width: 3vw;
-  height: 3vw;
-  line-height: 3vw;
-  padding-left: 7px;
+  width: 4vw;
+  height: 4vw;
+  line-height: 4.1vw;
+  padding-left: 9px;
   margin-left: 15px;
-  font-size: 13px;
+  font-size: 1.5vw;
   font-weight: bold;
+  margin-top: 5px;
 }
 
 .ws-initial {
@@ -170,6 +224,10 @@ a:link {
   object-fit: cover;
 }
 
+.ws-initial:hover {
+  cursor: pointer;
+}
+
 .ws-title {
   text-align: left;
   overflow: visible;
@@ -177,6 +235,10 @@ a:link {
   float: left;
   font-size: 25px;
   padding-top: 5px;
+}
+
+.ws-title:hover {
+  cursor: pointer;
 }
 
 .ws-members {
@@ -189,6 +251,12 @@ a:link {
   float: left;
 }
 
+.ws-members:hover {
+  cursor: pointer;
+  background-color: rgba(10, 39, 73, 0.3);
+  color: rgba(10, 39, 73, 0.8);
+}
+
 .ws-members img {
   width: 20px;
   height: 20px;
@@ -197,6 +265,17 @@ a:link {
   opacity: 50%;
   line-height: 20px;
   padding-bottom: 3px;
+}
+
+.ws-title-profile {
+  text-align: center;
+  font-size: 25px;
+  margin-top: 20px;
+}
+
+.ws-title-profile:hover {
+  cursor: pointer;
+  opacity: 80%;
 }
 
 .ws-boards {
@@ -208,6 +287,12 @@ a:link {
   width: 10%;
   margin-left: 15px;
   float: left;
+}
+
+.ws-boards:hover {
+  cursor: pointer;
+  background-color: rgba(10, 39, 73, 0.3);
+  color: rgba(10, 39, 73, 0.8);
 }
 
 .ws-boards img {
@@ -222,4 +307,222 @@ a:link {
 
 .ws-buttons {
   padding-top: 30px;
+}
+
+.members-dropdown {
+  display: none;
+}
+
+.show {
+  display: flex;
+}
+
+.member-style {
+  color: white;
+  border-radius: 50%;
+  width: 3vw;
+  height: 3vw;
+  line-height: 2.6vw;
+  font-size: 1.1vw;
+  margin-top: 20px;
+  margin-left: -7px;
+  border: 2px #eef4fa solid;
+}
+
+.member-style:hover {
+  cursor: pointer;
+  width: 3.3vw;
+  height: 3.3vw;
+  line-height: 2.9vw;
+  margin-top: 17px;
+  border: 2px #aec5dc solid;
+}
+
+.board-box {
+  color: #0a2749;
+  font-size: 2vw;
+  font-weight: bold;
+  background-color: #eef4fa;
+  opacity: 80%;
+  height: 6vw;
+  width: 6vw;
+  min-height: 90px;
+  min-width: 150px;
+  line-height: 6vw;
+  margin: 20px;
+  border-radius: 5px;
+  box-shadow: 2px 2px rgba(10, 39, 73, 0.3);
+}
+
+.board-box:hover {
+  opacity: 110%;
+  cursor: pointer;
+}
+
+.boards-div {
+  margin: 50px;
+}
+
+.ws-boards-title {
+  margin-top: 50px;
+  color: #0a2749;
+}
+
+.members-number {
+  font-size: 13px;
+  color: #0a2749;
+  opacity: 70%;
+  padding-top: 22px;
+  padding-left: 10px;
+}
+
+.board-members {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.board-members .member-style {
+  margin-top: -5px;
+}
+
+.board-members p {
+  padding-right: 20px;
+  font-size: 17px;
+  font-weight: bold;
+  color: #0a2749;
+  opacity: 80%;
+}
+
+.list-card {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 110%;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.list-card-inner {
+  position: relative;
+  padding: 32px;
+  width: 100%;
+  max-width: 500px;
+  height: fit-content;
+  background-color: white;
+}
+
+.close-card {
+  width: 2vw;
+  float: right;
+  margin: -10px;
+  opacity: 50%;
+}
+
+.close-card:hover {
+  opacity: 100%;
+  cursor: pointer;
+}
+
+.sm-card {
+  background-color: white;
+  box-shadow: 2px 2px rgba(10, 39, 73, 0.1);
+  padding: 10px;
+  margin: 5px;
+  font-weight: bold;
+}
+
+.sm-card:hover {
+  cursor: pointer;
+  background-color: rgba(10, 39, 73, 0.1);
+}
+
+.add-card {
+  background-color: white;
+  margin: 20px;
+  color: #0a2749;
+  outline: 1px solid #0a2749;
+}
+
+.workspaces-profile {
+  text-align: left;
+  font-size: 24px;
+  margin-top: 50px;
+  margin-left: 30px;
+  color: rgba(10, 39, 73, 0.5);
+}
+
+.add-card:hover {
+  background-color: rgba(10, 39, 73, 0.1);
+  color: rgba(10, 39, 73, 1);
+}
+
+.board-title {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.board-background {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 10px;
+  padding-bottom: 40px;
+  min-height: 800px;
+}
+
+.list {
+  background-color: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 2px 2px rgba(10, 39, 73, 0.1);
+}
+
+.list-title-input {
+  font-size: 30px;
+  text-align: center;
+  margin-left: 60px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.profile-ws {
+  background-color: rgba(10, 39, 73, 0.2);
+  font-weight: bold;
+  margin: 20px;
+  padding: 40px;
+  border-radius: 5px;
+}
+
+.list-con {
+  margin-left: 30px;
+}
+
+.add-description {
+  display: flex;
+  margin-top: 5px;
+}
+
+.description-label {
+  display: flex;
+  font-size: 20px;
+}
+
+.activity-label {
+  display: flex;
+  font-size: 20px;
+}
+
+.edit-title {
+  width: 25px;
+  height: 25px;
+  opacity: 50%;
+}
+
+.card-title {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
 }

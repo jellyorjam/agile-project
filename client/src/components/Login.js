@@ -7,8 +7,8 @@ import { setMember } from "../reducers/loginSlice";
 import { setWorkspaces, workspacesLoaded } from "../reducers/homeSlice";
 
 
-const Login = ({updateUser}) => {
-  const [loading, setLoading] = useState(false);
+const Login = () => {
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -27,9 +27,9 @@ const Login = ({updateUser}) => {
     setLoading(true);
     navigate("/home", { replace: true });
 
-    // const hardCodedUserId = '62d592bb2d475d2ed21bbea9' //emily's hardcoded user
-    const hardCodedUserId = '62d4c5f2eb86a718a87a3d22' //natalie's hardcoded user
-
+    // const hardCodedUserId = '62dea68fb79afa738755affb' //emily's hardcoded user
+    const hardCodedUserId = '62e3414e66a3fd155259807e' //natalie's hardcoded user
+    
     dispatch(setMember(hardCodedUserId))
       .unwrap()
       .then((payload) => {
@@ -65,7 +65,7 @@ const Login = ({updateUser}) => {
         onSubmit={handleLogin}
       >
         <div className="d-flex justify-content-center align-items-center login-form">
-          <Form className="form-control">
+          <Form className="form-control form">
             <div>
               <Field className="form-control form-item" name="username" type="text" placeholder="Username" />
               <ErrorMessage name="username" component="div" />
@@ -75,7 +75,7 @@ const Login = ({updateUser}) => {
               <ErrorMessage name="password" component="div" />
             </div>
             <div>
-              <button className="btn btn-primary form-item" type="submit" disabled={loading}>
+              <button className="btn btn-outline-secondary form-item" type="submit" disabled={loading}>
                 {loading && (
                     <span className="spinner-border spinner-border-sm"></span>
                   )}
