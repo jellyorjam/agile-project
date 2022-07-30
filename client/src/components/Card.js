@@ -9,6 +9,7 @@ import { addCommentToCard, activityAdded} from "../reducers/cardSlice";
 
 
 
+
 const Card = ({trigger, toggle}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const Card = ({trigger, toggle}) => {
   const [descriptionInput, setDescriptionInput] = useState("");
   const [clickOnComment, setClickOnComment] = useState(false)
   const [commentInput, setCommentInput] = useState("");
+ 
 
 
   const newCards = [];
@@ -107,17 +109,30 @@ const Card = ({trigger, toggle}) => {
         if (activity.activityType === "comment") {
           if (activity.member) {
             return (
-              <div>{activity.member.name.first + " " + activity.member.name.last + " commented: " + activity.comment.text}</div>
+              
+              <div>
+                <div className="comment">{activity.member.name.first + " " + activity.member.name.last + " commented: " + activity.comment.text}</div>
+                <div className="comment-date">{renderDate(activity.date)}</div>
+              </div>
             )
           }
           else {
             return (
-              <div>{"Unknwon member commented: " + activity.comment.text}</div>
+              <div>
+                <div className="comment">{"Unknwon member commented: " + activity.comment.text}</div>
+                <div className="comment-date">{activity.date}</div>
+              </div>
+              
             )
           }
         }
       })
     }
+  }
+
+  const renderDate = (date) => {
+   const newDate = new Date(date).toLocaleDateString('en-us', {month:"short", day:"numeric", hour:"numeric", minute:"numeric"}) 
+   return newDate
   }
 
  
@@ -131,7 +146,7 @@ const Card = ({trigger, toggle}) => {
           <button type="button" className={clickOnComment ? "btn btn-outline-secondary add-description" : "hide-form"} onClick={addComment}>Save</button>
           <button type="button" className={clickOnComment ? "btn btn-outline-secondary add-description" : "hide-form"} onClick={() => setClickOnComment(false)}>Exit</button>
         </div>
-       <div>{renderActivityBody()}</div>
+       <div className="activity-body">{renderActivityBody()}</div>
       </div>
     )
   }
