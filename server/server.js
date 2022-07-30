@@ -554,6 +554,94 @@ router.put("/labels/:labelID", (req, res, next) => {
     });
 });
 
+//find board
+//get map of labelIDs from board
+//get map of listIDs
+//get map of cardIDs from lists
+//get map of activityIDs
+
+router.delete("/boards/:boardID", (req, res, next) => {
+    Workspace.findOneAndUpdate({boards: req.params.boardID}, {$pull: {boards: req.params.boardID}}, (err, workspace) => {
+        if(err) throw err;
+        Board.findByIdAndDelete(req.params.boardID, (err, board) => {
+            if(err) throw err;
+            let listIds = board.lists;
+            console.log(`ListId count: ${listIds.length}`);
+            let cardIds = [];
+            let activityIds = [];
+            let labelIds = board.labels;
+            console.log(`LabelId count: ${labelIds.length}`);
+            Label.deleteMany({_id: {$in: [...labelIds]}}, err => {
+                if(err) throw err;
+                List.find({_id: {$in: [...listIds]}}, (err, lists) => {
+                    if(err) throw err;
+                    for(let i = 0; i < lists.length; lists++) {
+                        cardIds.push(...lists[i].cards);
+                    }
+                    console.log(`CardId count: ${cardIds.length}`);
+                    Card.find({_id: {$in: [...cardIds]}}, (err, cards) => {
+                        if(err) throw err;
+                        for(let j = 0; j < cards.length; j++) {
+                            activityIds.push(...cards[j].activity);
+                        }
+                        console.log(`ActivityId count: ${activityIds.length}`);
+                        List.deleteMany({_id: {$in: [...listIds]}}, err => {
+                            if(err) throw err;
+                            Card.deleteMany({_id: {$in: [...cardIds]}}, err => {
+                                if(err) throw err;
+                                Activity.deleteMany({_id: {$in: [...activityIds]}}, err => {
+                                    if(err) throw err;
+                                    res.status(200).send("Board deletion complete");
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    })
+});
+
+router.delete("/lists/:listID", (req, res, next) => {
+    Board.findOneAndUpdate({lists: req.params.listID}, {$pull: {boards: req.params.boardID}}, (err, board) => {
+        if(err) throw err;
+        let cardIds = [...list.cards];
+        let activityIds = [];
+        List.findByIdAndDelete(req.params.listID, (err, list) => {
+            if(err) throw err;
+            if(cardIds.length > 0) {
+                Card.find({_id: {$in: [...cardIds]}}, (err, cards) => {
+                    if(err) throw err;
+                    for(let i = 0; i < cards.length; i++) {
+                        activityIds.push(...cards[i].activity);
+                    }
+                    Card.deleteMany({_id: {$in: [...cardIds]}}, err => {
+                        if(err) throw err;
+                        Activity.deleteMany({_id: [...activityIds]}, err => {
+                            if(err) throw err;
+                            res.status(200).send("List (and all subdoc) deletion complete");
+                        });
+                    });
+                });
+            } else {
+                res.status(200).send("List deletion complete");
+            }
+        });
+    })
+});
+
+router.delete("/cards/:cardID", (req, res, next) => {
+    List.findOneAndUpdate({cards: req.params.cardID}, {$pull: {cards: req.params.cardID}}, (err, list) => {
+        if(err) throw err;
+        Card.findByIdAndDelete(req.params.cardID, (err, card) => {
+            if(err) throw err;
+            Activity.deleteMany({_id: [...card.activity]}, err => {
+                if(err) throw err;
+                res.status(200).send("Activity Deleted");
+            });
+        });
+    });
+});
 
 app.use(router);
 
