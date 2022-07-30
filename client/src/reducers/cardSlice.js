@@ -9,6 +9,16 @@ const initialState = {
 };
 
 
+export const addCommentToCard = createAsyncThunk('card/addCommentToCard', async (data) => {
+  try {
+     const response = await axios.post(baseUrl + "/boards/" + data.boardId + "/cards/" + data.cardId + "/activity", data.activity)
+    return JSON.parse(response.config.data)
+  }
+  catch (err) {
+    return err
+  }
+})
+
 export const cardSlice = createSlice({
   name: 'card',
   initialState,
@@ -17,9 +27,23 @@ export const cardSlice = createSlice({
       state.members = action.payload.members;
       state.labels = action.payload.labels;
       state.activity = action.payload.activity;
+    },
+    cardAdded: (state, action) => {
+      state.cardAdded = action.payload
+    },
+    activityAdded: (state, action) => {
+      state.activityAdded = action.payload
+    },
+    detailsLoaded: (state, action) => {
+      state.detailsLoaded = action.payload
     }
   },
+  extraReducers: (builder) => {
+    builder.addCase(addCommentToCard.fulfilled, (state, action) => {
+      state.activity.push({...action.payload, member: action.meta.arg.member})
+    });
+  }
 })
 
-export const {setCardDetail} = cardSlice.actions
+export const {setCardDetail, cardAdded, activityAdded, detailsLoaded} = cardSlice.actions
 export default cardSlice.reducer

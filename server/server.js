@@ -6,21 +6,27 @@ const faker = require("faker");
 const {Member, Workspace, Board, List, Card, Activity, Label} = require("./models/models");
 const shuffleArray = require("./utils");
 const e = require("express");
-const keys = require('./config/keys');
 
-
-
-mongoose.connect(keys.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+// keys.js - figure out what set of credentials to return
+if (process.env.NODE_ENV === "production") {
+    mongoose.connect(process.env.MONGODB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
+  } else {
+    mongoose.connect("mongodb://localhost/trello-clone", {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
+  }
 
 const app = express();
 
 app.use(bodyParser.json());
 
+
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     res.header(
         "Access-Control-Allow-Headers",
@@ -159,6 +165,10 @@ if (process.env.NODE_ENV === "production") {
 //     res.end();
 // });
 
+app.get('/login', function (req, res) {
+    res.sendFile(__dirname + '/login');
+  });
+
 router.param("memberID", function(req, res, next, memberID) {
     Member.findById(memberID, (err, member) => {
         if(err) {
@@ -268,37 +278,38 @@ router.get("/members/:memberID", (req, res, next) => {
     res.status(200).send(req.member);
 });
 
-router.get("/workspaces/:workspaceID", (req, res, next) => {
+
+router.get("/workspaces/:workspaceID",  (req, res, next) => {
     console.log("Workspace found");
     res.status(200).send(req.workspace);
 });
 
-router.get("/boards/:boardID", (req, res, next) => {
+router.get("/boards/:boardID",  (req, res, next) => {
     console.log("Board found");
     res.status(200).send(req.board);
 });
 
-router.get("/lists/:listID", (req, res, next) => {
+router.get("/lists/:listID",  (req, res, next) => {
     console.log("List found");
     res.status(200).send(req.list);
 });
 
-router.get("/cards/:cardID", (req, res, next) => {
+router.get("/cards/:cardID",  (req, res, next) => {
     console.log("Card found");
     res.status(200).send(req.card);
 });
 
-router.get("/activities/:activityID", (req, res, next) => {
+router.get("/activities/:activityID",  (req, res, next) => {
     console.log("Actvity found");
     res.status(200).send(req.activity);
 });
 
-router.get("/labels/:labelID", (req, res, next) => {
+router.get("/labels/:labelID",  (req, res, next) => {
     console.log("Label found");
     res.status(200).send(req.label);
 });
 
-router.post("/members/:memberID/workspaces", (req, res, next) => {
+router.post("/members/:memberID/workspaces",  (req, res, next) => {
     if(req.body.title && req.body.description) {
         let workspace = new Workspace();
         workspace.title = req.body.title;
@@ -315,7 +326,7 @@ router.post("/members/:memberID/workspaces", (req, res, next) => {
     }
 });
 
-router.post("/workspaces/:workspaceID/boards", (req, res, next) => {
+router.post("/workspaces/:workspaceID/boards",  (req, res, next) => {
     if(req.body.title) {
         let board = new Board();
         board.title = req.body.title;
@@ -333,7 +344,7 @@ router.post("/workspaces/:workspaceID/boards", (req, res, next) => {
     }
 });
 
-router.post("/boards/:boardID/lists", (req, res, next) => {
+router.post("/boards/:boardID/lists",  (req, res, next) => {
     if(req.body.title) {
         let list = new List();
         list.title = req.body.title;
@@ -350,7 +361,7 @@ router.post("/boards/:boardID/lists", (req, res, next) => {
     }
 });
 
-router.post("/boards/:boardID/lists/:listID/cards", (req, res, next) => {
+router.post("/boards/:boardID/lists/:listID/cards",  (req, res, next) => {
     if(req.body.title) {
         if(req.board.lists.includes(req.list._id)) {
             let card = new Card();
@@ -372,7 +383,7 @@ router.post("/boards/:boardID/lists/:listID/cards", (req, res, next) => {
     }
 });
 
-router.post("/boards/:boardID/cards/:cardID/activity", (req, res, next) => {
+router.post("/boards/:boardID/cards/:cardID/activity",  (req, res, next) => {
     if(!req.body.activityType || !req.body.member) {
         res.status(400).send("Activity must have a member and a type");
     } else {
@@ -417,7 +428,7 @@ router.post("/boards/:boardID/cards/:cardID/activity", (req, res, next) => {
     }
 });
 
-router.post("/boards/:boardID/cards/:cardID/labels", (req, res, next) => {
+router.post("/boards/:boardID/cards/:cardID/labels",  (req, res, next) => {
     if(req.body.title && req.body.color) {
         Label.findOne({title: req.body.title, color: req.body.color}, function(err, label) {
             if(err) throw err;
@@ -459,7 +470,7 @@ router.post("/boards/:boardID/cards/:cardID/labels", (req, res, next) => {
 });
 
 
-router.put("/members/:memberID", (req, res, next) => {
+router.put("/members/:memberID",  (req, res, next) => {
     for(key in req.body) {
         if(key in req.member) {
             req.member[key] = req.body[key];
@@ -471,7 +482,7 @@ router.put("/members/:memberID", (req, res, next) => {
     });
 });
 
-router.put("/workspaces/:workspaceID", (req, res, next) => {
+router.put("/workspaces/:workspaceID",  (req, res, next) => {
     for(key in req.body) {
         if(key in req.workspace) {
             req.workspace[key] = req.body[key];
@@ -483,7 +494,7 @@ router.put("/workspaces/:workspaceID", (req, res, next) => {
     });
 });
 
-router.put("/boards/:boardID", (req, res, next) => {
+router.put("/boards/:boardID",  (req, res, next) => {
     for(key in req.body) {
         if(key in req.board) {
             req.board[key] = req.body[key];
@@ -491,11 +502,11 @@ router.put("/boards/:boardID", (req, res, next) => {
     }
     req.board.save((err, board) => {
         if(err) throw err;
-        res.status(200).send(`Board ${board.title} updated`);
+        res.status(200).send(board);
     });
 });
 
-router.put("/lists/:listID", (req, res, next) => {
+router.put("/lists/:listID",  (req, res, next) => {
     for(key in req.body) {
         if(key in req.list) {
             req.list[key] = req.body[key];
@@ -503,11 +514,11 @@ router.put("/lists/:listID", (req, res, next) => {
     }
     req.list.save((err, list) => {
         if(err) throw err;
-        res.status(200).send(`List ${list.title} updated`);
+        res.status(200).send(list);
     });
 });
 
-router.put("/cards/:cardID", (req, res, next) => {
+router.put("/cards/:cardID",  (req, res, next) => {
     for(key in req.body) {
         if(key in req.card) {
             req.card[key] = req.body[key];
@@ -519,7 +530,7 @@ router.put("/cards/:cardID", (req, res, next) => {
     });
 });
 
-router.put("/activities/:activityID", (req, res, next) => {
+router.put("/activities/:activityID",  (req, res, next) => {
     for(key in req.body) {
         if(key in req.activity) {
             req.activity[key] = req.body[key];
