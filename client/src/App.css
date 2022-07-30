@@ -135,7 +135,7 @@ a:link {
 .home-title {
   margin-top: 60px;
   margin-bottom: 30px;
-  color: #0a2749;
+  color: rgba(10, 39, 73, 0.5);
 }
 
 .login-div {
@@ -552,4 +552,85 @@ a:link {
   display: flex;
   justify-content: center;
   gap: 5px;
+}
+
+.comment-div {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid rgba(10, 39, 73, 0.5);
+  box-shadow: 2px 2px rgba(10, 39, 73, 0.2);
+}
+
+.activity {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#description {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#incorrect-form {
+  margin-left: 235px;
+  margin-top: 90px;
+  margin-bottom: -40px;
+  color: red;
+  font-weight: bold;
+  font-size: 24px;
+  background-color: rgba(255, 0, 0, 0.2);
+  max-width: 500px;
+  border-radius: 5px;
+}
+
+.error-message {
+  margin-left: 325px;
+  padding: 8px;
+  color: red;
+  font-weight: bold;
+  font-size: 15px;
+  background-color: rgba(255, 0, 0, 0.2);
+  max-width: 300px;
+  border-radius: 5px;
+}
+
+#welcome {
+  margin-top: 70px;
+}
+
+.ws-card .background {
+  background-color: rgba(10, 39, 73, 0);
+  margin-top: -50px;
+}
+
+.background .render-ws {
+  min-height: 600px;
+}
+
+.yes {
+  color: rgba(10, 39, 73, 1);
+  font-weight: bold;
+  border: 1px solid rgba(10, 39, 73, 1);
+  border-radius: 3px;
+  background-color: white;
+  box-shadow: 2px 2px rgba(10, 39, 73, 0.2);
+}
+
+.no {
+  color: rgba(10, 39, 73, 1);
+  font-weight: bold;
+  border: 1px solid rgba(10, 39, 73, 1);
+  border-radius: 3px;
+  background-color: white;
+  box-shadow: 2px 2px rgba(10, 39, 73, 0.2);
+}
+
+.yes:hover {
+  background-color: rgba(10, 39, 73, 0.8);
+  color: white;
+}
+
+.no:hover {
+  background-color: rgba(10, 39, 73, 0.8);
+  color: white;
 }

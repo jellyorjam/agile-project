@@ -6,7 +6,8 @@ const faker = require("faker");
 const {Member, Workspace, Board, List, Card, Activity, Label} = require("./models/models");
 const shuffleArray = require("./utils");
 const e = require("express");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const { send } = require("process");
 
 const maxAge = 3 * 24 * 60 * 60;
 
@@ -183,13 +184,17 @@ router.post('/login', async function (req, res, next) {
                 {"login.password": password}
             ]
         });
-        const token = createToken(user._id);
-        res.cookie("jwt", token, {
-            withCredentials: true, 
-            httpOnly: false,
-            maxAge: maxAge * 1000
-        });
-        res.status(200).json(user._id)
+        if(user){
+            const token = createToken(user._id);
+            res.cookie("jwt", token, {
+                withCredentials: true, 
+                httpOnly: false,
+                maxAge: maxAge * 1000
+            });
+            res.status(200).json(user._id)
+        } else {
+            res.status(404).send("User not found")
+        }
     } catch (err) {
         throw err;
     }

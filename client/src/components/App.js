@@ -50,7 +50,7 @@ function App() {
             <h1 className='col'>{`Trello(ish)`}</h1> 
           </div>
           <Routes>
-            <Route path="/" element={<Login />} />
+            <Route path="*" element={<Login />} />
           </Routes>
         </div>
       )

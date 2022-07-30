@@ -110,7 +110,7 @@ const Card = ({trigger, toggle}) => {
           if (activity.member) {
             return (
               
-              <div>
+              <div className="comment-div">
                 <div className="comment">{activity.member.name.first + " " + activity.member.name.last + " commented: " + activity.comment.text}</div>
                 <div className="comment-date">{renderDate(activity.date)}</div>
               </div>
@@ -118,7 +118,7 @@ const Card = ({trigger, toggle}) => {
           }
           else {
             return (
-              <div>
+              <div className="comment-div">
                 <div className="comment">{"Unknwon member commented: " + activity.comment.text}</div>
                 <div className="comment-date">{activity.date}</div>
               </div>
