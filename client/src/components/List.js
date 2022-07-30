@@ -1,7 +1,7 @@
 import Card from "./Card"
 import AddCard from "./AddCard"
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch, Provider } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {  editTitle, moveCard, setListsAndCards} from "../reducers/listSlice";
 import { setCardDetail } from "../reducers/cardSlice";
 import axios from "axios";
@@ -23,7 +23,6 @@ const List = () => {
   const activityHasBeenAdded = useSelector(state => state.card.activityAdded)
   const [isLoading, setIsLoading] = useState(true);
   const {workspaceId} = useParams();
-  const {cardId} = useParams();
 
 
   useEffect(() => {

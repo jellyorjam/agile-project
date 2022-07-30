@@ -6,6 +6,15 @@ const faker = require("faker");
 const {Member, Workspace, Board, List, Card, Activity, Label} = require("./models/models");
 const shuffleArray = require("./utils");
 const e = require("express");
+const jwt = require("jsonwebtoken")
+
+const maxAge = 3 * 24 * 60 * 60;
+
+const createToken = (id) => {
+    return jwt.sign({ id }, "supercalifrajilisticexpialidocious", {
+        expiresIn: maxAge,
+    })
+}
 
 // keys.js - figure out what set of credentials to return
 if (process.env.NODE_ENV === "production") {
@@ -164,6 +173,27 @@ if (process.env.NODE_ENV === "production") {
 //     console.log('Data loading complete');
 //     res.end();
 // });
+
+router.post('/login', async function (req, res, next) {
+    try {
+        const { username, password } = req.body;
+        const user = await Member.findOne({
+            $and: [
+                {"login.username": username},
+                {"login.password": password}
+            ]
+        });
+        const token = createToken(user._id);
+        res.cookie("jwt", token, {
+            withCredentials: true, 
+            httpOnly: false,
+            maxAge: maxAge * 1000
+        });
+        res.status(200).json(user._id)
+    } catch (err) {
+        throw err;
+    }
+})
 
 app.get('/login', function (req, res) {
     res.sendFile(__dirname + '/login');

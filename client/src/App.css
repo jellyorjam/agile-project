@@ -415,6 +415,33 @@ a:link {
   background-color: white;
 }
 
+.logout-outer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 110%;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logout-inner {
+  margin-top: -60px;
+  font-weight: bold;
+  position: relative;
+  padding: 32px;
+  width: 100%;
+  max-width: 300px;
+  height: fit-content;
+  background-color: white;
+}
+
+.logout-inner button {
+  margin: 10px;
+}
+
 .close-card {
   width: 2vw;
   float: right;

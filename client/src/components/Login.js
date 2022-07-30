@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setMember } from "../reducers/loginSlice";
+import { setLogin, setMember } from "../reducers/loginSlice";
 import { setWorkspaces, workspacesLoaded } from "../reducers/homeSlice";
 
 
@@ -24,37 +24,31 @@ const Login = () => {
 
   const handleLogin = (formValue) => {
     // const { username, password } = formValue;
+    dispatch(setLogin(formValue))
+      .unwrap()
+      .then((payload) => {
+        console.log(payload)
+        dispatch(setMember(payload))
+          .unwrap()
+          .then((payload) => {
+            const workspaces = payload.workspaces;
+            for (let i = 0; i < workspaces.length; i++) {
+              let workspace = workspaces[i];
+              dispatch(setWorkspaces(workspace)).then((payload) => {
+                if (i === workspaces.length - 1) {
+                  dispatch(workspacesLoaded())
+                }
+              });
+            }
+          }).catch((err) => {
+            return err
+          });
+      }).catch((err) => err)
     setLoading(true);
     navigate("/home", { replace: true });
 
     // const hardCodedUserId = '62dea68fb79afa738755affb' //emily's hardcoded user
-    const hardCodedUserId = '62e3414e66a3fd155259807e' //natalie's hardcoded user
-    
-    dispatch(setMember(hardCodedUserId))
-      .unwrap()
-      .then((payload) => {
-        const workspaces = payload.workspaces;
-        for (let i = 0; i < workspaces.length; i++) {
-          let workspace = workspaces[i];
-          dispatch(setWorkspaces(workspace)).then((payload) => {
-            if (i === workspaces.length - 1) {
-              dispatch(workspacesLoaded())
-            }
-          });
-        }
-      }).catch((err) => {
-        setLoading(false);
-        return err
-      });
-    // dispatch(login({ username, password }))
-    //   .unwrap()
-    //   .then(() => {
-    //     props.history.push("/profile");
-    //     window.location.reload();
-    //   })
-    //   .catch(() => {
-    //     setLoading(false);
-    //   });
+    // const hardCodedUserId = '62e3414e66a3fd155259807e' //natalie's hardcoded user
   };
 
   return (

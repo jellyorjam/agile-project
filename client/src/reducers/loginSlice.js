@@ -2,17 +2,28 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 import {url} from "../config/keys"
 
-const initialState = [];
+const initialState = {
+  userId: []
+};
 
-export const setMember = createAsyncThunk('login/setMember', async (hardCodedUserId) => {
+export const setLogin = createAsyncThunk('login/setLogin', async (userData) => {
   try {
-    const response = await axios.get(url + '/members/' + hardCodedUserId);
+    const response = await axios.post('/login', userData);
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+})
+
+export const setMember = createAsyncThunk('login/setMember', async (userId) => {
+  try {
+    const response = await axios.get(url + '/members/' + userId);
     return response.data
   }
   catch (err) {
     return err
   }
-})
+});
 
 export const loginSlice = createSlice({
   name: 'login',
@@ -23,6 +34,9 @@ export const loginSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(setMember.fulfilled, (state, action) => {
       return action.payload
+    })
+    builder.addCase(setLogin.fulfilled, (state, action) => {
+      state.userId.push(action.payload);
     })
   }
 })
