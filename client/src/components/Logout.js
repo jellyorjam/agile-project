@@ -4,12 +4,16 @@ import { resetHome } from "../reducers/homeSlice";
 import { reset } from "../reducers/loginSlice";
 import { clearBoards } from "../reducers/workspaceSlice";
 
-const Logout = () => {
+const Logout = ({trigger, toggle}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  function eraseCookie(name) {   
+    document.cookie = name+'=; Max-Age=-99999999;';  
+  }
 
   const handleYesClick = () => {
-    
+    eraseCookie("jwt")
+    toggle(false)
     dispatch(reset());
     dispatch(clearBoards());
     dispatch(resetHome());
@@ -17,20 +21,23 @@ const Logout = () => {
   }
 
   const handleNoClick = () => {
+    toggle(false)
     navigate("../home", {relpace: true})
   }
 
-  return (
-    <div className="comp">
-      <p>Are you sure you want to logout?</p>
-      <button onClick={handleYesClick} className="btn btn-success">
-        Yes
-      </button>
-      <button onClick={handleNoClick} className="btn btn-danger">
-        No
-      </button>
+  return trigger ? (
+    <div className="logout-outer">
+      <div className="logout-inner">
+        <p>Are you sure you want to logout?</p>
+        <button onClick={handleYesClick} className="btn btn-success">
+          Yes
+        </button>
+        <button onClick={handleNoClick} className="btn btn-danger">
+          No
+        </button>
+      </div>
     </div>
-  )
+  ) : ""
 }
 
 export default Logout;

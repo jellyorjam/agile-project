@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { random_rgba } from "./BoardList";
 import { editCardTitle } from "../reducers/listSlice";
 import { addCommentToCard, activityAdded} from "../reducers/cardSlice";
@@ -20,6 +20,7 @@ const Card = ({trigger, toggle}) => {
   const currentMember = useSelector(state => state.login.name)
   const currentMemberId = useSelector(state => state.login._id)
   const detailsAreLoaded = useSelector(state => state.card.detailsLoaded)
+  // eslint-disable-next-line no-unused-vars
   const [descriptionInput, setDescriptionInput] = useState("");
   const [clickOnComment, setClickOnComment] = useState(false)
   const [commentInput, setCommentInput] = useState("");
@@ -101,6 +102,7 @@ const Card = ({trigger, toggle}) => {
 
   const renderActivityBody = () => {
     if (detailsAreLoaded && activities.length) {
+      // eslint-disable-next-line array-callback-return
       return activities.map((activity) => {
         if (activity.activityType === "comment") {
           if (activity.member) {
