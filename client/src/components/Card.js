@@ -131,8 +131,14 @@ const Card = ({trigger, toggle}) => {
   }
 
   const renderDate = (date) => {
-   const newDate = new Date(date).toLocaleDateString('en-us', {month:"short", day:"numeric", hour:"numeric", minute:"numeric"}) 
-   return newDate
+    if (date) {
+      const newDate = new Date(date).toLocaleDateString('en-us', {month:"short", day:"numeric", hour:"numeric", minute:"numeric"}) 
+      return newDate
+    }
+    else {
+      return "Just now"
+    }
+  
   }
 
  
