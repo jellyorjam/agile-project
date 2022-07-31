@@ -1,5 +1,6 @@
 import Card from "./Card"
 import AddCard from "./AddCard"
+import AddList from "./AddList"
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {  editTitle, moveCard, setListsAndCards} from "../reducers/listSlice";
@@ -290,6 +291,7 @@ const List = () => {
               <div {...provided.droppableProps} ref={provided.innerRef} className="list-con container row">
                 <Card trigger={trigger} toggle={toggleTrigger}/>
                   {renderLists()}
+                  <div className="col list"><AddList/></div>
                   {provided.placeholder}
               </div>
             )
