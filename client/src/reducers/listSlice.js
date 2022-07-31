@@ -10,7 +10,8 @@ const initialState = {};
 export const addList = createAsyncThunk('list/addList', async (newList) => {
   try {
      const response = await axios.post(baseUrl + "/boards/" + newList.boardId + "/lists", {
-      title: newList.title
+      title: newList.title,
+      _id: newList._id
     })
     return JSON.parse(response.config.data)
   }
