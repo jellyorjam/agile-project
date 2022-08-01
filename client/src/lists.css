@@ -66,6 +66,8 @@
 
 .comment {
   display: flex;
+  justify-content: flex-start;
+  text-align: left;
 }
 
 .comment-date {
@@ -77,4 +79,19 @@
 
 .add-list-form {
   margin-top: 10px;
+}
+
+.comment-edit-button {
+  all: unset;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 200;
+}
+
+.edit-comment-div {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
 }

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { useState } from "react";
 import { random_rgba } from "./BoardList";
 import { editCardTitle } from "../reducers/listSlice";
-import { addCommentToCard, activityAdded} from "../reducers/cardSlice";
+import { addCommentToCard, activityAdded, editToComment} from "../reducers/cardSlice";
 
 
 
@@ -21,7 +21,6 @@ const Card = ({trigger, toggle}) => {
   const currentMember = useSelector(state => state.login.name)
   const currentMemberId = useSelector(state => state.login._id)
   const detailsAreLoaded = useSelector(state => state.card.detailsLoaded)
-  // eslint-disable-next-line no-unused-vars
   const [descriptionInput, setDescriptionInput] = useState("");
   const [clickOnComment, setClickOnComment] = useState(false)
   const [commentInput, setCommentInput] = useState("");
@@ -102,6 +101,40 @@ const Card = ({trigger, toggle}) => {
     )
   }
 
+  const editComment = (e) => {
+    const div = e.target.parentElement.parentElement.childNodes[0];
+    const input = e.target.parentElement.parentElement.childNodes[1];
+    div.style.display = "none";
+    input.style.display = "block"
+  }
+
+  const handleCommentEnter = (e) => {
+    if (e.key === 'Enter') {
+      const originalComment = e.target.previousElementSibling.innerHTML;
+      const sliceComment = originalComment.split("commented: ");
+      const comment = sliceComment[sliceComment.length - 1];
+      const originalDate = e.target.nextElementSibling.childNodes[0].innerHTML;
+      const newDate = new Date(originalDate);
+      const formattedDate = newDate.toISOString();
+      const shortDate = formattedDate.substring(0, formattedDate.length - 8)
+      const commentToBeChanged = activities.find((activity) => activity.comment.text === comment && activity.date.substring(0, activity.date.length - 8) === shortDate);
+      const commentIndex = activities.indexOf(commentToBeChanged);
+
+      const newComment = {...commentToBeChanged, comment: {text: e.target.value, edited: true}, index: commentIndex, date: new Date()}
+      console.log(newComment)
+      dispatch(editToComment(newComment));
+
+      const input = e.target
+      const div = e.target.previousElementSibling
+      console.log(div)
+      input.style.display = "none";
+      div.style.display = "block";
+      
+    }
+
+
+  }
+
   const renderActivityBody = () => {
     if (detailsAreLoaded && activities.length) {
       // eslint-disable-next-line array-callback-return
@@ -112,7 +145,12 @@ const Card = ({trigger, toggle}) => {
               
               <div className="comment-div">
                 <div className="comment">{activity.member.name.first + " " + activity.member.name.last + " commented: " + activity.comment.text}</div>
-                <div className="comment-date">{renderDate(activity.date)}</div>
+                <input onKeyUp={handleCommentEnter} className="comment-input" style={{display: "none"}} />
+                <div className="edit-comment-div">
+                  <div className="comment-date">{renderDate(activity.date)}</div>
+                  <button className="comment-edit-button" onClick={editComment}>Edit</button>
+                </div>
+                
               </div>
             )
           }
@@ -120,7 +158,11 @@ const Card = ({trigger, toggle}) => {
             return (
               <div className="comment-div">
                 <div className="comment">{"Unknwon member commented: " + activity.comment.text}</div>
-                <div className="comment-date">{activity.date}</div>
+                <input onKeyUp={handleCommentEnter(activity)} className="comment-input" style={{display: "none"}} />
+                <div className="edit-comment-div">
+                  <div className="comment-date">{renderDate(activity.date)}</div>
+                  <button className="comment-edit-button" onClick={editComment}>Edit</button>
+                </div>
               </div>
               
             )
@@ -132,7 +174,7 @@ const Card = ({trigger, toggle}) => {
 
   const renderDate = (date) => {
     if (date) {
-      const newDate = new Date(date).toLocaleDateString('en-us', {month:"short", day:"numeric", hour:"numeric", minute:"numeric"}) 
+      const newDate = new Date(date).toLocaleDateString('en-us', {month:"short", day:"numeric", year:"numeric", hour:"numeric", minute:"numeric"}) 
       return newDate
     }
     else {

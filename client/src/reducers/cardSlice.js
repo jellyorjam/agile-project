@@ -19,6 +19,17 @@ export const addCommentToCard = createAsyncThunk('card/addCommentToCard', async 
   }
 })
 
+export const editToComment = createAsyncThunk('card/editToComment', async (comment) => {
+  try {
+    const response = await axios.put(baseUrl + "/activities/" + comment._id, comment);
+    console.log(JSON.parse(response.config.data))
+    return JSON.parse(response.config.data)
+  }
+  catch (err) {
+    return err
+  }
+})
+
 export const cardSlice = createSlice({
   name: 'card',
   initialState,
@@ -42,6 +53,9 @@ export const cardSlice = createSlice({
     builder.addCase(addCommentToCard.fulfilled, (state, action) => {
       state.activity.push({...action.payload, member: action.meta.arg.member})
     });
+    builder.addCase(editToComment.fulfilled, (state, action) => {
+      state.activity[action.meta.arg.index] = action.payload
+    })
   }
 })
 
