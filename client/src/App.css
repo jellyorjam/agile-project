@@ -411,7 +411,8 @@ a:link {
   padding: 32px;
   width: 100%;
   max-width: 500px;
-  height: fit-content;
+  height: auto;
+  overflow: scroll;
   background-color: white;
 }
 
