@@ -121,9 +121,15 @@ const Card = ({trigger, toggle}) => {
       const commentIndex = activities.indexOf(commentToBeChanged);
 
       const newComment = {...commentToBeChanged, comment: {text: e.target.value, edited: true}, index: commentIndex, date: new Date()}
-      
+      console.log(newComment)
       dispatch(editToComment(newComment));
-     
+
+      const input = e.target
+      const div = e.target.previousElementSibling
+      console.log(div)
+      input.style.display = "none";
+      div.style.display = "block";
+      
     }
 
 
