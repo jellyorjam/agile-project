@@ -71,7 +71,7 @@ const Profile = () => {
   if(workspaces){
     return (
       <div className="container profile-page">
-        <img className="full-cover-pic" src={viewedMember.picture} alt={viewedMember.name.first} />
+        <img className="full-cover-pic" src="https://images.unsplash.com/photo-1546587348-d12660c30c50?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8bmF0dXJhbHxlbnwwfHwwfHw%3D&w=1000&q=80" alt={viewedMember.name.first} />
         <div style={colorStyle} className="full-pfp">{viewedMember.name.first[0]}{viewedMember.name.last[0]}</div>
         <h1>{viewedMember.name.first} {viewedMember.name.last}</h1>
         <h3 className="email-profile col">{viewedMember.email}</h3>
