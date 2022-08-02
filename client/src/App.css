@@ -509,11 +509,12 @@ a:link {
 }
 
 .list-title-input {
-  font-size: 30px;
+  font-size: 18px;
+  width: 100px;
   text-align: center;
-  margin-left: 60px;
-  margin-top: 8px;
-  margin-bottom: 8px;
+  margin-left: 25px;
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 
 .profile-ws {
@@ -645,4 +646,8 @@ a:link {
 .hamburger:hover {
   cursor: pointer;
   opacity: 80%;
+}
+
+.render-lists {
+  width: 140vw;
 }

@@ -77,7 +77,7 @@ const Board = ({color}) => {
           <p>Members: </p>
           {renderMembers()}
         </div>
-      <div>{renderLists()}</div>
+      <div className="render-lists">{renderLists()}</div>
     </div>
   )
 }
