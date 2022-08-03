@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addList } from "../reducers/listSlice";
 import { activityAdded } from "../reducers/cardSlice";
 
-const AddList = () => {
+const AddList = ({setLoading}) => {
   const [input, setInput] = useState("");
   const dispatch = useDispatch();
   const boardId = useSelector(state => state.board.boardInfo._id)
@@ -15,12 +15,15 @@ const AddList = () => {
   }
 
   const handleClick = () => {
+    setLoading(true);
     const newList = {
       boardId: boardId,
       title: input,
       _id: randomNum
     }
-    dispatch(addList(newList))
+    dispatch(addList(newList)).then(() => {
+      setLoading(false)
+    })
   }
 
   return (

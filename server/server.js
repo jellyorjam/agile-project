@@ -388,7 +388,7 @@ router.post("/boards/:boardID/lists",  (req, res, next) => {
             req.board.lists.push(list);
             req.board.save(err => {
                 if(err) throw err;
-                res.status(200).send(`List ${list.title} sucessfully added to board ${req.board.title}`);
+                res.status(200).send(list);
             });
         });
     } else {
@@ -407,7 +407,7 @@ router.post("/boards/:boardID/lists/:listID/cards",  (req, res, next) => {
                 req.list.cards.push(card);
                 req.list.save(err => {
                     if(err) throw err;
-                    res.status(200).send(`Card ${card.title} successfully added to ${req.list.title} on the ${req.board.title} board`);
+                    res.status(200).send(card);
                 });
             });
         } else {
