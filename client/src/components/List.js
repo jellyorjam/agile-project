@@ -30,7 +30,7 @@ const List = () => {
     getLists().then(() => getCards()).then(() => dispatch(setListsAndCards(returnedLists))).then(() => setIsLoading(false));
     
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [board, isCardAdded])
+  }, [listsDetail, isCardAdded])
 
   const returnedLists = [];
 
