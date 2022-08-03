@@ -20,6 +20,8 @@ const List = () => {
   const boardId = useSelector(state => state.board.boardInfo._id)
   const lists = useSelector(state => state.board.boardInfo.lists);
   const listsDetail = useSelector(state => state.list);
+  const cardHasBeenAdded = useSelector(state => state.card.cardAdded)
+  const activityHasBeenAdded = useSelector(state => state.card.activityAdded)
   const [isLoading, setIsLoading] = useState(true);
   const {workspaceId} = useParams();
 
@@ -30,6 +32,16 @@ const List = () => {
     
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [board])
+
+  useEffect(() => {
+    if (cardHasBeenAdded || activityHasBeenAdded) {
+      getLists().then(() => getCards()).then(() => dispatch(setListsAndCards(returnedLists))).then(() => {
+        dispatch(cardAdded(false));
+        dispatch(activityAdded(false));
+        setIsLoading(false)
+      });
+    }
+  })
 
   const returnedLists = [];
 
@@ -81,6 +93,11 @@ const List = () => {
   let description = "";
 
   const getCardDetail =  async (currentCard) => {
+    console.log(currentCard)
+    if (currentCard.description) {
+      description = currentCard.description
+     
+  }
     
     if (currentCard.members.length) {
       for (let i = 0; i < currentCard.members.length; i++) {
@@ -105,9 +122,7 @@ const List = () => {
         activity.push(activityInfo.data)
       }
 
-    if (currentCard.description) {
-        description = currentCard.description
-    }
+    
     }
     
   }
