@@ -90,6 +90,7 @@ const List = () => {
   const members = [];
   const labels = [];
   const activity = [];
+  let description = "";
 
   const getCardDetail =  async (currentCard) => {
     
@@ -115,6 +116,10 @@ const List = () => {
         let activityInfo = await axios.get(url + "/activities/" + activities)
         activity.push(activityInfo.data)
       }
+
+    if (currentCard.description) {
+        description = currentCard.description
+    }
     }
     
   }
@@ -133,7 +138,8 @@ const List = () => {
     const detailObj = {
       members: members,
       labels: labels,
-      activity: activity
+      activity: activity,
+      description: description
     }
     dispatch(setCardDetail(detailObj));
     dispatch(detailsLoaded(true));

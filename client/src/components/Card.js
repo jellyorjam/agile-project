@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { useState } from "react";
 import { random_rgba } from "./BoardList";
 import { editCardTitle } from "../reducers/listSlice";
-import { addCommentToCard, activityAdded, editToComment} from "../reducers/cardSlice";
+import { addCommentToCard, activityAdded, editToComment, addDescription} from "../reducers/cardSlice";
 
 
 
@@ -16,6 +16,7 @@ const Card = ({trigger, toggle}) => {
   const {cardId} = useParams();
   const {boardId} = useParams();
   const lists = useSelector(state => state.list);
+  const card = useSelector(state => state.card)
   const members = useSelector(state => state.card.members);
   const activities = useSelector(state => state.card.activity)
   const currentMember = useSelector(state => state.login.name)
@@ -24,6 +25,7 @@ const Card = ({trigger, toggle}) => {
   const [descriptionInput, setDescriptionInput] = useState("");
   const [clickOnComment, setClickOnComment] = useState(false)
   const [commentInput, setCommentInput] = useState("");
+  const [clickOnDescription, setClickOnDescription] = useState(false);
  
 
 
@@ -39,14 +41,6 @@ const Card = ({trigger, toggle}) => {
   }
 
   const currentCard = newCards.find(card => card._id === cardId)
-
-  const clickOnDescription = () => {
-    console.log("click")
-  }
-
-  const handleChange = (e) => {
-    setDescriptionInput(e.target.value)
-  }
 
   const addComment = () => {
     const data = {
@@ -74,6 +68,25 @@ const Card = ({trigger, toggle}) => {
     setCommentInput("")
   }
 
+  const saveDescription = (e) => {
+    if (card.description) {
+      const description = descriptionInput;
+      const cardObj = {...card, description: description, _id: cardId};
+      dispatch(addDescription(cardObj));
+      dispatch(activityAdded(true))
+      const input = e.target.parentElement.parentElement
+      input.style.display = "none"
+      const div = e.target.parentElement.parentElement.parentElement.previousElementSibling
+      div.style.display = "block"
+    }
+    else {
+      const description = descriptionInput;
+      const cardObj = {...card, description: description, _id: cardId};
+      dispatch(addDescription(cardObj));
+      dispatch(activityAdded(true))
+    }
+    
+  }
   const renderMembers = () => {
       if(members){
         return members.map((member, i) => {
@@ -89,13 +102,64 @@ const Card = ({trigger, toggle}) => {
     
   }
 
+  const renderDescription = () => {
+    if (card.description) {
+      return (
+        <div>
+          <div className="description-div" style={{display: "block"}}>
+            <div className="card-edit">
+              <div className="description-label">Description</div>
+              <img className="edit-card" src="https://cdn4.iconfinder.com/data/icons/evil-icons-user-interface/64/pen-1024.png" alt="edit-title" onClick={editDescription}/>
+            </div>
+            <div className="card-description">{card.description}</div>
+          </div>
+          <form style={{display: "none"}}>
+            <div className="form-row description-form">
+                <label for="description" className="description-label">Description</label>
+                <textarea value={descriptionInput} className="form-control" id="description" rows={clickOnDescription ? "3" : "1"} placeholder="Enter a more detailed description here" onClick={() => setClickOnDescription(true)} onChange={(e) => setDescriptionInput(e.target.value)}></textarea>
+                <div className="comment-buttons">
+                <button type="button" className={clickOnDescription ? "btn btn-outline-secondary add-description" : "hide-form"} onClick={saveDescription}>Save</button>
+                <button type="button" className={clickOnDescription ? "btn btn-outline-secondary add-description" : "hide-form"} onClick={() => {setClickOnDescription(false);
+                setDescriptionInput("")}}>Exit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+          
+        
+        
+      )
+    }
+    else {
+      return renderDescriptionForm()
+    }
+     
+  }
+
+  const editDescription = (e) => {
+   
+    const div = e.target.parentElement.parentElement;
+    div.style.display = "none";
+
+    const input = e.target.parentElement.parentElement.nextElementSibling
+    input.style.display = "block"
+    
+    
+    
+  }
+
   const renderDescriptionForm = () => {
+    
     return (
       <form>
       <div className="form-row description-form">
           <label for="description" className="description-label">Description</label>
-          <textarea className="form-control" id="description" rows="3" placeholder="Enter a more detailed description here" onClick={clickOnDescription} onChange={handleChange}></textarea>
-          <button type="button" className="btn btn-outline-secondary add-description">Save</button>
+          <textarea value={descriptionInput} className="form-control" id="description" rows={clickOnDescription ? "3" : "1"} placeholder="Enter a more detailed description here" onClick={() => setClickOnDescription(true)} onChange={(e) => setDescriptionInput(e.target.value)}></textarea>
+          <div className="comment-buttons">
+          <button type="button" className={clickOnDescription ? "btn btn-outline-secondary add-description" : "hide-form"} onClick={saveDescription}>Save</button>
+          <button type="button" className={clickOnDescription ? "btn btn-outline-secondary add-description" : "hide-form"} onClick={() => {setClickOnDescription(false);
+          setDescriptionInput("")}}>Exit</button>
+        </div>
       </div>
     </form>
     )
@@ -131,8 +195,6 @@ const Card = ({trigger, toggle}) => {
       div.style.display = "block";
       
     }
-
-
   }
 
   const renderActivityBody = () => {
@@ -231,6 +293,9 @@ const Card = ({trigger, toggle}) => {
         <img onClick={() => {
           toggle(false);
           navigate(-1);
+          setClickOnDescription(false);
+          setClickOnComment(false);
+          setDescriptionInput("");
           }} className="close-card" src="https://cdn0.iconfinder.com/data/icons/octicons/1024/x-512.png" alt="close card"/>
         <div className="card-title">
           <h1>{currentCard.title}</h1>
@@ -241,7 +306,7 @@ const Card = ({trigger, toggle}) => {
           <p>Members: </p>
           {renderMembers()}
         </div>
-        <div>{renderDescriptionForm()}</div>
+        <div>{renderDescription()}</div>
         <div>{renderActivity()}</div>
       </div>
     </div>

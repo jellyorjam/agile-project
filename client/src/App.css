@@ -550,6 +550,11 @@ a:link {
   opacity: 50%;
 }
 
+.edit-title:hover {
+  opacity: 100%;
+  cursor: pointer;
+}
+
 .card-title {
   display: flex;
   justify-content: center;
