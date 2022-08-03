@@ -11,7 +11,6 @@ import { DragDropContext, Draggable, Droppable } from "react-dnd-beautiful";
 import { reorderBoard } from "../reducers/boardSlice";
 import { cardAdded, activityAdded, detailsLoaded } from "../reducers/cardSlice";
 import {url} from "../config/keys"
-import AddList from "./AddList";
 
 const List = () => {
   const [trigger, toggleTrigger] = useState(false);
