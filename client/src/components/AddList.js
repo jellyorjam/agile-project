@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { useSelector, useDispatch } from "react-redux";
 import { addList } from "../reducers/listSlice";
-import { activityAdded } from "../reducers/cardSlice";
 
 const AddList = ({setLoading}) => {
   const [input, setInput] = useState("");

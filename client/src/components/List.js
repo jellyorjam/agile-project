@@ -11,7 +11,6 @@ import { DragDropContext, Draggable, Droppable } from "react-dnd-beautiful";
 import { reorderBoard } from "../reducers/boardSlice";
 import { cardAdded, activityAdded, detailsLoaded } from "../reducers/cardSlice";
 import {url} from "../config/keys"
-import AddList from "./AddList";
 
 const List = () => {
   const [trigger, toggleTrigger] = useState(false);
@@ -20,7 +19,6 @@ const List = () => {
   const board = useSelector(state => state.board.boardInfo)
   const boardId = useSelector(state => state.board.boardInfo._id)
   const lists = useSelector(state => state.board.boardInfo.lists);
-  const isCardAdded = useSelector(state => state.card.cardAdded)
   const listsDetail = useSelector(state => state.list);
   const [isLoading, setIsLoading] = useState(true);
   const {workspaceId} = useParams();
@@ -31,7 +29,7 @@ const List = () => {
     getLists().then(() => getCards()).then(() => dispatch(setListsAndCards(returnedLists))).then(() => setIsLoading(false));
     
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listsDetail, isCardAdded])
+  }, [board])
 
   const returnedLists = [];
 
@@ -287,13 +285,12 @@ const List = () => {
               <div {...provided.droppableProps} ref={provided.innerRef} className="list-con container row">
                 <Card trigger={trigger} toggle={toggleTrigger}/>
                   {renderLists()}
-                  <div className="col list"><AddList/></div>
+                  <div className="col list"><AddList setLoading={setIsLoading}/></div>
                   {provided.placeholder}
               </div>
             )
           }}
         </Droppable>
-        <AddList setLoading={setIsLoading} />
       </DragDropContext>
     )
   }
