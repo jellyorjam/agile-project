@@ -95,3 +95,29 @@
   align-items: flex-start;
   gap: 10px;
 }
+
+.card-description {
+  display: flex;
+  padding-top: 10px;
+  font-weight: 350;
+}
+
+.card-edit {
+  display: flex;
+}
+
+.edit-card {
+  width: 20px;
+  height: 20px;
+  opacity: 50%;
+  padding-left: 2px;
+}
+
+.edit-card:hover {
+  opacity: 100%;
+  cursor: pointer;
+}
+
+.description-form-hide {
+  display: "none";
+}
