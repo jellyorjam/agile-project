@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useSelector, useDispatch } from "react-redux";
 import { addList } from "../reducers/listSlice";
 
-const AddList = () => {
+const AddList = ({setLoading}) => {
   const [input, setInput] = useState("");
   const dispatch = useDispatch();
   const boardId = useSelector(state => state.board.boardInfo._id)
@@ -12,11 +12,14 @@ const AddList = () => {
   }
 
   const handleClick = () => {
+    setLoading(true);
     const newList = {
       boardId: boardId,
       title: input
     }
-    dispatch(addList(newList))
+    dispatch(addList(newList)).then(() => {
+      setLoading(false)
+    })
   }
 
   return (

@@ -5,14 +5,15 @@ import {url} from "../config/keys"
 // const baseUrl = 'http://localhost:8000';
 const baseUrl = url;
 
-const initialState = {};
+const initialState = {
+};
 
 export const addList = createAsyncThunk('list/addList', async (newList) => {
   try {
      const response = await axios.post(baseUrl + "/boards/" + newList.boardId + "/lists", {
       title: newList.title
     })
-    return JSON.parse(response.config.data)
+    return response.data
   }
   catch (err) {
     return err
@@ -64,12 +65,12 @@ export const listSlice = createSlice({
   },
   addCard: (state, action) => {
     const index = action.payload.index;
-    state[index].cards[0].push({title: action.payload.title.title, _id: action.payload._id})
+    state[index].cards[0].push(action.payload);
   },
-   listsLoaded: (state) => {
-     state.listsLoaded = true
-   },
-   clearListsAndCards: () => initialState
+  listsLoaded: (state) => {
+     state.listsLoaded = true;
+  },
+  clearListsAndCards: () => initialState
   },
   extraReducers: (builder) => {
     builder.addCase(addList.fulfilled, (state, action) => {

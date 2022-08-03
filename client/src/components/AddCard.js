@@ -8,15 +8,13 @@ import axios from "axios";
 
 
 
-const AddCard = ({list}) => {
+const AddCard = ({list, setLoading}) => {
   const dispatch = useDispatch();
   const [input, setInput] = useState("");
   const [clicked, setIsClicked] = useState(false)
   const {boardId} = useParams();
   const lists = useSelector(state => state.list)
   const baseUrl = url;
-
-  const randomNum = Math.floor(Math.random() * (100 - 1 + 1)) + 1
 
   const handleChange = (e) => {
     setInput(e.target.value)
@@ -37,22 +35,25 @@ const AddCard = ({list}) => {
     }
 
     if (input) {
+      dispatch(cardAdded(false))
       postCard(cardObj).then(() => dispatch(cardAdded(true)))
     };
     setInput("")
   }
 
   const postCard = async (cardObj) => {
+    setLoading(true)
     try {
       await axios.post(baseUrl + "/boards/" + cardObj.boardId + "/lists/" + cardObj.listId + "/cards", {
         title: cardObj.title
       }).then((response) => {
-        const responseObj = {
-          title: JSON.parse(response.config.data),
-          index: cardObj.index,
-          _id: randomNum
-        }
-        dispatch(addCard(responseObj))
+        dispatch(addCard({
+          _id: response.data._id,
+          title: response.data.title,
+          board: response.data.board,
+          index: cardObj.index
+        }))
+        setLoading(false)
       })
     }
     catch (err) {

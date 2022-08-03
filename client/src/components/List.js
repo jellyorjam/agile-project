@@ -2,7 +2,7 @@ import Card from "./Card"
 import AddCard from "./AddCard"
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {  editTitle, moveCard, setListsAndCards} from "../reducers/listSlice";
+import {  editTitle, moveCard, setListsAndCards } from "../reducers/listSlice";
 import { setCardDetail } from "../reducers/cardSlice";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
@@ -10,6 +10,7 @@ import { DragDropContext, Draggable, Droppable } from "react-dnd-beautiful";
 import { reorderBoard } from "../reducers/boardSlice";
 import { cardAdded, activityAdded, detailsLoaded } from "../reducers/cardSlice";
 import {url} from "../config/keys"
+import AddList from "./AddList";
 
 const List = () => {
   const [trigger, toggleTrigger] = useState(false);
@@ -18,9 +19,8 @@ const List = () => {
   const board = useSelector(state => state.board.boardInfo)
   const boardId = useSelector(state => state.board.boardInfo._id)
   const lists = useSelector(state => state.board.boardInfo.lists);
+  const isCardAdded = useSelector(state => state.card.cardAdded)
   const listsDetail = useSelector(state => state.list);
-  const cardHasBeenAdded = useSelector(state => state.card.cardAdded)
-  const activityHasBeenAdded = useSelector(state => state.card.activityAdded)
   const [isLoading, setIsLoading] = useState(true);
   const {workspaceId} = useParams();
 
@@ -30,17 +30,7 @@ const List = () => {
     getLists().then(() => getCards()).then(() => dispatch(setListsAndCards(returnedLists))).then(() => setIsLoading(false));
     
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [board])
-
-  useEffect(() => {
-    if (cardHasBeenAdded || activityHasBeenAdded) {
-      getLists().then(() => getCards()).then(() => dispatch(setListsAndCards(returnedLists))).then(() => {
-        dispatch(cardAdded(false));
-        dispatch(activityAdded(false));
-        setIsLoading(false)
-      });
-    }
-  })
+  }, [board, isCardAdded])
 
   const returnedLists = [];
 
@@ -271,7 +261,7 @@ const List = () => {
                         )
                       }}
                     </Droppable>
-                  <div><AddCard list={list.list._id}/></div>
+                  <div><AddCard list={list.list._id} setLoading={setIsLoading}/></div>
                 </div>
               )
             }}
@@ -295,6 +285,7 @@ const List = () => {
             )
           }}
         </Droppable>
+        <AddList setLoading={setIsLoading} />
       </DragDropContext>
     )
   }
